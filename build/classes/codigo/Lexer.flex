@@ -6,11 +6,14 @@ import static codigo.Tokens.*;
 L=[a-zA-Z_]+
 D=[0-9]+
 Point="."
+LETTER=[a-zA-Z]
+Caracteres="+"|"-"|"/"|"*"|">"|"<"|">="|"<="|"!="|"!"|"="|":"|";"|"."|","|"-"|"_"|"&"|"'"|"@"|"#"|"("|")"|"["|"]"|"{"|"}"|"^"|"%"|"?"
 INTEGER=[1-9]{D}*|0
 DECIMAL={D}+{Point}{D}+
-STRING=\"({L}|{D})*\"
-
 espacio=[ ,\t,\r]+
+NUMBER=[0-9]
+Comentario=("/^")({LETTER}|{NUMBER}|{espacio}|{Caracteres})*("^/")
+STRING=\"({LETTER}|{NUMBER}|{espacio}|{Caracteres})*\"
 %{
     public String lexeme;
 %}
@@ -21,9 +24,7 @@ espacio=[ ,\t,\r]+
 {espacio} {/*Ignore*/}
 
 /* Comentarios */
-( "//"(.)* ) {/*Ignore*/}
-
-("/^"|"^/") {/*Ignore*/}
+({Comentario}) {/*Ignore*/}
 
 /* Salto de linea */
 ( "\n" ) {return Linea;}
