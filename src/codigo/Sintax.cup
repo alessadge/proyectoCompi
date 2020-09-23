@@ -1,0 +1,334 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  IF,
+        EndIf,
+        Else,
+        EndElse,
+        ElseIf,
+        EndElseIf,
+        Then,
+        For,
+        IN,
+        Range,
+        EndFor,
+        While,
+        Repeat,
+        EndWhile,
+        TypeInt,
+        TypeFloat,
+        TypeString,
+        TypeList,
+        TypeMatriz,
+        TypeBool,
+        TBool,
+        OP_SUMA,
+        OP_MULT,
+        OP_DIV,
+        OP_LOGIC,
+        OP_RELA,
+        OP_ASIG,    
+        Case,
+        Of,
+        Default,
+        EndCase,    
+        Main,
+        Begin,
+        ImpLn,
+        Imp,
+        Call,
+        EndCall,
+        RETURN,
+        EndMain,
+        put,
+        get,    
+        DosPuntos,
+        PuntoComa,
+        Punto,
+        Coma,
+        GuionBajo,
+        Ampersand,
+        Apostrofe,
+        Arroba,
+        Numeral,
+        ParIzq,
+        ParDer,
+        SquareBIzq,
+        SquareBDer,
+        CurlyIzq,
+        CurlyDer,
+        special_characters,     
+        IDENTIFICADOR,
+        ENTERO,
+        CADENA,
+        DECIMAL,
+        COMENTARIO,
+        ERROR;
+
+non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
+             ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
+             OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
+             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR; 
+
+start with INICIO;
+
+INICIO ::= 
+    CLASE
+;
+CLASE::=
+    M_MAIN METODOS|
+    M_MAIN
+;
+M_MAIN ::=
+    Main Begin
+        SENTENCIA
+    EndMain
+;
+METODOS::=
+    M_VOID METODOS|
+    M_VOID|
+    METODO_T METODOS|
+    METODO_T
+;
+M_VOID::=
+    Call Begin IDENTIFICADOR ParIzq ParDer
+        SENTENCIA
+    EndCall
+;
+METODO_T::=
+    TYPE Begin IDENTIFICADOR ParIzq PARAMETRO ParDer
+        SENTENCIA
+    EndCall
+;
+PARAMETRO::=
+    TYPE IDENTIFICADOR Coma PARAMETRO|
+    TYPE IDENTIFICADOR
+;
+
+TYPE::=
+        TypeInt|
+        TypeFloat|
+        TypeString|
+        TypeList|
+        TypeMatriz|
+        TypeBool|
+;
+RETORNO::=
+    RETURN TRETORNO    
+;
+TRETORNO::=
+     OPERACION_ARITMETICA PuntoComa|
+     CADENA PuntoComa|
+     TBool PuntoComa
+;
+SENTENCIA::=
+        SENTENCIA RETORNO|
+        RETORNO|
+        SENTENCIA LOOP_FOR|
+        LOOP_FOR|
+        SENTENCIA LOOP_WHILE|
+        LOOP_WHILE|
+        SENTENCIA IF_ESTRUCTURA|
+        IF_ESTRUCTURA|
+        SENTENCIA SENTENCIA_DEC_ASIG|
+        SENTENCIA_DEC_ASIG|
+        SENTENCIA IMPRIMIR|
+        IMPRIMIR|
+        SENTENCIA SWITCH_ESTRUCTURA|
+        SWITCH_ESTRUCTURA
+        SENTENCIA ENTRADA|
+        ENTRADA|
+        SENTENCIA COMENTAR|
+        COMENTAR
+;
+
+LOOP_FOR::=
+    For TypeInt IDENTIFICADOR OP_ASIG ENTERO IN Range ParIzq PROP1 ParDer SENTENCIA EndFor
+;
+LOOP_WHILE::=
+    While PROPOSICION Repeat 
+    SENTENCIA
+    EndWhile
+;
+IF_ESTRUCTURA::=
+    IF PROPOSICION Then SENTENCIA EndIf IFELSE|
+    IF PROPOSICION Then SENTENCIA EndIf
+;
+IFELSE::=
+    ElseIf PROPOSICION Then SENTENCIA EndElseIf IFELSE|
+    ElseIf PROPOSICION Then SENTENCIA EndElseIf|
+    Else Then SENTENCIA EndElse
+;
+
+SENTENCIA_DEC_ASIG::=
+    DECLARAR_ASIGNAR|
+    ASIGNAR
+;
+
+DECLARAR_ASIGNAR::=
+    TypeInt IDENTIFICADOR OP_ASIG OPERACION_ARITMETICA PuntoComa|
+    TypeString IDENTIFICADOR OP_ASIG CADENA PuntoComa|
+    TypeFloat IDENTIFICADOR OP_ASIG OPERACION_ARITMETICA PuntoComa|
+    TypeBool IDENTIFICADOR OP_ASIG TBool PuntoComa|
+    TypeList IDENTIFICADOR ParIzq ENTERO ParDer OP_ASIG CurlyIzq LISTA CurlyDer PuntoComa|
+    TypeMatriz IDENTIFICADOR ParIzq ENTERO ParDer ParIzq ENTERO ParDer OP_ASIG CurlyIzq LISTA CurlyDer CurlyIzq LISTA CurlyDer PuntoComa|    
+  
+    TypeInt IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeString IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeFloat IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeBool IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeList IDENTIFICADOR  OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeMatriz IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+
+    TypeInt IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa|
+    TypeString IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa|
+    TypeFloat IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa
+;
+ASIGNAR::=
+    IDENTIFICADOR OP_ASIG TIPOA
+;
+TIPOA::=
+     CADENA PuntoComa|
+     TBool PuntoComa|
+     CurlyIzq LISTA CurlyDer PuntoComa|
+     CurlyIzq LISTA CurlyDer CurlyIzq LISTA CurlyDer PuntoComa|
+     OPERACION_ARITMETICA PuntoComa|
+     LLAMAR_METODO PuntoComa
+;
+LISTA::=
+   ENTERO Coma LISTA|
+   CADENA Coma LISTA|
+   DECIMAL Coma LISTA|
+   ENTERO|
+   CADENA|
+   DECIMAL
+;
+
+PROPOSICION::=
+    PROP1|
+    PROP2|
+    PROP3|
+    TBool
+;
+
+PROP3::=
+   ParIzq PROP2 ParDer OP_LOGIC PROP3|
+   ParIzq PROP2 ParDer
+;
+PROP2::=
+    ParIzq PROP1 ParDer OP_LOGIC PROP2|
+    ParIzq PROP1 ParDer
+;
+PROP1::=
+    IDENTIFICADOR OP_RELA IDENTIFICADOR|
+
+    IDENTIFICADOR OP_RELA ENTERO|
+    ENTERO OP_RELA ENTERO|
+    ENTERO OP_RELA IDENTIFICADOR|
+
+    IDENTIFICADOR OP_RELA CADENA|
+    CADENA OP_RELA CADENA|
+    CADENA OP_RELA IDENTIFICADOR|
+
+    IDENTIFICADOR OP_RELA DECIMAL|
+    DECIMAL OP_RELA DECIMAL|
+    DECIMAL OP_RELA IDENTIFICADOR|
+
+    IDENTIFICADOR OP_RELA SHOWCOORDENADAS|
+    SHOWCOORDENADAS OP_RELA SHOWCOORDENADAS|
+    SHOWCOORDENADAS OP_RELA IDENTIFICADOR
+
+    
+;
+OPERACION_ARITMETICA::=
+    IDENTIFICADOR OP_SUMA OPERACION_ARITMETICA|
+    ENTERO OP_SUMA OPERACION_ARITMETICA|
+    DECIMAL OP_SUMA OPERACION_ARITMETICA|
+    IDENTIFICADOR OP_MULT OPERACION_ARITMETICA|
+    ENTERO OP_MULT OPERACION_ARITMETICA|
+    DECIMAL OP_MULT OPERACION_ARITMETICA|
+    IDENTIFICADOR OP_DIV OPERACION_ARITMETICA|
+    ENTERO OP_DIV OPERACION_ARITMETICA|
+    DECIMAL OP_DIV OPERACION_ARITMETICA|
+    ENTERO|
+    IDENTIFICADOR|
+    DECIMAL
+;
+
+IMPRIMIR::=
+    ImpLn ParIzq CADENA CONCAT ParDer PuntoComa|
+    Imp ParIzq CADENA CONCAT ParDer  PuntoComa|
+    
+    ImpLn ParIzq LLAMAR_METODO ParDer PuntoComa|
+    Imp ParIzq LLAMAR_METODO ParDer  PuntoComa|
+    
+    ImpLn ParIzq SHOWCOORDENADAS ParDer PuntoComa|
+    Imp ParIzq SHOWCOORDENADAS ParDer  PuntoComa|
+
+    ImpLn ParIzq IDENTIFICADOR ParDer PuntoComa|
+    Imp ParIzq IDENTIFICADOR ParDer  PuntoComa
+;
+CONCAT::=
+    Coma CADENA CONCAT|
+    Coma LLAMAR_METODO CONCAT|
+    Coma SHOWCOORDENADAS CONCAT|
+    Coma IDENTIFICADOR CONCAT|
+;
+SWITCH_ESTRUCTURA::=
+    Case ParIzq IDENTIFICADOR ParDer Of
+        CASOS
+        Default DosPuntos SENTENCIA
+    EndCase
+;
+CASOS::=
+    CASOC|CASOE
+;
+CASOC::=
+    CADENA DosPuntos SENTENCIA CASOC|
+    CADENA DosPuntos SENTENCIA
+;
+CASOE::=
+    ENTERO DosPuntos SENTENCIA CASOE|
+    ENTERO DosPuntos SENTENCIA
+;
+LLAMAR_METODO::=
+    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_SUMA OPERACION_ARITMETICA|
+    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_DIV OPERACION_ARITMETICA|
+    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_MULT OPERACION_ARITMETICA|
+    IDENTIFICADOR ParIzq ARGUMENTO ParDer 
+;
+ARGUMENTO::=
+    OPERACION_ARITMETICA Coma ARGUMENTO|
+    OPERACION_ARITMETICA
+;
+
+ENTRADA::=
+    put IDENTIFICADOR
+;
+SHOWCOORDENADAS::=
+    IDENTIFICADOR SquareBIzq ENTERO SquareBDer|
+    IDENTIFICADOR SquareBIzq ENTERO SquareBDer SquareBIzq ENTERO SquareBDer|
+    IDENTIFICADOR SquareBIzq CADENA SquareBDer|
+    IDENTIFICADOR SquareBIzq CADENA SquareBDer SquareBIzq ENTERO SquareBDer|
+    IDENTIFICADOR SquareBIzq DECIMAL SquareBDer|
+    IDENTIFICADOR SquareBIzq DECIMAL SquareBDer SquareBIzq ENTERO SquareBDer|
+    IDENTIFICADOR SquareBIzq IDENTIFICADOR SquareBDer|
+    IDENTIFICADOR SquareBIzq IDENTIFICADOR SquareBDer SquareBIzq ENTERO SquareBDer
+;
+COMENTAR::=
+    COMENTARIO
+;

@@ -1,0 +1,41 @@
+package Analizar;
+import java_cup.runtime.Symbol;
+
+parser code(:
+	public void sintax_error(Symbol s){
+		System.out.println("Error de sintaxis "+s.value+" linea "+(s.left+1)+" columna "+(s.right+1));
+	}
+	public void unrecorvered_syntax_error(Symbol s)throws java.lang.Exception{
+		System.out.println("Error de sintaxis "+s.value+" linea "+(s.left+1)+" columna "+(s.right+1));
+	}
+:)
+
+action code{:
+
+:}
+	terminal If,EndIf,Else,EndElse,ElseIf,EndElseIf,Then,
+	For,In,Range,EndFor,
+	While,Repeat,EndWhile,
+	TypeInt,TypeFloat,TypeString,TypeList,TypeMatriz,TypeBoolean,typeBool,
+	Case,Of,Default,EndCase,
+	Main,Begin,ImpLn,Imp,Call,EndCall,EndMain,put,get,
+	OP_SUMA,OP_DIV,
+	OP_MULT,OP_RELA,OP_LOGIC,OP_ASIG,
+	DosPuntos,PuntoComa,Punto,Coma,Guion,GuionBajo,Ampersand,
+	Apostrofe,Arroba,Numeral,ParIzq,ParDer,SquareBIzq,SquareBDer,CurlyIzq,CurlyDer,
+	special_characters,
+	LETTER,NUMBER,ID,STRING,INTEGER,DECIMAL;
+
+	nonterminal INICIO,DECLARAR;
+
+start with INICIO;
+        INICIO::= DECLARAR
+
+        ;
+	DECLARAR::=
+		TypeInt ID |
+                TypeBoolean ID |
+                TypeString ID |
+                TypeFloat ID
+        ;	
+
