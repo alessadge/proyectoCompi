@@ -29,10 +29,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-    private void analizarLexico() throws IOException{
+
+    private void analizarLexico() throws IOException {
         int cont = 1;
-        
+
         String expr = (String) txtResultado.getText();
         Lexer lexer = new Lexer(new StringReader(expr));
         String resultado = "LINEA " + cont + "\t\tSIMBOLO\n";
@@ -395,7 +395,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
-        
+
         try {
             String ST = new String(Files.readAllBytes(archivo.toPath()));
             txtResultado.setText(ST);
@@ -421,20 +421,37 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         String ST = txtResultado.getText();
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
-        
+        String temporal = "------Errores Sintacticos------\n";
         try {
             s.parse();
-            txtAnalizarSin.setText("Analisis realizado correctamente");
-            txtAnalizarSin.setForeground(new Color(25, 111, 61));
         } catch (Exception ex) {
-            Symbol sym = s.getS();String temporal = "------Errores Lexicos------\n";
-            temporal = temporal + Lexer.ErroresLexicos + "\n";
-            temporal = temporal +"------Errores Sintacticos------\n";
-            temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
-            txtAnalizarSin.setText(temporal);
-            temporal = "";
-            txtAnalizarSin.setForeground(Color.red);
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (Sintax.Errores.isEmpty() && Lexer.ErroresLexicos.isEmpty()) {
+            try {
+                txtAnalizarSin.setText("Analisis realizado correctamente");
+                txtAnalizarSin.setForeground(new Color(25, 111, 61));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            try {
+                Symbol sym = s.getS();
+                temporal = temporal + Sintax.Errores;
+                System.out.println(Sintax.Errores);
+                temporal = temporal + "------Errores Lexicos------\n";
+                //temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+                temporal = temporal + Lexer.ErroresLexicos + "\n";
+                txtAnalizarSin.setText(temporal);
+                temporal = "";
+                Sintax.Errores.clear();
+                Lexer.ErroresLexicos.clear();
+                txtAnalizarSin.setForeground(Color.red);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }//GEN-LAST:event_btnAnalizarLex1ActionPerformed
 
     /**
