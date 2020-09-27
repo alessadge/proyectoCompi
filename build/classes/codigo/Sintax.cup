@@ -1,18 +1,26 @@
 package codigo;
 
 import java_cup.runtime.Symbol;
+import java.util.LinkedList;
 
 parser code
 {:
+    public static LinkedList<String> Errores = new LinkedList<String>();
     private Symbol s;
     
     public void syntax_error(Symbol s){
         this.s = s;
+     System.err.println("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+".");
+     Sintax.Errores.add("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
     }
 
     public Symbol getS(){
         return this.s;
-}
+} 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+            System.err.println("Error síntactico irrecuperable en la Línea " + (s.left)+ " Columna "+s.right+". Componente " + s.value + " no reconocido."); 
+            Sintax.Errores.add("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
+}  
 :};
 
 terminal  IF,
@@ -280,7 +288,7 @@ IMPRIMIR::=
     Imp ParIzq SHOWCOORDENADAS ParDer  PuntoComa|
 
     ImpLn ParIzq IDENTIFICADOR ParDer PuntoComa|
-    Imp ParIzq IDENTIFICADOR ParDer  PuntoComa
+    Imp ParIzq IDENTIFICADOR ParDer  PuntoComa|error
 ;
 CONCAT::=
     Coma CADENA CONCAT|
