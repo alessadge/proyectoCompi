@@ -1,4 +1,5 @@
 package codigo;
+import java.util.LinkedList;
 import static codigo.Tokens.*;
 %%
 %class Lexer
@@ -16,7 +17,13 @@ Comentario=("/^")({LETTER}|{NUMBER}|{espacio}|{Caracteres})*("^/")
 STRING=\"({LETTER}|{NUMBER}|{espacio}|{Caracteres})*\"
 %{
     public String lexeme;
+    /* Lista con errores lexicos */
+    public static LinkedList<String> ErroresLexicos=new LinkedList<String>();
 %}
+%init{ 
+    yyline = 1; 
+    yychar = 1; 
+%init} 
 %%
 
 
@@ -243,4 +250,5 @@ STRING=\"({LETTER}|{NUMBER}|{espacio}|{Caracteres})*\"
 
 
 /* Error de analisis */
- . {return ERROR;}
+ . {System.err.println("Este es un error lexico: "+yytext()+", en la linea: "+yyline+", en la columna: "+yychar);
+    ErroresLexicos.add("Este es un error lexico: "+yytext()+", en la linea: "+yyline+", en la columna: "+yychar + " con el caracter:\n " +yytext() + "\n");}
