@@ -540,30 +540,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
+       // TODO add your handling code here:
         try {
             analizarLexico();
         } catch (IOException ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println(Sintax.Errores.size());
         String ST = txtResultado.getText();
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
         String temporal = "------Errores Sintacticos------\n";
         try {
             s.parse();
         } catch (Exception ex) {
-
-            Symbol sym = s.getS();
-            temporal = "------Errores Lexicos------\n";
-            temporal = temporal + Lexer.ErroresLexicos + "\n";
-            temporal = temporal +"------Errores Sintacticos------\n";
-            //temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\n";
-            txtAnalizarSin.setText(temporal);
-            temporal = "";
-            txtAnalizarSin.setForeground(Color.red);
-
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-
         }
         if (Sintax.Errores.isEmpty() && Lexer.ErroresLexicos.isEmpty()) {
             try {
@@ -576,7 +566,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             try {
                 Symbol sym = s.getS();
                 temporal = temporal + Sintax.Errores;
-                System.out.println(Sintax.Errores);
                 temporal = temporal + "------Errores Lexicos------\n";
                 //temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
                 temporal = temporal + Lexer.ErroresLexicos + "\n";
@@ -588,8 +577,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }
-
+        } 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btnIfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIfActionPerformed
