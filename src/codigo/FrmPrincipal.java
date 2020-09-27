@@ -427,10 +427,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             txtAnalizarSin.setText("Analisis realizado correctamente");
             txtAnalizarSin.setForeground(new Color(25, 111, 61));
         } catch (Exception ex) {
-            Symbol sym = s.getS();String temporal = "------Errores Lexicos------\n";
+            Symbol sym = s.getS();
+            String temporal = "------Errores Lexicos------\n";
             temporal = temporal + Lexer.ErroresLexicos + "\n";
             temporal = temporal +"------Errores Sintacticos------\n";
-            temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"";
+            temporal = temporal + "Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\n";
             txtAnalizarSin.setText(temporal);
             temporal = "";
             txtAnalizarSin.setForeground(Color.red);
