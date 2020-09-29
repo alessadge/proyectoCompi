@@ -162,7 +162,7 @@ SENTENCIA::=
         SENTENCIA IMPRIMIR|
         IMPRIMIR|
         SENTENCIA SWITCH_ESTRUCTURA|
-        SWITCH_ESTRUCTURA
+        SWITCH_ESTRUCTURA|
         SENTENCIA ENTRADA|
         ENTRADA|
         SENTENCIA COMENTAR|
@@ -286,14 +286,14 @@ IMPRIMIR::=
     ImpLn ParIzq CADENA CONCAT ParDer PuntoComa|
     Imp ParIzq CADENA CONCAT ParDer  PuntoComa|
     
-    ImpLn ParIzq LLAMAR_METODO ParDer PuntoComa|
-    Imp ParIzq LLAMAR_METODO ParDer  PuntoComa|
+    ImpLn ParIzq LLAMAR_METODO CONCAT ParDer PuntoComa|
+    Imp ParIzq LLAMAR_METODO CONCAT ParDer  PuntoComa|
     
-    ImpLn ParIzq SHOWCOORDENADAS ParDer PuntoComa|
-    Imp ParIzq SHOWCOORDENADAS ParDer  PuntoComa|
+    ImpLn ParIzq SHOWCOORDENADAS CONCAT ParDer PuntoComa|
+    Imp ParIzq SHOWCOORDENADAS CONCAT ParDer  PuntoComa|
 
-    ImpLn ParIzq IDENTIFICADOR ParDer PuntoComa|
-    Imp ParIzq IDENTIFICADOR ParDer  PuntoComa
+    ImpLn ParIzq IDENTIFICADOR CONCAT ParDer PuntoComa|
+    Imp ParIzq IDENTIFICADOR CONCAT ParDer  PuntoComa
 ;
 CONCAT::=
     Coma CADENA CONCAT|
