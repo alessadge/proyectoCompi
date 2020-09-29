@@ -6,6 +6,8 @@
 package codigo;
 
 import java.awt.Color;
+import java.awt.Dialog;
+import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -28,6 +32,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public FrmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
+        jpanel2.setVisible(false);
     }
     
     public int corregirLinea(int x){
@@ -280,6 +285,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jpanel2 = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jtree = new javax.swing.JTree();
+        jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnWhile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -290,6 +302,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnFunctions = new javax.swing.JButton();
         btnFor = new javax.swing.JButton();
         btnIf = new javax.swing.JButton();
+        btnArbol = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAnalizarSin = new javax.swing.JTextArea();
@@ -303,6 +316,50 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
 
         jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
+
+        jButton3.setText("jButton3");
+
+        jLabel1.setText("ARBOL");
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        jtree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane4.setViewportView(jtree);
+
+        jButton4.setText("Ver mi arbol");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpanel2Layout = new javax.swing.GroupLayout(jpanel2.getContentPane());
+        jpanel2.getContentPane().setLayout(jpanel2Layout);
+        jpanel2Layout.setHorizontalGroup(
+            jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanel2Layout.createSequentialGroup()
+                .addGap(266, 266, 266)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(64, 64, 64))
+            .addGroup(jpanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
+        jpanel2Layout.setVerticalGroup(
+            jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton4))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -356,6 +413,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnArbol.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        btnArbol.setText("Ver arbol");
+        btnArbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArbolActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -372,7 +437,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFunctions))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnFunctions)
+                        .addGap(63, 63, 63)
+                        .addComponent(btnArbol)))
                 .addGap(18, 18, 18))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -389,7 +457,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnCase)
                     .addComponent(btnWhile)
                     .addComponent(btnFor)
-                    .addComponent(btnIf))
+                    .addComponent(btnIf)
+                    .addComponent(btnArbol))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -557,6 +626,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         if (Sintax.Errores.isEmpty() && Lexer.ErroresLexicos.isEmpty()) {
             try {
+                root = s.raiz;
                 txtAnalizarSin.setText("Analisis realizado correctamente");
                 txtAnalizarSin.setForeground(new Color(25, 111, 61));
             } catch (Exception ex) {
@@ -586,6 +656,34 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnIfActionPerformed
 
+    private void btnArbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolActionPerformed
+        try {
+           jpanel2.setModal(true);
+            jpanel2.pack();
+            jpanel2.setLocationRelativeTo(this);
+            jpanel2.setVisible(true);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnArbolActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            arbol = new DefaultMutableTreeNode(root);
+            DefaultTreeModel modelo = (DefaultTreeModel)jtree.getModel();
+            llenar(root, arbol);
+            modelo.setRoot(arbol);
+            jtree.setModel(modelo);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+        public static void llenar(Node root, DefaultMutableTreeNode current){
+        for (int i = 0; i < root.hijos.size(); i++) {
+            current.add(new DefaultMutableTreeNode(root.hijos.get(i)));
+            if(!root.hijos.get(i).hijos.isEmpty()){
+                llenar(root.hijos.get(i), (DefaultMutableTreeNode)current.getChildAt(i));
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -622,12 +720,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnArbol;
     private javax.swing.JButton btnCase;
     private javax.swing.JButton btnFor;
     private javax.swing.JButton btnFunctions;
     private javax.swing.JButton btnIf;
     private javax.swing.JButton btnWhile;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -641,8 +744,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JDialog jpanel2;
+    private javax.swing.JTree jtree;
     private javax.swing.JTextArea txtAnalizarLex;
     private javax.swing.JTextArea txtAnalizarSin;
     private javax.swing.JTextArea txtResultado;
     // End of variables declaration//GEN-END:variables
+    public static Node root;
+    DefaultMutableTreeNode arbol;
 }

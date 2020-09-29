@@ -5,21 +5,22 @@ import java.util.LinkedList;
 
 parser code
 {:
+    public static Node raiz;
     public static LinkedList<String> Errores = new LinkedList<String>();
     private Symbol s;
     
     public void syntax_error(Symbol s){
         this.s = s;
-     System.err.println("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+".");
-     Sintax.Errores.add("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
+     System.err.println("Error Sintáctico en la columna " + (s.left+1) +" linea "+s.right+ ". No se esperaba este componente: " +s.value+".");
+     Sintax.Errores.add("Error Sintáctico en la columna " + (s.left+1) +" linea "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
     }
 
     public Symbol getS(){
         return this.s;
 } 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-            System.err.println("Error síntactico irrecuperable en la Línea " + (s.left)+ " Columna "+s.right+". Componente " + s.value + " no reconocido."); 
-            Sintax.Errores.add("Error Sintáctico en la Línea " + (s.left) +" Columna "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
+            System.err.println("Error síntactico irrecuperable en la columna " + (s.left+1)+ " linea "+s.right+". Componente " + s.value + " no reconocido."); 
+            Sintax.Errores.add("Error Sintáctico en la columna " + (s.left+1) +" linea "+s.right+ ". No se esperaba este componente: " +s.value+". \n");
 }  
 :};
 
@@ -90,258 +91,1245 @@ terminal  IF,
 non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
              ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
              OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
-             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,ERRORSIRIJILLO; 
+             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR; 
 
 start with INICIO;
 
 INICIO ::= 
-    INICIO CLASE|
-    CLASE|
-    error
+   CLASE:c {:  Sintax.raiz=(Node)c; :}
+|error
 ;
 CLASE::=
-    M_MAIN METODOS|
-    M_MAIN
-;
-ERRORSIRIJILLO::=
- ParIzq
+     M_MAIN:m METODOS:me {: Node clase = new Node("main");
+                            clase.addNode(m);
+                            clase.addNode(me);
+                            RESULT=clase;
+     :} 
+    |M_MAIN:m {: 
+                Node clase = new Node("main");
+                            clase.addNode(m);
+                            RESULT=clase;
+         :}
 ;
 M_MAIN ::=
     Main Begin
-        SENTENCIA
+        SENTENCIA:s
     EndMain
+    {:  
+    Node main = new Node("Main");
+        main.addNode(new Node("Main", "main"));
+        main.addNode(new Node("Begin", "begin"));
+        main.addNode(s);
+        main.addNode(new Node("EndMain", "end main"));
+        RESULT=main;
+:}
 ;
 METODOS::=
-    M_VOID METODOS|
-    M_VOID|
-    METODO_T METODOS|
-    METODO_T
+    M_VOID:mv METODOS:m
+    {:  Node metodo = new Node("metodos"); 
+        metodo.addNode(mv);
+        metodo.addNode(m);
+        RESULT=metodo;
+    :}
+|M_VOID:mv 
+    {:
+        Node metodo = new Node("metodos"); 
+        metodo.addNode(mv);
+        RESULT=metodo;
+    :}
+|METODO_T:mt METODOS:m
+{:
+        Node metodo = new Node("metodos"); 
+        metodo.addNode(mt);
+        metodo.addNode(m);
+        RESULT=metodo;
+:}
+|METODO_T:mt
+{:
+        Node metodo = new Node("metodos"); 
+        metodo.addNode(mt);
+        RESULT=metodo;
+:}
 ;
+
 M_VOID::=
-    Call Begin IDENTIFICADOR ParIzq ParDer
-        SENTENCIA
+    Call Begin IDENTIFICADOR:i ParIzq ParDer
+        SENTENCIA:se
     EndCall
+{: 
+        Node Void = new Node("void");
+        Void.addNode(new Node("Call", "call"));
+        Void.addNode(new Node("Begin", "begin"));
+        Void.addNode(new Node("IDENTIFICADOR", ((String) i)));
+        Void.addNode(se);
+        Void.addNode(new Node("EndCall", "end call"));
+        RESULT=Void;
+:}
 ;
 METODO_T::=
-    TYPE Begin IDENTIFICADOR ParIzq PARAMETRO ParDer
-        SENTENCIA
+    TYPE:t Begin IDENTIFICADOR:i ParIzq PARAMETRO:p ParDer
+        SENTENCIA:s
     EndCall
+    {:
+    Node metodoT = new Node("metodo parametro");
+    metodoT.addNode(new Node("TYPE",((String) t)));
+    metodoT.addNode(new Node("Begin", "begin"));
+    metodoT.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    metodoT.addNode(p);
+    metodoT.addNode(s);
+    metodoT.addNode(new Node("EndCall", "end call"));
+    RESULT=metodoT;
+:}
 ;
 PARAMETRO::=
-    TYPE IDENTIFICADOR Coma PARAMETRO|
-    TYPE IDENTIFICADOR
+    TYPE:t IDENTIFICADOR:i Coma PARAMETRO:pa{:
+    Node parametro = new Node("parametro"); 
+    parametro.addNode(new Node("TYPE", ((String) t)));
+    parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    parametro.addNode(new Node("Coma", ","));
+    parametro.addNode(pa);
+    RESULT=parametro;
+   :}
+     |TYPE:t IDENTIFICADOR:i
+    {:
+    Node parametro = new Node("parametro"); 
+    parametro.addNode(new Node("TYPE", ((String) t)));
+    parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    RESULT=parametro;
+     :}
+   
 ;
 
 TYPE::=
-        TypeInt|
-        TypeFloat|
-        TypeString|
-        TypeList|
-        TypeMatriz|
-        TypeBool|
+TypeInt:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|TypeFloat:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|TypeString:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|TypeList:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|TypeMatriz:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|TypeBool:t {: 
+        Node type = new Node("tipo");
+        type.addNode(new Node("TYPE", ((String) t))); 
+        RESULT=type;
+        :}
+|
 ;
+
 RETORNO::=
-    RETURN TRETORNO    
+    RETURN TRETORNO:t {: 
+        Node retorno = new Node("Return");
+        retorno.addNode(new Node("RETURN", "return"));
+        retorno.addNode(t);
+        RESULT=retorno;
+        :}    
 ;
 TRETORNO::=
-     OPERACION_ARITMETICA PuntoComa|
-     CADENA PuntoComa|
-     TBool PuntoComa
+     OPERACION_ARITMETICA:op PuntoComa
+     {:
+        Node tretorno = new Node("retorno");
+        tretorno.addNode(op);
+        tretorno.addNode(new Node("PuntoComa", ";"));
+        RESULT=tretorno;
+       :}
+    |CADENA:c PuntoComa{:
+        Node tretorno = new Node("retorno");
+        tretorno.addNode(new Node("CADENA", ((String) c)));
+        tretorno.addNode(new Node("PuntoComa", ";"));
+        RESULT=tretorno;
+        :}
+    |TBool:tb PuntoComa {:
+        Node tretorno = new Node("retorno");
+        tretorno.addNode(new Node("TBool", ((String) tb)));
+        tretorno.addNode(new Node("PuntoComa", ";"));
+        RESULT=tretorno;
+        :}
 ;
 SENTENCIA::=
-        SENTENCIA RETORNO|
-        RETORNO|
-        SENTENCIA LOOP_FOR|
-        LOOP_FOR|
-        SENTENCIA LOOP_WHILE|
-        LOOP_WHILE|
-        SENTENCIA IF_ESTRUCTURA|
-        IF_ESTRUCTURA|
-        SENTENCIA SENTENCIA_DEC_ASIG|
-        SENTENCIA_DEC_ASIG|
-        SENTENCIA IMPRIMIR|
-        IMPRIMIR|
-        SENTENCIA SWITCH_ESTRUCTURA|
-        SWITCH_ESTRUCTURA|
-        SENTENCIA ENTRADA|
-        ENTRADA|
-        SENTENCIA COMENTAR|
-        COMENTAR|error
+SENTENCIA:s RETORNO:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|RETORNO:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s LOOP_FOR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|LOOP_FOR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s LOOP_WHILE:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|LOOP_WHILE:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s IF_ESTRUCTURA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|IF_ESTRUCTURA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s SENTENCIA_DEC_ASIG:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA_DEC_ASIG:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s IMPRIMIR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|IMPRIMIR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s SWITCH_ESTRUCTURA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SWITCH_ESTRUCTURA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s ENTRADA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|ENTRADA:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|SENTENCIA:s COMENTAR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(s);
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|COMENTAR:r{:
+        Node sentencia = new Node("sentencia");
+        sentencia.addNode(r);
+        RESULT=sentencia;
+:}
+|error
 ;
 
 LOOP_FOR::=
-    For TypeInt IDENTIFICADOR OP_ASIG ENTERO IN Range ParIzq PROP1 ParDer SENTENCIA EndFor
+    For TypeInt IDENTIFICADOR:i OP_ASIG ENTERO:e IN Range ParIzq PROP1:p ParDer SENTENCIA:s EndFor
+{:
+        Node For = new Node("FOR");
+        For.addNode(new Node("For", "for"));
+        For.addNode(new Node("TypeInt", "int"));
+        For.addNode(new Node("IDENTIFICADOR", ((String) i)));
+        For.addNode(new Node("OP_ASIG", "=>"));
+        For.addNode(new Node("ENTERO",((String) e) ));
+        For.addNode(new Node("Range", "range"));
+        For.addNode(p);
+        For.addNode(s);
+        For.addNode(new Node("EndFor", "end for"));
+        RESULT=For;
+:}
 ;
 LOOP_WHILE::=
-    While PROPOSICION Repeat 
-    SENTENCIA
+    While PROPOSICION:p Repeat 
+    SENTENCIA:s
     EndWhile
+    {:
+    Node While = new Node("While");
+    While.addNode(new Node("While", "while"));
+    While.addNode(p);
+    While.addNode(s);
+    While.addNode(new Node("EndWhile", "end while"));
+    RESULT=While;
+    :}
 ;
 IF_ESTRUCTURA::=
-    IF PROPOSICION Then SENTENCIA EndIf IFELSE|
-    IF PROPOSICION Then SENTENCIA EndIf
+    IF PROPOSICION:t Then SENTENCIA:r EndIf IFELSE:i
+    {:
+    Node IF = new Node("If");
+    IF.addNode(new Node("If", "if"));
+    IF.addNode(t);
+    IF.addNode(r);
+    IF.addNode(new Node("EndIf", "end if"));
+    IF.addNode(i);
+    RESULT=IF;
+    :}
+    |IF PROPOSICION:p Then SENTENCIA:s EndIf
+    {:
+    Node IF = new Node("If");
+    IF.addNode(new Node("If", "if"));
+    IF.addNode(p);
+    IF.addNode(s);
+    IF.addNode(new Node("EndIf", "end if"));
+    RESULT=IF;
+    :}
 ;
+
 IFELSE::=
-    ElseIf PROPOSICION Then SENTENCIA EndElseIf IFELSE|
-    ElseIf PROPOSICION Then SENTENCIA EndElseIf|
-    Else Then SENTENCIA EndElse
+ElseIf PROPOSICION:p Then SENTENCIA:s EndElseIf IFELSE:ie
+{:
+    Node eif = new Node("else If");
+    eif.addNode(new Node("ElseIf", "else if"));
+    eif.addNode(p);
+    eif.addNode(s);
+    eif.addNode(new Node("EndElseIf", "end else if"));
+    eif.addNode(ie);
+    RESULT=eif;
+:}
+|ElseIf PROPOSICION:p Then SENTENCIA:s EndElseIf
+{:
+    Node eif = new Node("else If");
+    eif.addNode(new Node("ElseIf", "else if"));
+    eif.addNode(p);
+    eif.addNode(s);
+    eif.addNode(new Node("EndElseIf", "end else if"));
+    RESULT=eif;
+:}
+
+|Else Then SENTENCIA:s EndElse
+{:
+    Node eif = new Node("else");
+    eif.addNode(new Node("Else", "else"));
+    eif.addNode(s);
+    eif.addNode(new Node("EndElse", "end else"));
+    RESULT=eif;
+:}
+    
 ;
 
 SENTENCIA_DEC_ASIG::=
-    DECLARAR_ASIGNAR|
-    ASIGNAR
+    DECLARAR_ASIGNAR:d
+    {:
+    Node da= new Node("decl asig");
+    da.addNode(d);
+    RESULT=da;
+    :}
+    |ASIGNAR:d
+    {:
+        Node da= new Node("asig");
+        da.addNode(d);
+        RESULT=da;
+    :}
 ;
 
 DECLARAR_ASIGNAR::=
-    TypeInt IDENTIFICADOR OP_ASIG OPERACION_ARITMETICA PuntoComa|
-    TypeString IDENTIFICADOR OP_ASIG CADENA PuntoComa|
-    TypeFloat IDENTIFICADOR OP_ASIG OPERACION_ARITMETICA PuntoComa|
-    TypeBool IDENTIFICADOR OP_ASIG TBool PuntoComa|
-    TypeList IDENTIFICADOR ParIzq ENTERO ParDer OP_ASIG CurlyIzq LISTA CurlyDer PuntoComa|
-    TypeMatriz IDENTIFICADOR ParIzq ENTERO ParDer ParIzq ENTERO ParDer OP_ASIG CurlyIzq LISTA CurlyDer CurlyIzq LISTA CurlyDer PuntoComa|    
-  
-    TypeInt IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
-    TypeString IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
-    TypeFloat IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
-    TypeBool IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
-    TypeList IDENTIFICADOR  OP_ASIG LLAMAR_METODO PuntoComa|
-    TypeMatriz IDENTIFICADOR OP_ASIG LLAMAR_METODO PuntoComa|
+    TypeInt:t IDENTIFICADOR:i OP_ASIG OPERACION_ARITMETICA:oa PuntoComa
+    {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(oa);
+    RESULT=declararA;
+    :}
+    |
+    TypeString:t IDENTIFICADOR:i OP_ASIG CADENA:c PuntoComa
+        {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(new Node("CADENA", ((String) c)));
+    RESULT=declararA;
+    :}
+    
+|
+    TypeFloat:t IDENTIFICADOR:i OP_ASIG OPERACION_ARITMETICA:oa PuntoComa
+        {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(oa);
+    RESULT=declararA;
+    :}
+    |
+    TypeBool:t IDENTIFICADOR:i OP_ASIG TBool:c PuntoComa
+            {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(new Node("BOOl", ((String) c)));
+    RESULT=declararA;
+    :}
+    |
+    TypeList:t IDENTIFICADOR:i ParIzq ENTERO:e ParDer OP_ASIG CurlyIzq LISTA:l CurlyDer PuntoComa
+            {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(new Node("ENTERO",((String) e)));
+    declararA.addNode(new Node("LISTA", ((String) l)));
+    RESULT=declararA;
+    :}
+    |
+    TypeMatriz:t IDENTIFICADOR:i ParIzq ENTERO:e1 ParDer ParIzq ENTERO:e2 ParDer OP_ASIG CurlyIzq LISTA:l1 CurlyDer CurlyIzq LISTA:l2 CurlyDer PuntoComa
+    {: 
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(new Node("ENTERO",((String) e1)));
+    declararA.addNode(new Node("ENTERO",((String) e2)));
+    declararA.addNode(new Node("LISTA", ((String) l1)));
+    declararA.addNode(new Node("LISTA", ((String) l2)));
+    RESULT=declararA;
+    :}
+|      
+    TypeInt:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+    |
+    TypeString:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
+    TypeFloat:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+    |
+    TypeBool:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
+    TypeList:t IDENTIFICADOR:i  OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
+    TypeMatriz:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
 
-    TypeInt IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa|
-    TypeString IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa|
-    TypeFloat IDENTIFICADOR OP_ASIG SHOWCOORDENADAS PuntoComa
+    TypeInt:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
+    TypeString:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(i);
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
+|
+    TypeFloat:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
+    {:
+    Node declararA= new Node("asig");
+    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    declararA.addNode(new Node("OP_ASIG","=>"));
+    declararA.addNode(c);
+    RESULT=declararA;
+    :}
 ;
 ASIGNAR::=
-    IDENTIFICADOR OP_ASIG TIPOA
+    IDENTIFICADOR:i OP_ASIG TIPOA:c
+    {:
+    Node Asignar= new Node("asignar");
+    Asignar.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    Asignar.addNode(new Node("OP_ASIG","=>"));
+    Asignar.addNode(c);
+    RESULT=Asignar;
+    :}
 ;
 TIPOA::=
-     CADENA PuntoComa|
-     TBool PuntoComa|
-     CurlyIzq LISTA CurlyDer PuntoComa|
-     CurlyIzq LISTA CurlyDer CurlyIzq LISTA CurlyDer PuntoComa|
-     OPERACION_ARITMETICA PuntoComa|
-     LLAMAR_METODO PuntoComa
+     CADENA:t PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(new Node("CADENA", ((String) t)));
+    RESULT=tipo;
+    :}
+    |
+     TBool:t PuntoComa
+     {:
+      Node tipo= new Node("TIPO");
+        tipo.addNode(new Node("BOOL", ((String) t)));
+        RESULT=tipo;
+    :}
+    |
+     CurlyIzq LISTA:t CurlyDer PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(new Node("LISTA", ((String) t)));
+    RESULT=tipo;
+    :}
+    |
+     CurlyIzq LISTA:t1 CurlyDer CurlyIzq LISTA:t2 CurlyDer PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(new Node("CADENA", ((String) t1)));
+    tipo.addNode(new Node("CADENA", ((String) t2)));
+    RESULT=tipo;
+    :}
+     |
+     OPERACION_ARITMETICA:oa PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(oa);
+    RESULT=tipo;
+    :}
+|
+     LLAMAR_METODO:l PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(l);
+    RESULT=tipo;
+    :}
 ;
 LISTA::=
-   ENTERO Coma LISTA|
-   CADENA Coma LISTA|
-   DECIMAL Coma LISTA|
-   ENTERO|
-   CADENA|
-   DECIMAL
+   ENTERO:t Coma LISTA:l
+    {:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("ENTERO", ((String) t)));
+    LISTA.addNode(new Node("LISTA", ((String) l)));
+    RESULT=LISTA;
+    :}
+    |
+   CADENA:t Coma LISTA:l
+{:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("cadena", ((String) t)));
+    LISTA.addNode(new Node("LISTA", ((String) l)));
+    RESULT=LISTA;
+    :}
+    |
+   DECIMAL:t Coma LISTA:l
+    {:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("decimal", ((String) t)));
+    LISTA.addNode(new Node("LISTA", ((String) l)));
+    RESULT=LISTA;
+    :}
+|
+   ENTERO:t
+    {:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("ENTERO", ((String) t)));
+    RESULT=LISTA;
+    :}
+|
+   CADENA:t
+    {:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("CADENA", ((String) t)));
+    RESULT=LISTA;
+    :}
+|
+   DECIMAL:t
+{:
+    Node LISTA= new Node("LISTA");
+    LISTA.addNode(new Node("DECIMAL", ((String) t)));
+    RESULT=LISTA;
+    :}
 ;
 
 PROPOSICION::=
-    PROP1|
-    PROP2|
-    PROP3|
-    TBool
+    PROP1:p
+    {:
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(p);
+    RESULT=prop;
+    :}
+    |
+    PROP2:p
+    {:
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(p);
+    RESULT=prop;
+    :}
+    |
+    PROP3:p
+    {:
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(p);
+    RESULT=prop;
+    :}
+    |
+    TBool:t
+{:
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(new Node("BOOL", ((String) t)));
+    RESULT=prop;
+    :}
 ;
 
 PROP3::=
-   ParIzq PROP2 ParDer OP_LOGIC PROP3|
-   ParIzq PROP2 ParDer
+   ParIzq PROP2:p ParDer OP_LOGIC:t PROP3:p1
+    {:
+    Node prop3= new Node("PROPOSICION3");
+    prop3.addNode(p);
+    prop3.addNode(new Node("OP_LOGIC", ((String) t)));
+    prop3.addNode(p1);
+    RESULT=prop3;
+    :}
+    |
+   ParIzq PROP2:p ParDer
+    {:
+    Node prop3= new Node("PROPOSICION");
+    prop3.addNode(p);
+    RESULT=prop3;
+    :}
 ;
 PROP2::=
-    ParIzq PROP1 ParDer OP_LOGIC PROP2|
-    ParIzq PROP1 ParDer
+    ParIzq PROP1:p ParDer OP_LOGIC:t PROP2:p1
+        {:
+    Node prop2= new Node("PROPOSICION");
+    prop2.addNode(p);
+    prop2.addNode(new Node("OP_LOGIC", ((String) t)));
+    prop2.addNode(p1);
+    RESULT=prop2;
+    :}
+    |
+    ParIzq PROP1:p ParDer
+    {:
+    Node prop2= new Node("PROPOSICION");
+    prop2.addNode(p);
+    RESULT=prop2;
+    :}
+
 ;
 PROP1::=
-    IDENTIFICADOR OP_RELA IDENTIFICADOR|
+    IDENTIFICADOR:i1 OP_RELA:t IDENTIFICADOR:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2)));
+    RESULT=prop1;
+    :}
+    |
 
-    IDENTIFICADOR OP_RELA ENTERO|
-    ENTERO OP_RELA ENTERO|
-    ENTERO OP_RELA IDENTIFICADOR|
+    IDENTIFICADOR:i OP_RELA:t ENTERO:e
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("ENTERO", ((String) e)));
+    RESULT=prop1;
+    :}
+    |
+    ENTERO:e1 OP_RELA:t ENTERO:e2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("ENTERO", ((String) e1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=prop1;
+    :}
+    |
+    ENTERO:i1 OP_RELA:t IDENTIFICADOR:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("ENTERO", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("ENTERO", ((String) i2))); 
+    RESULT=prop1;
+    :}    
+    |
 
-    IDENTIFICADOR OP_RELA CADENA|
-    CADENA OP_RELA CADENA|
-    CADENA OP_RELA IDENTIFICADOR|
+    IDENTIFICADOR:i1 OP_RELA:t CADENA:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("CADENA", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
+    CADENA:i1 OP_RELA:t CADENA:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("CADENA", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("CADENA", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
+    CADENA:i1 OP_RELA:t IDENTIFICADOR:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("CADENA", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
 
-    IDENTIFICADOR OP_RELA DECIMAL|
-    DECIMAL OP_RELA DECIMAL|
-    DECIMAL OP_RELA IDENTIFICADOR|
+    IDENTIFICADOR:i1 OP_RELA:t DECIMAL:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("DECIMAL", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
+    DECIMAL:i1 OP_RELA:t DECIMAL:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("DECIMAL", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("DECIMAL", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
+    DECIMAL:i1 OP_RELA:t IDENTIFICADOR:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("DECIMAL", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
+    RESULT=prop1;
+    :}
+    |
 
-    IDENTIFICADOR OP_RELA SHOWCOORDENADAS|
-    SHOWCOORDENADAS OP_RELA SHOWCOORDENADAS|
-    SHOWCOORDENADAS OP_RELA IDENTIFICADOR
+    IDENTIFICADOR:i1 OP_RELA:t SHOWCOORDENADAS:i2
+    {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(i2); 
+    RESULT=prop1;
+    :}
+    |
+    SHOWCOORDENADAS:i1 OP_RELA:t SHOWCOORDENADAS:i2
+        {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(i1);
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(i2); 
+    RESULT=prop1;
+    :}
+    |
+    SHOWCOORDENADAS:i1 OP_RELA:t IDENTIFICADOR:i2
+        {:
+    Node prop1= new Node("PROPOSICION");
+    prop1.addNode(i1);
+    prop1.addNode(new Node("OP_RELA", ((String) t)));
+    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
+    RESULT=prop1;
+    :}
 
     
 ;
 OPERACION_ARITMETICA::=
-    IDENTIFICADOR OP_SUMA OPERACION_ARITMETICA|
-    ENTERO OP_SUMA OPERACION_ARITMETICA|
-    DECIMAL OP_SUMA OPERACION_ARITMETICA|
-    IDENTIFICADOR OP_MULT OPERACION_ARITMETICA|
-    ENTERO OP_MULT OPERACION_ARITMETICA|
-    DECIMAL OP_MULT OPERACION_ARITMETICA|
-    IDENTIFICADOR OP_DIV OPERACION_ARITMETICA|
-    ENTERO OP_DIV OPERACION_ARITMETICA|
-    DECIMAL OP_DIV OPERACION_ARITMETICA|
-    ENTERO|
-    IDENTIFICADOR|
-    DECIMAL
+    IDENTIFICADOR:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
+        {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    ENTERO:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    DECIMAL:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
+        {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
+    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    IDENTIFICADOR:i1 OP_MULT:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    operacionA.addNode(new Node("OP_MULT", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    ENTERO:i1 OP_MULT:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("ENTERO", ((String) i1)));
+    operacionA.addNode(new Node("OP_MULT", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    DECIMAL:i1 OP_MULT:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
+    operacionA.addNode(new Node("OP_MULT", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    IDENTIFICADOR:i1 OP_DIV:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    operacionA.addNode(new Node("OP_DIV", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    ENTERO:i1 OP_DIV:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("ENTERO", ((String) i1)));
+    operacionA.addNode(new Node("OP_DIV", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    DECIMAL:i1 OP_DIV:t OPERACION_ARITMETICA:oa
+    {:
+    Node operacionA= new Node("Op=Aritmetica");
+    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
+    operacionA.addNode(new Node("OP_DIV", ((String) t)));
+    operacionA.addNode(oa); 
+    RESULT=operacionA;
+    :}
+    |
+    ENTERO:i1
+    {:
+    Node operacionA= new Node("ENTERO");
+    operacionA.addNode(new Node("ENTERO", ((String) i1)));
+    RESULT=operacionA;
+    :}
+    |
+    IDENTIFICADOR:i1
+    {:
+    Node operacionA= new Node("IDENTIFICADOR");
+    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
+    RESULT=operacionA;
+    :}
+    |
+    DECIMAL:i1{:
+    Node operacionA= new Node("DECIMAL");
+    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
+    RESULT=operacionA;
+    :}
 ;
 
 IMPRIMIR::=
-    ImpLn ParIzq CADENA CONCAT ParDer PuntoComa|
-    Imp ParIzq CADENA CONCAT ParDer  PuntoComa|
+    ImpLn ParIzq CADENA:c CONCAT:c1 ParDer PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("ImpLn", "Println"));
+    imprimir.addNode(new Node("cadena", ((String) c)));
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
+    Imp ParIzq CADENA:c CONCAT:c1 ParDer  PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("Imp", "Print"));
+    imprimir.addNode(new Node("cadena", ((String) c)));
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
     
-    ImpLn ParIzq LLAMAR_METODO CONCAT ParDer PuntoComa|
-    Imp ParIzq LLAMAR_METODO CONCAT ParDer  PuntoComa|
+    ImpLn ParIzq LLAMAR_METODO:c CONCAT:c1 ParDer PuntoComa
+        {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("ImpLn", "Println"));
+    imprimir.addNode(c);
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
+    Imp ParIzq LLAMAR_METODO:c CONCAT:c1 ParDer  PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("Imp", "Print"));
+    imprimir.addNode(c);
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
     
-    ImpLn ParIzq SHOWCOORDENADAS CONCAT ParDer PuntoComa|
-    Imp ParIzq SHOWCOORDENADAS CONCAT ParDer  PuntoComa|
+    ImpLn ParIzq SHOWCOORDENADAS:c CONCAT:c1 ParDer PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("ImpLn", "Println"));
+    imprimir.addNode(c);
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
+    Imp ParIzq SHOWCOORDENADAS:c CONCAT:c1 ParDer  PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("Imp", "Print"));
+    imprimir.addNode(c);
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
 
-    ImpLn ParIzq IDENTIFICADOR CONCAT ParDer PuntoComa|
-    Imp ParIzq IDENTIFICADOR CONCAT ParDer  PuntoComa
+    ImpLn ParIzq IDENTIFICADOR:c CONCAT:c1 ParDer PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("ImpLn", "Println"));
+    imprimir.addNode(new Node("cadena", ((String) c)));
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
+    |
+    Imp ParIzq IDENTIFICADOR:c CONCAT:c1 ParDer  PuntoComa
+    {:
+    Node imprimir= new Node("IMPRIMIR");
+    imprimir.addNode(new Node("Imp", "Print"));
+    imprimir.addNode(new Node("cadena", ((String) c)));
+    imprimir.addNode(c1); 
+    RESULT=imprimir;
+    :}
 ;
 CONCAT::=
-    Coma CADENA CONCAT|
-    Coma LLAMAR_METODO CONCAT|
-    Coma SHOWCOORDENADAS CONCAT|
-    Coma IDENTIFICADOR CONCAT|
+    Coma CADENA:c CONCAT:c1
+    {:
+    Node concatenacion= new Node("concatenacion");
+    concatenacion.addNode(new Node("cadena", ((String) c)));
+    concatenacion.addNode(c1); 
+    RESULT=concatenacion;
+    :}
+    |
+    Coma LLAMAR_METODO:c CONCAT:c1
+    {:
+    Node concatenacion= new Node("concatenacion");
+    concatenacion.addNode(c);
+    concatenacion.addNode(c1); 
+    RESULT=concatenacion;
+    :}
+    |
+    Coma SHOWCOORDENADAS:c CONCAT:c1
+    {:
+    Node concatenacion= new Node("concatenacion");
+    concatenacion.addNode(c);
+    concatenacion.addNode(c1); 
+    RESULT=concatenacion;
+    :}
+    |
+    Coma IDENTIFICADOR:c CONCAT:c1
+    {:
+    Node concatenacion= new Node("concatenacion");
+    concatenacion.addNode(new Node("IDENTIFICADOR", ((String) c)));
+    concatenacion.addNode(c1); 
+    RESULT=concatenacion;
+    :}
+    |
 ;
 SWITCH_ESTRUCTURA::=
-    Case ParIzq IDENTIFICADOR ParDer Of
-        CASOS
-        Default DosPuntos SENTENCIA
+    Case ParIzq IDENTIFICADOR:i ParDer Of
+        CASOS:c
+        Default DosPuntos SENTENCIA:s
     EndCase
+    {:
+    Node Switch= new Node("switch");
+    Switch.addNode(new Node("Case", "case"));
+    Switch.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    Switch.addNode(c);
+    Switch.addNode(new Node("Default", "default"));
+    Switch.addNode(s);
+    RESULT=Switch;
+    :}
 ;
 CASOS::=
-    CASOC|CASOE
+    CASOC:c
+    {:
+    Node caso= new Node("case");
+    caso.addNode(c);
+    RESULT=caso;
+    :}
+    |CASOE:c
+    {:
+    Node caso= new Node("case");
+    caso.addNode(c);
+    RESULT=caso;
+    :}
+    
 ;
 CASOC::=
-    CADENA DosPuntos SENTENCIA CASOC|
-    CADENA DosPuntos SENTENCIA
+    CADENA:c DosPuntos SENTENCIA:s CASOC:c1
+    {:
+    Node casoc= new Node("caseC");
+    casoc.addNode(new Node("cadena", ((String) c)));    
+    casoc.addNode(s);    
+    casoc.addNode(c1);
+    RESULT=casoc;
+    :}
+    |
+    CADENA:c DosPuntos SENTENCIA:s
+    {:
+    Node casoc= new Node("caseC");
+    casoc.addNode(new Node("cadena", ((String) c)));    
+    casoc.addNode(s);    
+    RESULT=casoc;
+    :}
 ;
 CASOE::=
-    ENTERO DosPuntos SENTENCIA CASOE|
-    ENTERO DosPuntos SENTENCIA
+    ENTERO:e DosPuntos SENTENCIA:s CASOE:c1
+    {:
+    Node casoe= new Node("caseE");
+    casoe.addNode(new Node("entero", ((String) e)));    
+    casoe.addNode(s);    
+    casoe.addNode(c1);
+    RESULT=casoe;
+    :}
+    |
+    ENTERO:e DosPuntos SENTENCIA:s
+    {:
+    Node casoe= new Node("caseE");
+    casoe.addNode(new Node("entero", ((String) e)));    
+    casoe.addNode(s);    
+    RESULT=casoe;
+    :}
 ;
 LLAMAR_METODO::=
-    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_SUMA OPERACION_ARITMETICA|
-    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_DIV OPERACION_ARITMETICA|
-    IDENTIFICADOR ParIzq ARGUMENTO ParDer OP_MULT OPERACION_ARITMETICA|
-    IDENTIFICADOR ParIzq ARGUMENTO ParDer |
-    IDENTIFICADOR ParIzq ParDer
+    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_SUMA:o OPERACION_ARITMETICA:oa
+    {:
+    Node cmetodo= new Node("llamar metodo");
+    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
+    cmetodo.addNode(a);    
+    cmetodo.addNode(new Node("OP_SUMA", ((String) o)));
+    cmetodo.addNode(oa);
+    RESULT=cmetodo;
+    :}
+    |
+    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_DIV:o OPERACION_ARITMETICA:oa
+    {:
+    Node cmetodo= new Node("llamar metodo");
+    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
+    cmetodo.addNode(a);    
+    cmetodo.addNode(new Node("OP_DIV", ((String) o)));
+    cmetodo.addNode(oa);
+    RESULT=cmetodo;
+    :}
+    |
+    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_MULT:o OPERACION_ARITMETICA:oa
+    {:
+    Node cmetodo= new Node("llamar metodo");
+    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
+    cmetodo.addNode(a);    
+    cmetodo.addNode(new Node("OP_MULT", ((String) o)));
+    cmetodo.addNode(oa);
+    RESULT=cmetodo;
+    :}
+    |
+    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer 
+    {:
+    Node cmetodo= new Node("llamar metodo");
+    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
+    cmetodo.addNode(a);    
+    RESULT=cmetodo;
+    :}
+    |
+    IDENTIFICADOR:i ParIzq ParDer
+    {:
+    Node cmetodo= new Node("llamar metodo");
+    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
+    RESULT=cmetodo;
+    :}
 ;
 ARGUMENTO::=
-    OPERACION_ARITMETICA Coma ARGUMENTO|
-    OPERACION_ARITMETICA
+    OPERACION_ARITMETICA:oa Coma ARGUMENTO:a
+    {:
+    Node argumento= new Node("argumento");    
+    argumento.addNode(oa);
+    argumento.addNode(a);
+    RESULT=argumento;
+    :}
+    |
+    OPERACION_ARITMETICA:oa
+    {:
+    Node argumento= new Node("argumento");    
+    argumento.addNode(oa);
+    RESULT=argumento;
+    :}
 ;
 
 ENTRADA::=
-    put IDENTIFICADOR
+    put IDENTIFICADOR:i
+    {:
+    Node entrada= new Node("Entrada");
+    entrada.addNode(new Node("PUT", "put"));
+    entrada.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    RESULT=entrada;
+    :}
 ;
 SHOWCOORDENADAS::=
-    IDENTIFICADOR SquareBIzq ENTERO SquareBDer|
-    IDENTIFICADOR SquareBIzq ENTERO SquareBDer SquareBIzq ENTERO SquareBDer|
-    IDENTIFICADOR SquareBIzq CADENA SquareBDer|
-    IDENTIFICADOR SquareBIzq CADENA SquareBDer SquareBIzq ENTERO SquareBDer|
-    IDENTIFICADOR SquareBIzq DECIMAL SquareBDer|
-    IDENTIFICADOR SquareBIzq DECIMAL SquareBDer SquareBIzq ENTERO SquareBDer|
-    IDENTIFICADOR SquareBIzq IDENTIFICADOR SquareBDer|
-    IDENTIFICADOR SquareBIzq IDENTIFICADOR SquareBDer SquareBIzq ENTERO SquareBDer
+    IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("ENTERO", ((String) e)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("ENTERO", ((String) e1)));
+    showCoor.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq CADENA:e1 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("CADENA", ((String) e1)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq CADENA:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("CADENA", ((String) e1)));
+    showCoor.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq DECIMAL:e1 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("DECIMAL", ((String) e1)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq DECIMAL:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("DECIMAL", ((String) e1)));
+    showCoor.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
+    showCoor.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=showCoor;
+    :}
 ;
 COMENTAR::=
     COMENTARIO
