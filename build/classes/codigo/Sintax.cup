@@ -1547,7 +1547,7 @@ ARGUMENTO::=
 ;
 
 ENTRADA::=
-    put IDENTIFICADOR:i
+    put IDENTIFICADOR:i PuntoComa
     {:
     Node entrada= new Node("Entrada");
     entrada.addNode(new Node("PUT", "put"));
