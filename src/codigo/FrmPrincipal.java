@@ -365,7 +365,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnWhile.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnWhile.setText("Error 1");
+        btnWhile.setText("ErrorCase");
         btnWhile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnWhileActionPerformed(evt);
@@ -399,7 +399,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnFor.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnFor.setText("Error2");
+        btnFor.setText("ErrorM");
         btnFor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnForActionPerformed(evt);
@@ -407,7 +407,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnIf.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnIf.setText("Error3");
+        btnIf.setText("ErrorL");
         btnIf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIfActionPerformed(evt);
@@ -427,18 +427,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnWhile, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(btnFor)
-                        .addGap(45, 45, 45)
+                        .addComponent(btnWhile, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnFor, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnIf)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                         .addComponent(btnCase)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnIf1)
@@ -471,7 +470,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Debugging...", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Errores...", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         txtAnalizarSin.setEditable(false);
         txtAnalizarSin.setColumns(20);
@@ -574,7 +573,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnWhileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWhileActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "while true repeat \n" + "\t n=>5;\n" + "end while\n"+"end main\n";
+        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=> in range (i<a)\n" + "\tPrint(\"hola\");ª\n"
+                        +"end for\n" + "end if\n" + "while true  º\n" + "\t a=>10; ç \n" + "end while \n" + "case(a) of \n"
+                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
+                        + "end case\n" + "end main";
         txtResultado.setText(codigo);
         
     }//GEN-LAST:event_btnWhileActionPerformed
@@ -601,7 +603,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFunctionsActionPerformed
 
     private void btnForActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForActionPerformed
-        String codigo = "main begin \n"+ "for Int i=>0 in range (i<a) \n" + "\t a=>5;\n" + "end for\n"+"end main\n";
+       String codigo = " begin \n"+ "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
+                        +"\t1: Matriz m(2)(2)=>{1,2}{3,4};~\n" + "\tfor Int i=>0  range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) |\n" 
+                        + "\t\t\tPrint(m[i][j]);°\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
+                        + "end case\nend main \n\n" + "Int begin (Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
+                        + "\treturn 1;\n"+"end if\nelse then\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                        +"\treturn resultado;\n"+"end else\nend call\n";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnForActionPerformed
 
@@ -671,7 +678,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnIfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIfActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "if x = 2 then \n" + "\t n=>1;\n" + "end if\n"+"else if x=3 then \n"+"\t n=>2; \n"+"end else if\n"+"end main";
+        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in  (i<a)\n" + "\t\t Print(\"hola\");\n"
+                        +"\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");|\n" + "\t default:Println(\"nunca\");° \n"
+                        + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado; ~\n"
+                        +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
+                        +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call  imprimirHola()\n"  
+                        + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnIfActionPerformed
 
