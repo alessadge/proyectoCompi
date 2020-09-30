@@ -107,7 +107,7 @@ STRING=\"({LETTER}|{NUMBER}|{espacio}|{Caracteres})*\"
 (true | false)      {lexeme = yytext(); return OP_BOOL;}
     
     //operadores
-("+|-") {      
+("+"|"-") {      
         lexeme=yytext(); return OP_SUMA;
     }
 ("*") {
