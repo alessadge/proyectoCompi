@@ -823,7 +823,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(new Node("ENTERO",((String) e)));
-    declararA.addNode(new Node("LISTA", ((String) l)));
+    declararA.addNode(l);
     RESULT=declararA;
     :}
     |
@@ -835,8 +835,8 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(new Node("ENTERO",((String) e1)));
     declararA.addNode(new Node("ENTERO",((String) e2)));
-    declararA.addNode(new Node("LISTA", ((String) l1)));
-    declararA.addNode(new Node("LISTA", ((String) l2)));
+    declararA.addNode(l1);
+    declararA.addNode(l2);
     RESULT=declararA;
     :}
 |      
@@ -959,15 +959,15 @@ TIPOA::=
      CurlyIzq LISTA:t CurlyDer PuntoComa
      {:
     Node tipo= new Node("TIPO");
-    tipo.addNode(new Node("LISTA", ((String) t)));
+    tipo.addNode(t);
     RESULT=tipo;
     :}
     |
      CurlyIzq LISTA:t1 CurlyDer CurlyIzq LISTA:t2 CurlyDer PuntoComa
      {:
     Node tipo= new Node("TIPO");
-    tipo.addNode(new Node("CADENA", ((String) t1)));
-    tipo.addNode(new Node("CADENA", ((String) t2)));
+    tipo.addNode(t1);
+    tipo.addNode(t2);
     RESULT=tipo;
     :}
      |
@@ -983,14 +983,23 @@ TIPOA::=
     Node tipo= new Node("TIPO");
     tipo.addNode(l);
     RESULT=tipo;
-    :}|  error:e {: System.out.println("TYPE");Sintax.TipoA_Error(); :}
+    :}
+    |
+     SHOWCOORDENADAS:l PuntoComa
+     {:
+    Node tipo= new Node("TIPO");
+    tipo.addNode(l);
+    RESULT=tipo;
+    :}
+    |  error:e {: System.out.println("TYPE");Sintax.TipoA_Error(); :}
 ;
+
 LISTA::=
    ENTERO:t Coma LISTA:l
     {:
     Node LISTA= new Node("LISTA");
     LISTA.addNode(new Node("ENTERO", ((String) t)));
-    LISTA.addNode(new Node("LISTA", ((String) l)));
+    LISTA.addNode(l);
     RESULT=LISTA;
     :}
     |
@@ -998,7 +1007,7 @@ LISTA::=
 {:
     Node LISTA= new Node("LISTA");
     LISTA.addNode(new Node("cadena", ((String) t)));
-    LISTA.addNode(new Node("LISTA", ((String) l)));
+    LISTA.addNode(l);
     RESULT=LISTA;
     :}
     |
@@ -1006,7 +1015,7 @@ LISTA::=
     {:
     Node LISTA= new Node("LISTA");
     LISTA.addNode(new Node("decimal", ((String) t)));
-    LISTA.addNode(new Node("LISTA", ((String) l)));
+    LISTA.addNode(l);
     RESULT=LISTA;
     :}
 |
@@ -1546,7 +1555,7 @@ SHOWCOORDENADAS::=
     RESULT=showCoor;
     :}
     |
-    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBIzq SquareBIzq ENTERO:e2 SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
@@ -1603,6 +1612,15 @@ SHOWCOORDENADAS::=
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
     showCoor.addNode(new Node("ENTERO", ((String) e2)));
+    RESULT=showCoor;
+    :}
+    |
+    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer SquareBIzq IDENTIFICADOR:e2 SquareBDer
+    {:
+    Node showCoor= new Node("Coordenadas");
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
+    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e2)));
     RESULT=showCoor;
     :}
 ;
