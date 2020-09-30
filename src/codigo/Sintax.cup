@@ -1571,7 +1571,7 @@ ENTRADA::=
     entrada.addNode(new Node("PUT", "put"));
     entrada.addNode(new Node("IDENTIFICADOR", ((String) i)));
     RESULT=entrada;
-    :}| error:e {: System.out.Println("ENTRADA"); Sintax.Entrada_Error(); :}
+    :}|put error:e {: System.out.Println("ENTRADA"); Sintax.Entrada_Error(); :}
 ;
 SHOWCOORDENADAS::=
     IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
