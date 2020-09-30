@@ -64,6 +64,24 @@ parser code
         }
        Sintax.Errores.add("[Void_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+put IDENTIFICADOR:i PuntoComa
+    public static void Entrada_Error(){
+        switch(found.sym){
+            case sym.put:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: put \n");
+                break;
+            case sym.IDENTIFICADOR: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: put \n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o put ) \n");
+                break;
+        }
+       Sintax.Errores.add("[Entrada_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
     public static void Parametro_Error(){
         switch(found.sym){
             case sym.Begin:
@@ -1553,7 +1571,7 @@ ENTRADA::=
     entrada.addNode(new Node("PUT", "put"));
     entrada.addNode(new Node("IDENTIFICADOR", ((String) i)));
     RESULT=entrada;
-    :}
+    :}| error:e {: System.out.Println("ENTRADA"); Sintax.Entrada_Error(); :}
 ;
 SHOWCOORDENADAS::=
     IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
