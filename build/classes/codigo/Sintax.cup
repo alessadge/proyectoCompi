@@ -401,7 +401,7 @@ terminal  IF,
 non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
              ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
              OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
-             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR; 
+             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX; 
 
 start with INICIO;
 
@@ -482,7 +482,7 @@ METODO_T::=
     EndCall
     {:
     Node metodoT = new Node("metodo parametro");
-    metodoT.addNode(new Node("TYPE",((String) t)));
+    metodoT.addNode(t);
     metodoT.addNode(new Node("Begin", "begin"));
     metodoT.addNode(new Node("IDENTIFICADOR", ((String) i)));
     metodoT.addNode(p);
@@ -494,7 +494,7 @@ METODO_T::=
 PARAMETRO::=
     TYPE:t IDENTIFICADOR:i Coma PARAMETRO:pa{:
     Node parametro = new Node("parametro"); 
-    parametro.addNode(new Node("TYPE", ((String) t)));
+    parametro.addNode(t);
     parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
     parametro.addNode(new Node("Coma", ","));
     parametro.addNode(pa);
@@ -503,7 +503,7 @@ PARAMETRO::=
      |TYPE:t IDENTIFICADOR:i
     {:
     Node parametro = new Node("parametro"); 
-    parametro.addNode(new Node("TYPE", ((String) t)));
+    parametro.addNode(t);
     parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
     RESULT=parametro;
      :}| TYPE error:e {: System.out.println("FUNCION PARAMETRO");Sintax.Parametro(); :}
@@ -1221,108 +1221,37 @@ PROP1::=
 
     
 ;
+
 OPERACION_ARITMETICA::=
-    IDENTIFICADOR:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
-        {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    ENTERO:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    DECIMAL:i1 OP_SUMA:t OPERACION_ARITMETICA:oa
-        {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
-    operacionA.addNode(new Node("OP_SUMA", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    IDENTIFICADOR:i1 OP_MULT:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    operacionA.addNode(new Node("OP_MULT", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    ENTERO:i1 OP_MULT:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("ENTERO", ((String) i1)));
-    operacionA.addNode(new Node("OP_MULT", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    DECIMAL:i1 OP_MULT:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
-    operacionA.addNode(new Node("OP_MULT", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    IDENTIFICADOR:i1 OP_DIV:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    operacionA.addNode(new Node("OP_DIV", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    ENTERO:i1 OP_DIV:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("ENTERO", ((String) i1)));
-    operacionA.addNode(new Node("OP_DIV", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    DECIMAL:i1 OP_DIV:t OPERACION_ARITMETICA:oa
-    {:
-    Node operacionA= new Node("Op=Aritmetica");
-    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
-    operacionA.addNode(new Node("OP_DIV", ((String) t)));
-    operacionA.addNode(oa); 
-    RESULT=operacionA;
-    :}
-    |
-    ENTERO:i1
-    {:
-    Node operacionA= new Node("ENTERO");
-    operacionA.addNode(new Node("ENTERO", ((String) i1)));
-    RESULT=operacionA;
-    :}
-    |
-    IDENTIFICADOR:i1
-    {:
-    Node operacionA= new Node("IDENTIFICADOR");
-    operacionA.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    RESULT=operacionA;
-    :}
-    |
-    DECIMAL:i1{:
-    Node operacionA= new Node("DECIMAL");
-    operacionA.addNode(new Node("DECIMAL", ((String) i1)));
-    RESULT=operacionA;
-    :}
+   OPERACION_ARITMETICA OP_SUMA TX
+   |TX
 ;
+TX::=
+    TX OP_MULT FX
+    |TX OP_DIV FX
+    |FX
+;
+FX::=
+    ENTERO
+    |IDENTIFICADOR
+    |DECIMAL
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 IMPRIMIR::=
     ImpLn ParIzq CADENA:c CONCAT:c1 ParDer PuntoComa
