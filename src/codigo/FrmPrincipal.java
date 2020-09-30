@@ -590,13 +590,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnFunctionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFunctionsActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<a)\n" + "\t Print(\"hola\");\n"
-                        +"end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in range (i<a)\n" + "\t\t Print(\"hola\");\n"
+                        +"\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                         + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
                         + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado;\n"
                         +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
                         +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call begin imprimirHola()\n"  
-                        + "\t List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \nend else\nend call";
+                        + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnFunctionsActionPerformed
 
@@ -699,10 +699,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnIf1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIf1ActionPerformed
         String codigo = "main begin \n"+ "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
                         +"\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n" 
-                        + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
+                        + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
                         + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
-                        + "\tif n=1 then\n" + "\treturn 1;\n"+"end if\nelsethen\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
-                        +"\treturn resultado\n"+"end else\nend call\n";
+                        + "\treturn 1;\n"+"end if\nelse then\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                        +"\treturn resultado;\n"+"end else\nend call\n";
         txtResultado.setText(codigo);
         
     }//GEN-LAST:event_btnIf1ActionPerformed
