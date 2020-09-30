@@ -1223,34 +1223,70 @@ PROP1::=
 ;
 
 OPERACION_ARITMETICA::=
-   OPERACION_ARITMETICA OP_SUMA TX
-   |TX
+   OPERACION_ARITMETICA:oa OP_SUMA:s TX:t
+    {:
+    Node operacionA= new Node("operacionA");
+    operacionA.addNode(oa);
+    operacionA.addNode(new Node("OP_SUMA", ((String) s)));
+    operacionA.addNode(t); 
+    RESULT=operacionA;
+    :}
+    |TX:oa {:
+        Node operacionA= new Node("operacionA");
+        operacionA.addNode(oa);
+        RESULT=operacionA;
+    :}
 ;
 TX::=
-    TX OP_MULT FX
-    |TX OP_DIV FX
-    |FX
+    TX:t OP_MULT:o FX:f
+    {:
+        Node TX= new Node("operacionA");
+        TX.addNode(t);
+        TX.addNode(new Node("OP_MULT", ((String) o)));
+        TX.addNode(f);
+        RESULT=TX;
+    :}
+    |TX:t OP_DIV:o FX:f
+    {:
+        Node TX= new Node("operacionA");
+        TX.addNode(t);
+        TX.addNode(new Node("OP_DIV", ((String) o)));
+        TX.addNode(f);
+        RESULT=TX;
+    :}
+    |FX:f
+    {:
+        Node TX= new Node("operacionA");
+        TX.addNode(f);
+        RESULT=TX;
+    :}
 ;
 FX::=
-    ENTERO
-    |IDENTIFICADOR
-    |DECIMAL
+    ENTERO:o
+    {:
+        Node FX= new Node("ENTERO");
+        FX.addNode(new Node("ENTERO", ((String) o)));
+        RESULT=FX;
+    :}
+    |IDENTIFICADOR:o
+    {:
+        Node FX= new Node("IDENTIFICADOR");
+        FX.addNode(new Node("IDENTIFICADOR", ((String) o)));
+        RESULT=FX;
+    :}
+    |DECIMAL:o
+    {:
+        Node FX= new Node("DECIMAL");
+        FX.addNode(new Node("DECIMAL", ((String) o)));
+        RESULT=FX;
+    :}
+    |ParIzq OPERACION_ARITMETICA:o ParDer
+         {:
+        Node FX= new Node("DECIMAL");
+        FX.addNode(o);
+        RESULT=FX;
+    :}
 ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 IMPRIMIR::=

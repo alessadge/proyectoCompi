@@ -574,7 +574,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnFunctionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFunctionsActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<a)\n" + "\t Print(\"hola\");\n"
+        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<a)\n" + "\t Print(\"hola\");\n"
                         +"end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                         + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
                         + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado;\n"
