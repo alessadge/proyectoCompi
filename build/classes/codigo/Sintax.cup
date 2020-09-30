@@ -15,14 +15,15 @@ parser code
 } 
     public void report_error(String errorBody, Object info){
         found = (Symbol)info;
-	//System.out.println("Se encontro: " + found.value+"\n");
+	Sintax.Errores.add("Se encontro Report_Error: " + found.value+"\n");
+        Sintax.Errores.add(" Descripcion:\n");
     }
 
     public void report_fatal_error(String errorBody, Object info){ 
         //error = "Errores no Recuperables \n";
         found = (Symbol)info;
-	System.out.println("Se encontro: " + found.value+"\n");
-	System.out.println("No se esperaba el Token\n");
+	Sintax.Errores.add("Se encontro Error_Fatal: " + found.value);
+	Sintax.Errores.add(" Descripcion:\n");
     }
     public static void Main_Error(){
         switch(found.sym){
@@ -35,7 +36,7 @@ parser code
                 Sintax.Errores.add("Error en el Main \n");
                 break;
         }
-        Sintax.Errores.add("[Main Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Main Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void Void_Error(){
         switch(found.sym){
@@ -58,10 +59,10 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: sentencia \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end call \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end call o ) \n");
                 break;
         }
-       Sintax.Errores.add("[Void_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+       Sintax.Errores.add("[Void_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void Parametro_Error(){
         switch(found.sym){
@@ -81,10 +82,10 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: sentencia \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end call \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end call o ) \n");
                 break;
         }
-       Sintax.Errores.add("[Parametro_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+       Sintax.Errores.add("[Parametro_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void TReturn_Error(){
         switch(found.sym){
@@ -95,7 +96,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
                 break;
         }
-        Sintax.Errores.add("[Return_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Return_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
         public static void For_Error(){
         switch(found.sym){
@@ -103,13 +104,16 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: for \n");
                 break;
             case sym.IDENTIFICADOR:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: TypeInt \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( o TypeInt\n");
                 break;
             case sym.OP_ASIG: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: IDENTIFICADOR \n");
                 break;
             case sym.ENTERO: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.OP_RELA:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: IDENTIFICADOR \n");
                 break;
             case sym.IN: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ENTERO \n");
@@ -127,13 +131,16 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: sentencia \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end for \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end for o ) \n");
                 break;
         }
-        Sintax.Errores.add("[For_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+ "\n");
+        Sintax.Errores.add("[For_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+ "\n");
     }
    public static void While_Error(){
         switch(found.sym){
+            case sym.While:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: while \n");
+                break;
             case sym.Repeat:
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: PROPOSICION \n");
                 break;
@@ -144,10 +151,14 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: end while \n");
                 break;
         }
-        Sintax.Errores.add("[While_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[While_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+
     public static void Normal_If_Error(){
         switch(found.sym){
+            case sym.IF:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: If \n");
+                break;
             case sym.Then:
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: PROPOSICION \n");
                 break;
@@ -158,11 +169,12 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: end if \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end if \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: if else o then \n");
                 break;
         }
-        Sintax.Errores.add("[If_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[If_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+
     public static void IfElse_Error(){
         switch(found.sym){
             case sym.Then:
@@ -172,7 +184,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: SENTENCIA \n");
                 break;
             case sym.ElseIf: 
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end else if \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end else if or else if \n");
                 break;
             case sym.EndElse: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: sentencia \n");
@@ -181,31 +193,44 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: if else or end else \n");
                 break;
         }
-        Sintax.Errores.add("[IfElse_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[IfElse_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+
     public static void Switch(){
         switch(found.sym){
+            case sym.Case: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: switch \n");
+                break;
             case sym.ParIzq: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: switch \n");
                 break;
             case sym.IDENTIFICADOR:
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( \n");
                 break;
+            case sym.ParDer: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: IDENTIFICADOR \n");
+                break;
             case sym.Of: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ) \n");
                 break;
+            case sym.Default: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Casos \n");
+                break;
             case sym.DosPuntos: 
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Default \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: default \n");
+                break;
+            case sym.EndCase: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: SENTENCIA \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end case \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end case o of \n");
                 break;
         }
-        Sintax.Errores.add("[Switch_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Switch_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void Else_Error(){
         Sintax.Errores.add("Error en el Else \n");
-        Sintax.Errores.add("[IfElse_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[IfElse_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void Print_Error(){
         switch(found.sym){
@@ -225,7 +250,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
                 break;
         }
-        Sintax.Errores.add("[Print_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Print_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
    public static void Asignar_Error(){
         switch(found.sym){
@@ -236,7 +261,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
                 break;
         }
-        Sintax.Errores.add("[Asignacion_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Asignacion_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
  
     public static void Declarar(){
@@ -251,7 +276,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
                 break;
         }
-        Sintax.Errores.add("[Declaracion_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Declaracion_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
     public static void TipoA_Error(){
         switch(found.sym){
@@ -274,7 +299,21 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
                 break;
         }
-        Sintax.Errores.add("[Type_Error] encontro: "+found.value.toString()+" en la linea: "+found.right+" columna: "+found.left+"\n");
+        Sintax.Errores.add("[Type_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+    public static void Parametro(){
+            switch(found.sym){
+            case sym.IDENTIFICADOR: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: TYPE \n");
+                break;
+            case sym.Coma: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: IDENTIFICADOR \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: parametro\n");
+                break;
+            }
+             Sintax.Errores.add("[Type_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
 :};
 
@@ -433,7 +472,7 @@ METODO_T::=
     metodoT.addNode(s);
     metodoT.addNode(new Node("EndCall", "end call"));
     RESULT=metodoT;
-:}//|  error:e {: System.out.println("FUNCION PARAMETRO");Sintax.Parametro_Error(); :}
+:}| TYPE error:e {: System.out.println("FUNCION PARAMETRO");Sintax.Parametro_Error(); :}
 ;
 PARAMETRO::=
     TYPE:t IDENTIFICADOR:i Coma PARAMETRO:pa{:
@@ -450,7 +489,7 @@ PARAMETRO::=
     parametro.addNode(new Node("TYPE", ((String) t)));
     parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
     RESULT=parametro;
-     :}
+     :}| TYPE error:e {: System.out.println("FUNCION PARAMETRO");Sintax.Parametro(); :}
    
 ;
 
@@ -1003,7 +1042,7 @@ PROPOSICION::=
     Node prop= new Node("PROPOSICION");
     prop.addNode(new Node("BOOL", ((String) t)));
     RESULT=prop;
-    :}
+    :}|error
 ;
 
 PROP3::=
@@ -1391,7 +1430,7 @@ SWITCH_ESTRUCTURA::=
     Switch.addNode(new Node("Default", "default"));
     Switch.addNode(s);
     RESULT=Switch;
-    :}|  SWITCH_ESTRUCTURA error:e {: System.out.println("SWITCH");Sintax.Switch(); :}
+    :}|  Case error:e {: System.out.println("SWITCH");Sintax.Switch(); :}
 ;
 CASOS::=
     CASOC:c
