@@ -302,10 +302,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnFunctions = new javax.swing.JButton();
         btnFor = new javax.swing.JButton();
         btnIf = new javax.swing.JButton();
-        btnArbol = new javax.swing.JButton();
+        btnIf1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAnalizarSin = new javax.swing.JTextArea();
+        btnArbol = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -364,7 +365,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnWhile.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnWhile.setText("While");
+        btnWhile.setText("Error 1");
         btnWhile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnWhileActionPerformed(evt);
@@ -390,7 +391,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnFunctions.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnFunctions.setText("Functions");
+        btnFunctions.setText("FunctionsL");
         btnFunctions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFunctionsActionPerformed(evt);
@@ -398,7 +399,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnFor.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnFor.setText("For");
+        btnFor.setText("Error2");
         btnFor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnForActionPerformed(evt);
@@ -406,18 +407,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         btnIf.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnIf.setText("If");
+        btnIf.setText("Error3");
         btnIf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIfActionPerformed(evt);
             }
         });
 
-        btnArbol.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnArbol.setText("Ver arbol");
-        btnArbol.addActionListener(new java.awt.event.ActionListener() {
+        btnIf1.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        btnIf1.setText("FunctionsM");
+        btnIf1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnArbolActionPerformed(evt);
+                btnIf1ActionPerformed(evt);
             }
         });
 
@@ -427,21 +428,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnWhile, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnFor)
-                .addGap(18, 18, 18)
-                .addComponent(btnIf)
-                .addGap(18, 18, 18)
-                .addComponent(btnCase)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnFunctions)
-                        .addGap(63, 63, 63)
-                        .addComponent(btnArbol)))
-                .addGap(18, 18, 18))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnWhile, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnFor)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnIf)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(btnCase)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnIf1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnFunctions)))
+                .addGap(19, 19, 19))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -451,15 +454,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFunctions)
+                    .addComponent(btnIf1)
                     .addComponent(btnCase)
-                    .addComponent(btnWhile)
-                    .addComponent(btnFor)
                     .addComponent(btnIf)
-                    .addComponent(btnArbol))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                    .addComponent(btnFor)
+                    .addComponent(btnWhile))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,6 +479,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtAnalizarSin.setText("/^ERRORES^/");
         jScrollPane3.setViewportView(txtAnalizarSin);
 
+        btnArbol.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        btnArbol.setText("Ver arbol");
+        btnArbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArbolActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -484,11 +495,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane3)
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(298, 298, 298)
+                .addComponent(btnArbol)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
+                .addComponent(btnArbol)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
@@ -580,7 +596,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado;\n"
                         +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
                         +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call begin imprimirHola()\n"  
-                        + "\t Println(\"Hola\");\n end call";
+                        + "\t List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \nend else\nend call";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnFunctionsActionPerformed
 
@@ -679,6 +695,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btnIf1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIf1ActionPerformed
+        String codigo = "main begin \n"+ "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
+                        +"\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n" 
+                        + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
+                        + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
+                        + "\tif n=1 then\n" + "\treturn 1;\n"+"end if\nelsethen\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                        +"\treturn resultado\n"+"end else\nend call\n";
+        txtResultado.setText(codigo);
+        
+    }//GEN-LAST:event_btnIf1ActionPerformed
         public static void llenar(Node root, DefaultMutableTreeNode current){
         for (int i = 0; i < root.hijos.size(); i++) {
             current.add(new DefaultMutableTreeNode(root.hijos.get(i)));
@@ -728,6 +755,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnFor;
     private javax.swing.JButton btnFunctions;
     private javax.swing.JButton btnIf;
+    private javax.swing.JButton btnIf1;
     private javax.swing.JButton btnWhile;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
