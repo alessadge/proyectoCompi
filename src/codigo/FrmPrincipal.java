@@ -578,7 +578,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         +"end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                         + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
                         + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado;\n"
-                        +"if n=1 then\n"+"\t return1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
+                        +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
                         +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call begin imprimirHola()\n"  
                         + "\t Println(\"Hola\");\n end call";
         txtResultado.setText(codigo);
