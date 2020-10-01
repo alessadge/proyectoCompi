@@ -64,6 +64,149 @@ parser code
         }
        Sintax.Errores.add("[Void_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+   public static void Matriz_Error(){
+        switch(found.sym){
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.ParIzq:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador o ) \n");
+                break;
+            case sym.ENTERO:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( \n");
+                break;
+            case sym.ParDer:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ENTERO \n");
+                break;
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ) \n");
+                break;
+            case sym.CurlyIzq:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => o }\n");
+                break;
+            case sym.CurlyDer:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Formato Lista ej.1,2,3\n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: } \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
+                break;
+        }
+       Sintax.Errores.add("[AsigLista_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+   public static void TypeList_Error(){
+        switch(found.sym){
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.ParIzq:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.ENTERO:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( \n");
+                break;
+            case sym.ParDer:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ENTERO \n");
+                break;
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ) \n");
+                break;
+            case sym.CurlyIzq:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.CurlyDer:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Formato Lista ej.1,2,3\n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: } \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
+                break;
+        }
+       Sintax.Errores.add("[AsigLista_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+   public static void TypeBool_Error(){
+        switch(found.sym){
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.TBool:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: true/false \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o =>\n");
+                break;
+        }
+       Sintax.Errores.add("[AsigBool_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+   public static void TypeFloat_Error(){
+        switch(found.sym){
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.CADENA:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Operacion aritmetica o metodo \n");
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o =>\n");
+                break;
+        }
+       Sintax.Errores.add("[AsigFloat_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+   public static void TypeString_Error(){
+        switch(found.sym){
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.CADENA:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Operacion aritmetica o metodo \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o =>\n");
+                break;
+        }
+       Sintax.Errores.add("[AsigString_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+    public static void TypeInt_Error(){
+        switch(found.sym){
+            case sym.OP_ASIG:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Type \n");
+                break;
+            case sym.CADENA:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: => \n");
+                break;
+            case sym.PuntoComa: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Operacion aritmetica o metodo \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o => \n");
+                break;
+        }
+       Sintax.Errores.add("[AsigInt_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
     public static void Entrada_Error(){
         switch(found.sym){
             case sym.put:
@@ -165,7 +308,7 @@ parser code
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: sentencia \n");
                 break;
             default:
-                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end while \n");
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: end while o repeat \n");
                 break;
         }
         Sintax.Errores.add("[While_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
@@ -245,6 +388,21 @@ parser code
         }
         Sintax.Errores.add("[Switch_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+
+        public static void Concat_Error(){
+        switch(found.sym){
+            case sym.IDENTIFICADOR:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: , \n");
+                break;
+            case sym.CADENA: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: , \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: error concatenacion \n");
+                break;
+        }
+        Sintax.Errores.add("[Concatenacion_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
     public static void Else_Error(){
         Sintax.Errores.add("Error en el Else \n");
         Sintax.Errores.add("[IfElse_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
@@ -269,10 +427,91 @@ parser code
         }
         Sintax.Errores.add("[Print_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
     }
+    public static void Lista_Error(){
+        switch(found.sym){
+            case sym.Coma: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ENTERO/DECIMAL/IDENTIFICADOR/CADENA \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador o ; \n");
+                break;
+        }
+        Sintax.Errores.add("[Matriz_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+   public static void Coordenadas_Error(){
+        switch(found.sym){
+            case sym.SquareBIzq: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.ENTERO: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: [ \n");
+                break;
+            case sym.SquareBDer: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ENTERO \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ] o ; \n");
+                break;
+        }
+        Sintax.Errores.add("[Matriz_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+
+     public static void Prop2_Error(){
+        switch(found.sym){
+            case sym.ParIzq: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( \n");
+                break;
+            case sym.ParDer: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: proposicion \n");
+                break;
+            case sym.IDENTIFICADOR: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: </>/>=/<=/= \n");
+                break;
+            case sym.OP_LOGIC: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ) \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o proposicion \n");
+                break;
+        }
+        Sintax.Errores.add("[Proposicion2_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
+     public static void Prop1_Error(){
+        switch(found.sym){
+            case sym.ParIzq: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ( \n");
+                break;
+            case sym.ParDer: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: proposicion \n");
+                break;
+            case sym.IDENTIFICADOR: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: </>/>=/<=/= \n");
+                break;
+            case sym.DECIMAL: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: </>/>=/<=/= \n");
+                break;
+            case sym.CADENA: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: </>/>=/<=/= \n");
+                break;
+            case sym.ENTERO: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: </>/>=/<=/= \n");
+                break;
+            case sym.OP_LOGIC: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ) \n");
+                break;
+            default:
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; o proposicion \n");
+                break;
+        }
+        Sintax.Errores.add("[Proposicion1_Error] encontro: "+found.value.toString()+" en la linea: "+(found.right+1)+" columna: "+found.left+"\n");
+    }
    public static void Asignar_Error(){
         switch(found.sym){
             case sym.OP_ASIG: 
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: identificador \n");
+                break;
+            case sym.IDENTIFICADOR: 
+                Sintax.Errores.add("[Error_Sintaxis] se esperaba: Tipo \n");
                 break;
             default:
                 Sintax.Errores.add("[Error_Sintaxis] se esperaba: ; \n");
@@ -783,7 +1022,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(oa);
     RESULT=declararA;
-    :}
+    :}|TypeInt error: e {:System.out.println("TYPEINT"); Sintax.TypeInt_Error();:}
     |
     TypeString:t IDENTIFICADOR:i OP_ASIG CADENA:c PuntoComa
         {: 
@@ -793,7 +1032,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(new Node("CADENA", ((String) c)));
     RESULT=declararA;
-    :}
+    :}|TypeString error: e {:System.out.println("TYPESTRING"); Sintax.TypeString_Error();:}
     
 |
     TypeFloat:t IDENTIFICADOR:i OP_ASIG OPERACION_ARITMETICA:oa PuntoComa
@@ -804,7 +1043,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(oa);
     RESULT=declararA;
-    :}
+    :}|TypeFloat error: e {:System.out.println("TYPEFLOAT"); Sintax.TypeFloat_Error();:}
     |
     TypeBool:t IDENTIFICADOR:i OP_ASIG TBool:c PuntoComa
             {: 
@@ -814,7 +1053,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(new Node("BOOl", ((String) c)));
     RESULT=declararA;
-    :}
+    :}|TypeBool error: e {:System.out.println("TYPEBOOL"); Sintax.TypeBool_Error();:}
     |
     TypeList:t IDENTIFICADOR:i ParIzq ENTERO:e ParDer OP_ASIG CurlyIzq LISTA:l CurlyDer PuntoComa
             {: 
@@ -825,7 +1064,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("ENTERO",((String) e)));
     declararA.addNode(l);
     RESULT=declararA;
-    :}
+    :}|TypeList error: e {:System.out.println("TYPELIST"); Sintax.TypeList_Error();:}
     |
     TypeMatriz:t IDENTIFICADOR:i ParIzq ENTERO:e1 ParDer ParIzq ENTERO:e2 ParDer OP_ASIG CurlyIzq LISTA:l1 CurlyDer CurlyIzq LISTA:l2 CurlyDer PuntoComa
     {: 
@@ -838,7 +1077,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(l1);
     declararA.addNode(l2);
     RESULT=declararA;
-    :}
+    :}|TypeMatriz error: e {:System.out.println("TYPEMATRIZ"); Sintax.Matriz_Error();:}
 |      
     TypeInt:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
@@ -878,7 +1117,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeBool error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 |
     TypeList:t IDENTIFICADOR:i  OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
@@ -888,7 +1127,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeList error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 |
     TypeMatriz:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
@@ -898,7 +1137,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeMatriz error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 |
 
     TypeInt:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
@@ -909,7 +1148,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeInt error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 |
     TypeString:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
     {:
@@ -919,7 +1158,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeString error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 |
     TypeFloat:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
     {:
@@ -929,7 +1168,7 @@ DECLARAR_ASIGNAR::=
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
     RESULT=declararA;
-    :}| TypeFloat error:e {: System.out.println("DECLARAR");Sintax.Declarar(); :}
+    :}
 ;
 ASIGNAR::=
     IDENTIFICADOR:i OP_ASIG TIPOA:c
@@ -1038,7 +1277,7 @@ LISTA::=
     Node LISTA= new Node("LISTA");
     LISTA.addNode(new Node("DECIMAL", ((String) t)));
     RESULT=LISTA;
-    :}
+    :}|error:e{: System.out.println("LISTA"); Sintax.Lista_Error();:}
 ;
 
 PROPOSICION::=
@@ -1086,7 +1325,7 @@ PROP3::=
     Node prop3= new Node("PROPOSICION");
     prop3.addNode(p);
     RESULT=prop3;
-    :}
+    :}| ParIzq error:e {:System.out.println("Prop3"); Sintax.Prop2_Error(); :}
 ;
 PROP2::=
     ParIzq PROP1:p ParDer OP_LOGIC:t PROP2:p1
@@ -1226,7 +1465,7 @@ PROP1::=
     prop1.addNode(new Node("OP_RELA", ((String) t)));
     prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
     RESULT=prop1;
-    :}
+    :}| IDENTIFICADOR error:e {:System.out.println("Prop1"); Sintax.Prop1_Error(); :}
 
     
 ;
@@ -1241,7 +1480,7 @@ OPERACION_ARITMETICA::=
     RESULT=operacionA;
     :}
     |TX:oa {:
-        Node operacionA= new Node("operacionA");
+        Node operacionA= new Node("op");
         operacionA.addNode(oa);
         RESULT=operacionA;
     :}
@@ -1399,7 +1638,7 @@ CONCAT::=
     RESULT=concatenacion;
     :}
     |
-    Coma IDENTIFICADOR:c CONCAT:c1
+    Coma IDENTIFICADOR:c CONCAT:c1 
     {:
     Node concatenacion= new Node("concatenacion");
     concatenacion.addNode(new Node("IDENTIFICADOR", ((String) c)));
@@ -1622,7 +1861,7 @@ SHOWCOORDENADAS::=
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) e2)));
     RESULT=showCoor;
-    :}
+    :}|error:e {: System.out.println("MATRIZ"); Sintax.Coordenadas_Error(); :}
 ;
 COMENTAR::=
     COMENTARIO
