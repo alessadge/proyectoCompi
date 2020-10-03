@@ -1171,6 +1171,15 @@ DECLARAR_ASIGNAR::=
     :}
 ;
 ASIGNAR::=
+    SHOWCOORDENADAS:i OP_ASIG TIPOA:c
+    {:
+    Node Asignar= new Node("asignar");
+    Asignar.addNode(i);
+    Asignar.addNode(new Node("OP_ASIG","=>"));
+    Asignar.addNode(c);
+    RESULT=Asignar;
+    :}
+    |
     IDENTIFICADOR:i OP_ASIG TIPOA:c
     {:
     Node Asignar= new Node("asignar");
