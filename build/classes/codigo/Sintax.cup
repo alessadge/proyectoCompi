@@ -599,6 +599,7 @@ terminal  IF,
         OP_DIV,
         OP_LOGIC,
         OP_RELA,
+        OP_RELA2,
         OP_ASIG,    
         Case,
         Of,
@@ -640,7 +641,7 @@ terminal  IF,
 non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
              ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
              OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
-             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX; 
+             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX,TY,FY; 
 
 start with INICIO;
 
@@ -1326,129 +1327,60 @@ PROP2::=
     :}
 
 ;
+
 PROP1::=
-    IDENTIFICADOR:i1 OP_RELA:t IDENTIFICADOR:i2
+    FY:f1 OP_RELA:o FY:f2
     {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2)));
-    RESULT=prop1;
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(f1);
+    prop.addNode(new Node("OP_RELA", ((String) o)));
+    prop.addNode(f2);
+    RESULT=prop;
     :}
     |
+    TY:f1 
+    {:
+    Node prop= new Node("PROPOSICION");
+    prop.addNode(f1);
+    RESULT=prop;
+    :}
+;
 
-    IDENTIFICADOR:i OP_RELA:t ENTERO:e
+TY::=
+    FY:f1 OP_RELA2:o FY:f2
     {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("ENTERO", ((String) e)));
-    RESULT=prop1;
+    Node ty= new Node("PROPOSICION");
+    ty.addNode(f1);
+    ty.addNode(new Node("OP_RELA", ((String) o)));
+    ty.addNode(f2);
+    RESULT=ty;
     :}
-    |
-    ENTERO:e1 OP_RELA:t ENTERO:e2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("ENTERO", ((String) e1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("ENTERO", ((String) e2)));
-    RESULT=prop1;
-    :}
-    |
-    ENTERO:i1 OP_RELA:t IDENTIFICADOR:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("ENTERO", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("ENTERO", ((String) i2))); 
-    RESULT=prop1;
-    :}    
-    |
+;
 
-    IDENTIFICADOR:i1 OP_RELA:t CADENA:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("CADENA", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-    CADENA:i1 OP_RELA:t CADENA:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("CADENA", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("CADENA", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-    CADENA:i1 OP_RELA:t IDENTIFICADOR:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("CADENA", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-
-    IDENTIFICADOR:i1 OP_RELA:t DECIMAL:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("DECIMAL", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-    DECIMAL:i1 OP_RELA:t DECIMAL:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("DECIMAL", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("DECIMAL", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-    DECIMAL:i1 OP_RELA:t IDENTIFICADOR:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("DECIMAL", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
-    RESULT=prop1;
-    :}
-    |
-
-    IDENTIFICADOR:i1 OP_RELA:t SHOWCOORDENADAS:i2
-    {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i1)));
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(i2); 
-    RESULT=prop1;
-    :}
-    |
-    SHOWCOORDENADAS:i1 OP_RELA:t SHOWCOORDENADAS:i2
-        {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(i1);
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(i2); 
-    RESULT=prop1;
-    :}
-    |
-    SHOWCOORDENADAS:i1 OP_RELA:t IDENTIFICADOR:i2
-        {:
-    Node prop1= new Node("PROPOSICION");
-    prop1.addNode(i1);
-    prop1.addNode(new Node("OP_RELA", ((String) t)));
-    prop1.addNode(new Node("IDENTIFICADOR", ((String) i2))); 
-    RESULT=prop1;
-    :}| IDENTIFICADOR error:e {:System.out.println("Prop1"); Sintax.Prop1_Error(); :}
-
-    
+FY::=
+	IDENTIFICADOR:o
+         {:
+        Node fy= new Node("IDENTIFICADOR", ((String) o));
+        RESULT=fy;
+         :}
+        |
+	ENTERO:o
+         {:
+        Node fy= new Node("ENTERO", ((String) o));
+        RESULT=fy;
+         :}
+        |
+	CADENA:o
+         {:
+        Node fy= new Node("CADENA", ((String) o));
+        RESULT=fy;
+         :}
+        |
+	SHOWCOORDENADAS:o
+         {:
+        Node fy= new Node("COORDENADAS", ((String) o));
+        RESULT=fy;
+         :}	
 ;
 
 OPERACION_ARITMETICA::=
@@ -1530,7 +1462,6 @@ IMPRIMIR::=
     Imp ParIzq CADENA:c CONCAT:c1 ParDer  PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(new Node("Imp", "Print"));
     imprimir.addNode(new Node("cadena", ((String) c)));
     imprimir.addNode(c1); 
     RESULT=imprimir;

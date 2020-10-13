@@ -118,8 +118,11 @@ import java_cup.runtime.Symbol;
 ("And"|"Or") {
         return new Symbol(sym.OP_LOGIC,yychar,yyline,yytext());
     }
-(">"|"<"|">="|"<="|"!="|"=") {
+(">"|"<"|">="|"<=") {
         return new Symbol(sym.OP_RELA,yychar,yyline,yytext());
+    }
+("!="|"=") {
+        return new Symbol(sym.OP_RELA2,yychar,yyline,yytext());
     } 
 ("=>") {
         return new Symbol(sym.OP_ASIG,yychar,yyline,yytext());
