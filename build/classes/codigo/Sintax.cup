@@ -907,10 +907,10 @@ LOOP_FOR::=
     For TypeInt IDENTIFICADOR:i OP_ASIG ENTERO:e IN Range ParIzq PROP1:p ParDer SENTENCIA:s EndFor
 {:
         Node For = new Node("FOR");
-        For.addNode(new Node("TypeInt","int"));
+        For.addNode(new Node("Int","Int"));
         For.addNode(new Node("IDENTIFICADOR", ((String) i)));
         For.addNode(new Node("OP_ASIG", "=>"));
-        For.addNode(new Node("ENTERO",((String) e) ));
+        For.addNode(new Node("Int",((String) e) ));
         For.addNode(p);
         For.addNode(s);
         RESULT=For;
@@ -990,7 +990,7 @@ DECLARAR_ASIGNAR::=
     TypeInt:t IDENTIFICADOR:i OP_ASIG OPERACION_ARITMETICA:oa PuntoComa
     {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Int", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(oa);
@@ -1143,6 +1143,8 @@ DECLARAR_ASIGNAR::=
     RESULT=declararA;
     :}
 ;
+
+
 ASIGNAR::=
     SHOWCOORDENADAS:i OP_ASIG TIPOA:c
     {:
@@ -1312,7 +1314,7 @@ PROP3::=
 PROP2::=
     ParIzq PROP1:p ParDer OP_LOGIC:t PROP2:p1
         {:
-    Node prop2= new Node("PROPOSICION");
+    Node prop2= new Node("PROPOSICION2");
     prop2.addNode(p);
     prop2.addNode(new Node("OP_LOGIC", ((String) t)));
     prop2.addNode(p1);
@@ -1331,7 +1333,7 @@ PROP2::=
 PROP1::=
     FY:f1 OP_RELA:o FY:f2
     {:
-    Node prop= new Node("PROPOSICION");
+    Node prop= new Node("PROPOSICION1");
     prop.addNode(f1);
     prop.addNode(new Node("OP_RELA", ((String) o)));
     prop.addNode(f2);
@@ -1366,21 +1368,21 @@ FY::=
         |
 	ENTERO:o
          {:
-        Node fy= new Node("ENTERO", ((String) o));
+        Node fy= new Node("Int", ((String) o));
         RESULT=fy;
          :}
         |
 	CADENA:o
          {:
-        Node fy= new Node("CADENA", ((String) o));
+        Node fy= new Node("String", ((String) o));
         RESULT=fy;
          :}
-        |
-	SHOWCOORDENADAS:o
+         |
+	DECIMAL:o
          {:
-        Node fy= new Node("COORDENADAS", ((String) o));
+        Node fy= new Node("Float", ((String) o));
         RESULT=fy;
-         :}	
+         :}
 ;
 
 OPERACION_ARITMETICA::=
@@ -1425,14 +1427,12 @@ TX::=
 FX::=
     ENTERO:o
     {:
-        Node FX= new Node("ENTERO");
-        FX.addNode(new Node("ENTERO", ((String) o)));
+        Node FX= new Node("Int", ((String) o));
         RESULT=FX;
     :}
     |IDENTIFICADOR:o
     {:
-        Node FX= new Node("IDENTIFICADOR");
-        FX.addNode(new Node("IDENTIFICADOR", ((String) o)));
+        Node FX= new Node("IDENTIFICADOR", ((String) o));
         RESULT=FX;
     :}
     |DECIMAL:o

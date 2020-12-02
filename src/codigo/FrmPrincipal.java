@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
@@ -580,7 +581,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaseActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<a)\n" + "\t Print(\"hola\");\n"
+        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<10)\n" + "\t Print(\"hola\");\n"
                         +"end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                         + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
                         + "end case\n" + "end main";
@@ -632,7 +633,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-       // TODO add your handling code here:
+        tabla_simbolos = new ArrayList<Entry>();
+        ids=null; ids2=null;
+        tipos_matrix=null;Errores_tipos=null; 
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -671,6 +674,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 ex.printStackTrace();
             }
         } 
+        try {
+            analizar();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btnIfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIfActionPerformed
@@ -723,6 +732,170 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 llenar(root.hijos.get(i), (DefaultMutableTreeNode)current.getChildAt(i));
             }
         }
+    }
+        
+        public static void llenar_tabla(Node actual) {
+        if (actual.nombre.equals("FOR")) {
+            if (actual.hijos.get(0).valor.equals("Int")) {
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            }
+            if(!Compr_valor(actual.hijos.get(4)).equals("Int")){
+                System.out.println("Error en el for, se esperaba un int en la proposicion");
+            }
+        
+        }else if(actual.nombre.equals("DECLARAR_ASIGNAR")){
+            if(actual.hijos.get(0).valor.equals("Int")){
+                 
+            }
+        }
+                
+        for (int i = 0; i < actual.hijos.size(); i++) {
+            if (!actual.hijos.get(i).hijos.isEmpty()) {
+                llenar_tabla(actual.hijos.get(i));
+            }
+        }
+    }
+
+    public static void agregar(Entry e) {
+        boolean esta = false;
+        for (int i = 0; i < tabla_simbolos.size(); i++) {
+            if (e.id.equals(tabla_simbolos.get(i).id)) {
+                esta = true;
+                break;
+            }
+        }
+        if (esta) {
+            System.out.println("La variable: " + e.id + " ya fue declarada");
+        } else {
+            tabla_simbolos.add(e);
+        }
+    }
+/*
+    public static String tipo_valoro(Node n) {
+        int caracter = '"';
+        if (n.hijos.isEmpty()) {
+            if (n.valor.contains("" + caracter)) {
+                return "String";
+            } else if (n.valor.equals("true") || n.valor.equals("false")) {
+                return "Bool";
+            } else {
+                if (existe(n.valor)) {
+                    return get_tipo(n.valor);
+                } else {
+                    System.out.println("La variable: " + n.valor + " no ha sido declarada");
+                    return "Int";
+                }
+            }
+        }
+        return "Int";
+    }
+*/
+    public static String Compr_valor(Node n){
+        if(n.valor.substring(0).equals("1")||
+                n.valor.substring(0).equals("2")||
+                n.valor.substring(0).equals("3")||
+                n.valor.substring(0).equals("4")||
+                n.valor.substring(0).equals("5")||
+                n.valor.substring(0).equals("6")||
+                n.valor.substring(0).equals("7")||
+                n.valor.substring(0).equals("8")||
+                n.valor.substring(0).equals("9")||
+                n.valor.substring(0).equals("0")                
+           ){
+            return "Int";
+        }else if(n.nombre.equals("PROPOSICION1")){
+                if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("Int")) {
+                    return "Int";
+                }else if(n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Float")){
+                    return "Float";
+                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")){
+                        if(existe(n.hijos.get(0).valor)==0 || existe(n.hijos.get(2).valor)==0){
+                            System.out.println("La variable "+n.hijos.get(0).valor+" o La variable "+n.hijos.get(2).valor+"no existe");
+                            return "";
+                        }else{
+                            
+                            if(get_tipo(n.hijos.get(0).valor).equals(get_tipo(n.hijos.get(2).valor))){
+                                    return get_tipo(n.hijos.get(0).valor); 
+                            }else{
+                                    return "";
+                            }
+                        }
+                        
+                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Int")){
+                    if(existe(n.hijos.get(0).valor)==0){
+                        System.out.println("La variable"+n.hijos.get(0).valor+" no existe");
+                            return "";
+                        }else if(existe(n.hijos.get(0).valor)==1){
+                            if(get_tipo(n.hijos.get(0).valor).equals("Int")){
+                                    return get_tipo(n.hijos.get(0).valor); 
+                            }else{
+                                    return "";
+                            }
+                        }
+                        
+                }else if(n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")){
+                        if(existe(n.hijos.get(2).valor)==0){
+                            System.out.println("la variable"+n.hijos.get(2).valor+" no existe");
+                            return "";
+                        }else if(existe(n.hijos.get(2).valor)==1){
+                            if(get_tipo(n.hijos.get(2).valor).equals("Int")){
+                                    return get_tipo(n.hijos.get(2).valor); 
+                            }else{
+                                    return "";
+                            }
+                        }
+                        
+                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Float")){
+                        if(existe(n.hijos.get(0).valor)==0){
+                            System.out.println("La variable "+n.hijos.get(0).valor+" no existe");
+                            return "";
+                        }else if(existe(n.hijos.get(0).valor)==1){
+                            if(get_tipo(n.hijos.get(0).valor).equals("Float")){
+                                    return get_tipo(n.hijos.get(0).valor); 
+                            }else{
+                                    return "";
+                            }
+                        }
+                        
+                }else if(n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Int")){
+                        if(existe(n.hijos.get(2).valor)==0){
+                            System.out.println("La variable "+n.hijos.get(2).valor+"no existe");
+                            return "";
+                        }else{
+                            if(get_tipo(n.hijos.get(2).valor).equals("Float")){
+                                    return get_tipo(n.hijos.get(2).valor); 
+                            }else{
+                                    return "";
+                            }
+                        }
+                        
+                }
+        }
+        return "";
+    } 
+    
+    public static int existe(String s) {
+        for (int i = 0; i < tabla_simbolos.size(); i++) {
+            if (s.equals(tabla_simbolos.get(i).id)) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public static String get_tipo(String s) {
+        for (int i = 0; i < tabla_simbolos.size(); i++) {
+            if (s.equals(tabla_simbolos.get(i).id)) {
+                return tabla_simbolos.get(i).tipo;
+            }
+        }
+        return "";
+    }
+    public static void analizar()throws IOException {
+        llenar_tabla(root);
+        for (int i = 0; i < tabla_simbolos.size(); i++) {
+            System.out.println("ID: " + tabla_simbolos.get(i).id + " TIPO: " + tabla_simbolos.get(i).tipo);
+        }   
     }
     /**
      * @param args the command line arguments
@@ -794,4 +967,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     public static Node root;
     DefaultMutableTreeNode arbol;
+    public static ArrayList<Entry> tabla_simbolos = new ArrayList<Entry>();
+    public static ArrayList<String> ids, ids2;
+    public static ArrayList<String> tipos_matrix,Errores_tipos;
 }

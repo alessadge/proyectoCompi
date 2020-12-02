@@ -16,6 +16,8 @@ import java_cup.runtime.Symbol;
     ID={LETTER}({NUMBER}|{GBajo}|{LETTER})*
     STRING=\"({LETTER}|{NUMBER}|{Espacio}|{Caracteres})*\"
     Comentario=("/^")({LETTER}|{NUMBER}|{Espacio}|{Caracteres})*("^/")
+    NUMERO=[1-9]{NUMBER}*|0 
+    NUMEROD={NUMBER}+{Point}{NUMBER}+
     INTEGER=[1-9]{NUMBER}*|0 
     DECIMAL={NUMBER}+{Point}{NUMBER}+
 
