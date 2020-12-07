@@ -1019,7 +1019,7 @@ DECLARAR_ASIGNAR::=
     :}|TypeBool error: e {:System.out.println("TYPEBOOL"); Sintax.TypeBool_Error();:}
     |
     TypeList:t IDENTIFICADOR:i ParIzq ENTERO:e ParDer OP_ASIG CurlyIzq LISTA:l CurlyDer PuntoComa
-            {: 
+    {: 
     Node declararA= new Node("asig");
     declararA.addNode(new Node("List", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));

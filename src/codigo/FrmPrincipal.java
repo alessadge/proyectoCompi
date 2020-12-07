@@ -758,7 +758,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (!Compr_valor(actual.hijos.get(4)).equals("Int")) {
                 Errores_tipos.add("Error en el for, se esperaba un int en la proposicion");
             }
-            
+
         } else if (actual.nombre.equals("asig")) {//Comprobacion de tipos de Declaracion con asignacion
             if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
@@ -773,15 +773,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
             if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("String")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
-            }else if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
-                if (existe(actual.hijos.get(3).valor)==1) {
+            } else if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
+                if (existe(actual.hijos.get(3).valor) == 1) {
                     if (actual.hijos.get(0).valor.equals("String") && get_tipo(actual.hijos.get(3).valor).equals("String")) {
-                    agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
-                } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
-                }
-                }else {
-                    Errores_tipos.add("La raiable "+actual.hijos.get(3).valor+" no existe");
+                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                    } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
+                        Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                    }
+                } else {
+                    Errores_tipos.add("La raiable " + actual.hijos.get(3).valor + " no existe");
                 }
             } else if (actual.hijos.get(0).valor.equals("String") && !actual.hijos.get(3).nombre.equals("String")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
@@ -790,19 +790,44 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("Bool")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
             } else if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
-                if (existe(actual.hijos.get(3).valor)==1) {
-                     if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
-                    agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
-                } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
-                }
-                }else{
-                    Errores_tipos.add("La raiable "+actual.hijos.get(3).valor+" no existe");
+                if (existe(actual.hijos.get(3).valor) == 1) {
+                    if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
+                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                    } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
+                        Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                    }
+                } else {
+                    Errores_tipos.add("La raiable " + actual.hijos.get(3).valor + " no existe");
                 }
             } else if (actual.hijos.get(0).valor.equals("Bool") && !(actual.hijos.get(3).nombre.equals("Bool"))) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
+        } else if (actual.nombre.equals("asignar")) {//Cpmprobacion de tipos asignar
+            if (existe(actual.hijos.get(0).valor) == 1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Int") && Compr_valor(actual.hijos.get(2)).equals("Int")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("Int") && !Compr_valor(actual.hijos.get(2)).equals("Int")) {
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                }
+                if (get_tipo(actual.hijos.get(0).valor).equals("Float") && Compr_valor(actual.hijos.get(2)).equals("Float")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("Float") && !Compr_valor(actual.hijos.get(2)).equals("Float")) {
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                }
+
+                if (get_tipo(actual.hijos.get(0).valor).equals("String") && Compr_valor(actual.hijos.get(2)).equals("String")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("String") && !Compr_valor(actual.hijos.get(2)).equals("String")) {
+                    System.out.println("tipo" + get_tipo(actual.hijos.get(0).valor));
+                    System.out.println("tipo" + Compr_valor(actual.hijos.get(2)));
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                }
+                if (get_tipo(actual.hijos.get(0).valor).equals("Bool") && Compr_valor(actual.hijos.get(2)).equals("Bool")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("Bool") && !Compr_valor(actual.hijos.get(2)).equals("Bool")) {
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                }
+
+            } else {
+                Errores_tipos.add("La variable" + actual.hijos.get(0).valor + " no existe");
+            }
         }
 
         for (int i = 0; i < actual.hijos.size(); i++) {
@@ -813,7 +838,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void agregar(Entry e) {
-        boolean esta = false;
+        tabla_simbolos.add(e);
+        /*boolean esta = false;
         for (int i = 0; i < tabla_simbolos.size(); i++) {
             if (e.id.equals(tabla_simbolos.get(i).id)) {
                 esta = true;
@@ -821,10 +847,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
         if (esta) {
-            System.out.println("La variable: " + e.id + " ya fue declarada");
+            Errores_tipos.add("La variable: " + e.id + " ya fue declarada");
         } else {
             tabla_simbolos.add(e);
-        }
+        }*/
     }
 
     public static String Compr_valor(Node n) {
@@ -851,6 +877,42 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             }
                         } else {
                             Errores_tipos.add("La variable " + t3.valor + " no existe");
+                        }
+                    }
+                }
+            }
+        }
+        if (n.nombre.equals("TIPO")) {
+            Node t = n.hijos.get(0);
+            if (t.nombre.equals("op")) {
+                Node t1 = t.hijos.get(0);
+                if (t1.nombre.equals("Valor")) {
+                    Node t2 = t1.hijos.get(0);
+                    if (t2.nombre.equals("Valoro")) {
+                        if (t2.hijos.get(0).nombre.equals("Int")) {
+                            return "Int";
+                        } else if (t2.hijos.get(0).nombre.equals("Float")) {
+                            return "Float";
+                        } else if (t2.hijos.get(0).nombre.equals("String")) {
+                            return "String";
+                        }else if (t2.hijos.get(0).nombre.equals("Bool")) {
+                            return "Bool";
+                        }
+                        else if (t2.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                            Node t3 = t2.hijos.get(0);
+                            if (existe(t3.valor) == 1) {
+                                if (get_tipo(t3.valor).equals("Int")) {
+                                    return "Int";
+                                } else if (get_tipo(t3.valor).equals("Float")) {
+                                    return "Float";
+                                } else if (get_tipo(t3.valor).equals("String")) {
+                                    return "String";
+                                } else if (get_tipo(t3.valor).equals("Bool")) {
+                                    return "Bool";
+                                }
+                            } else {
+                                Errores_tipos.add("La variable " + t3.valor + " no existe");
+                            }
                         }
                     }
                 }
