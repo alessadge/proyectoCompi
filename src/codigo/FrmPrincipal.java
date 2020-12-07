@@ -747,19 +747,27 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void llenar_tabla(Node actual) {
-
-        if (actual.nombre.equals("FOR")) {//Comprobacion de tipos de for
+//////////////////////////Comprobacion de tipos de for
+        if (actual.nombre.equals("FOR")) {
             if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
             } else {
                 Errores_tipos.add("Error en el For, en la declaracion se necesita valores Int");
             }
-            System.out.println("" + Compr_valor(actual.hijos.get(4)));
-            if (!Compr_valor(actual.hijos.get(4)).equals("Int")) {
-                Errores_tipos.add("Error en el for, se esperaba un int en la proposicion");
+            if (actual.hijos.get(4).hijos.size() > 1) {
+                if (actual.hijos.get(4).hijos.get(0).nombre.equals("IDENTIFICADOR")
+                   || actual.hijos.get(4).hijos.get(2).nombre.equals("IDENTIFICADOR")     
+                   ) {
+                    
+                }else{
+                    Errores_tipos.add("Condicion no valida para el for");
+                }
+            } else {
+                Errores_tipos.add("Condicion no valida para el for");
             }
-
-        } else if (actual.nombre.equals("asig")) {//Comprobacion de tipos de Declaracion con asignacion
+        }
+////////////////////////////Comprobacion de tipos de Declaracion con asignacion        
+        if (actual.nombre.equals("asig")) {
             if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
             } else if (actual.hijos.get(0).valor.equals("Int") && !Compr_valor(actual.hijos.get(3)).equals("Int")) {
@@ -803,7 +811,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
-        } else if (actual.nombre.equals("asignar")) {//Cpmprobacion de tipos asignar
+        }
+
+///////////////////////////////////////////////Comprobacion de tipos asignar
+        if (actual.nombre.equals("asignar")) {
             if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("Int") && Compr_valor(actual.hijos.get(2)).equals("Int")) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Int") && !Compr_valor(actual.hijos.get(2)).equals("Int")) {
@@ -829,12 +840,96 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("La variable" + actual.hijos.get(0).valor + " no existe");
             }
         }
+///////////////////////////////////////Comprobacion de tipos condicion1
+        if (actual.nombre.equals("PROPOSICION1") && actual.hijos.size() > 1) {
+            if (comprobar_condicion(actual) == 1) {
+            } else {
+                Errores_tipos.add("error en la condicion");
+            }
+        }
+        if (actual.nombre.equals("PROPOSICION1-2") && actual.hijos.size() > 1) {
+            if (comprobar_condicion(actual) == 1) {
+            } else {
+                Errores_tipos.add("error en la condicion");
+            }
+        }
+        
 
         for (int i = 0; i < actual.hijos.size(); i++) {
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 llenar_tabla(actual.hijos.get(i));
             }
         }
+    }
+
+    public static int comprobar_condicion(Node actual) {
+        if (actual.hijos.get(0).nombre.equals("Int") && actual.hijos.get(2).nombre.equals("Int")) {
+            return 1;
+        }else if (actual.hijos.get(0).nombre.equals("Float") && actual.hijos.get(2).nombre.equals("Float")) {
+            return 1;
+        }else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
+            if (existe(actual.hijos.get(0).valor) == 0 || existe(actual.hijos.get(2).valor) == 0) {
+                Errores_tipos.add("La variable  " + actual.hijos.get(0).valor + "  o La variable " + actual.hijos.get(2).valor + " no existe");
+
+            } else {
+                if (get_tipo(actual.hijos.get(0).valor).equals(get_tipo(actual.hijos.get(2).valor))) {
+                return 1;
+                } else {
+                    Errores_tipos.add("Las variables " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                }
+            }
+
+        }
+        else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("Int")) {
+            if (existe(actual.hijos.get(0).valor) == 0) {
+                Errores_tipos.add("La variable" + actual.hijos.get(0).valor + " no existe");
+            } else if (existe(actual.hijos.get(0).valor) == 1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Int")) {
+                    return 1;
+                } else {
+                    Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                }
+            }
+
+        } 
+        else if (actual.hijos.get(0).nombre.equals("Int") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
+            if (existe(actual.hijos.get(2).valor) == 0) {
+                Errores_tipos.add("la variable" + actual.hijos.get(2).valor + " no existe");
+            } else if (existe(actual.hijos.get(2).valor) == 1) {
+                if (get_tipo(actual.hijos.get(2).valor).equals("Int")) {
+                    return 1;
+                } else {
+                    Errores_tipos.add("El valor " + actual.hijos.get(0).valor + " y la variable" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                }
+            }
+
+        } 
+        else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("Float")) {
+            if (existe(actual.hijos.get(0).valor) == 0) {
+                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+            } else if (existe(actual.hijos.get(0).valor) == 1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Float")) {
+                    return 1;
+                } else {
+                    Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                }
+            }
+
+        } 
+        else if (actual.hijos.get(0).nombre.equals("Float") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
+            if (existe(actual.hijos.get(2).valor) == 0) {
+                Errores_tipos.add("La variable " + actual.hijos.get(2).valor + "no existe");
+            } else {
+                if (get_tipo(actual.hijos.get(2).valor).equals("Float")) {
+                    return 1;
+                } else {
+                    Errores_tipos.add("El valor " + actual.hijos.get(0).valor + " y la variable" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                }
+            }
+        }else{
+            Errores_tipos.add("Los valores " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+        }
+        return 0;
     }
 
     public static void agregar(Entry e) {
@@ -895,10 +990,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             return "Float";
                         } else if (t2.hijos.get(0).nombre.equals("String")) {
                             return "String";
-                        }else if (t2.hijos.get(0).nombre.equals("Bool")) {
+                        } else if (t2.hijos.get(0).nombre.equals("Bool")) {
                             return "Bool";
-                        }
-                        else if (t2.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                        } else if (t2.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
                             Node t3 = t2.hijos.get(0);
                             if (existe(t3.valor) == 1) {
                                 if (get_tipo(t3.valor).equals("Int")) {
@@ -916,74 +1010,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         }
                     }
                 }
-            }
-        }
-        if (n.nombre.equals("PROPOSICION1")) {
-            if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("Int")) {
-                return "Int";
-            } else if (n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Float")) {
-                return "Float";
-            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
-                if (existe(n.hijos.get(0).valor) == 0 || existe(n.hijos.get(2).valor) == 0) {
-                    Errores_tipos.add("La variable  " + n.hijos.get(0).valor + "  o La variable " + n.hijos.get(2).valor + " no existe");
-                    return "";
-                } else {
-
-                    if (get_tipo(n.hijos.get(0).valor).equals(get_tipo(n.hijos.get(2).valor))) {
-                        return get_tipo(n.hijos.get(0).valor);
-                    } else {
-                        return "";
-                    }
-                }
-
-            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Int")) {
-                if (existe(n.hijos.get(0).valor) == 0) {
-                    Errores_tipos.add("La variable" + n.hijos.get(0).valor + " no existe");
-                    return "";
-                } else if (existe(n.hijos.get(0).valor) == 1) {
-                    if (get_tipo(n.hijos.get(0).valor).equals("Int")) {
-                        return get_tipo(n.hijos.get(0).valor);
-                    } else {
-                        return "";
-                    }
-                }
-
-            } else if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
-                if (existe(n.hijos.get(2).valor) == 0) {
-                    Errores_tipos.add("la variable" + n.hijos.get(2).valor + " no existe");
-                    return "";
-                } else if (existe(n.hijos.get(2).valor) == 1) {
-                    if (get_tipo(n.hijos.get(2).valor).equals("Int")) {
-                        return get_tipo(n.hijos.get(2).valor);
-                    } else {
-                        return "";
-                    }
-                }
-
-            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Float")) {
-                if (existe(n.hijos.get(0).valor) == 0) {
-                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
-                    return "";
-                } else if (existe(n.hijos.get(0).valor) == 1) {
-                    if (get_tipo(n.hijos.get(0).valor).equals("Float")) {
-                        return get_tipo(n.hijos.get(0).valor);
-                    } else {
-                        return "";
-                    }
-                }
-
-            } else if (n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Int")) {
-                if (existe(n.hijos.get(2).valor) == 0) {
-                    Errores_tipos.add("La variable " + n.hijos.get(2).valor + "no existe");
-                    return "";
-                } else {
-                    if (get_tipo(n.hijos.get(2).valor).equals("Float")) {
-                        return get_tipo(n.hijos.get(2).valor);
-                    } else {
-                        return "";
-                    }
-                }
-
             }
         }
         return "";

@@ -1282,7 +1282,7 @@ PROP3::=
     |
    ParIzq PROP2:p ParDer
     {:
-    Node prop3= new Node("PROPOSICION");
+    Node prop3= new Node("PROPOSICION3");
     prop3.addNode(p);
     RESULT=prop3;
     :}| ParIzq error:e {:System.out.println("Prop3"); Sintax.Prop2_Error(); :}
@@ -1299,7 +1299,7 @@ PROP2::=
     |
     ParIzq PROP1:p ParDer
     {:
-    Node prop2= new Node("PROPOSICION");
+    Node prop2= new Node("PROPOSICION2");
     prop2.addNode(p);
     RESULT=prop2;
     :}
@@ -1318,7 +1318,7 @@ PROP1::=
     |
     TY:f1 
     {:
-    Node prop= new Node("PROPOSICION");
+    Node prop= new Node("PROPOSICION1");
     prop.addNode(f1);
     RESULT=prop;
     :}
@@ -1327,7 +1327,7 @@ PROP1::=
 TY::=
     FY:f1 OP_RELA2:o FY:f2
     {:
-    Node ty= new Node("PROPOSICION");
+    Node ty= new Node("PROPOSICION1-2");
     ty.addNode(f1);
     ty.addNode(new Node("OP_RELA", ((String) o)));
     ty.addNode(f2);
