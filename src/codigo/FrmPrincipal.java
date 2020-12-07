@@ -35,25 +35,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         jpanel2.setVisible(false);
     }
-    
-    public int corregirLinea(int x){
+
+    public int corregirLinea(int x) {
         int count = 0;
-        String temp = ""+x;
-        for(int i = 0; i < temp.length();i++){
+        String temp = "" + x;
+        for (int i = 0; i < temp.length(); i++) {
             count++;
         }
         switch (count) {
             case 1:
                 return x;
             case 2:
-                return Integer.parseInt(temp.substring(0,1));
+                return Integer.parseInt(temp.substring(0, 1));
             case 3:
-                return Integer.parseInt(temp.substring(0,2));
+                return Integer.parseInt(temp.substring(0, 2));
             default:
                 return x;
         }
 
     }
+
     private void analizarLexico() throws IOException {
         int cont = 1;
 
@@ -571,42 +572,42 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void btnWhileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnWhileActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=> in range (i<a)\n" + "\tPrint(\"hola\");ª\n"
-                        +"end for\n" + "end if\n" + "while true  º\n" + "\t a=>10; ç \n" + "end while \n" + "case(a) of \n"
-                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
-                        + "end case\n" + "end main";
+        String codigo = "main begin \n" + "Int a=>3;\n" + "if a=3 then \n" + "for Int i=> in range (i<a)\n" + "\tPrint(\"hola\");ª\n"
+                + "end for\n" + "end if\n" + "while true  º\n" + "\t a=>10; ç \n" + "end while \n" + "case(a) of \n"
+                + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
+                + "end case\n" + "end main";
         txtResultado.setText(codigo);
-        
+
     }//GEN-LAST:event_btnWhileActionPerformed
 
     private void btnCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaseActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<10)\n" + "\t Print(\"hola\");\n"
-                        +"end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
-                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
-                        + "end case\n" + "end main";
+        String codigo = "main begin \n" + "Int a=>3;\n" + "if a=3 then \n" + "for Int i=>0 in range (i<10)\n" + "\t Print(\"hola\");\n"
+                + "end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+                + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
+                + "end case\n" + "end main";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnCaseActionPerformed
 
     private void btnFunctionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFunctionsActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in range (i<a)\n" + "\t\t Print(\"hola\");\n"
-                        +"\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
-                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
-                        + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado;\n"
-                        +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
-                        +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call begin imprimirHola()\n"  
-                        + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
+        String codigo = "main begin \n" + "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in range (i<a)\n" + "\t\t Print(\"hola\");\n"
+                + "\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+                + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
+                + "end case\n" + "end main\n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\n"
+                + "if n=1 then\n" + "\t return 1;\n" + "end if\n" + "else then\n" + "\t resultado => metodoRecursivo(numero-1)*numero;\n"
+                + "\t\t return resultado;\n" + "end else\n" + "end call\n\n" + "call begin imprimirHola()\n"
+                + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnFunctionsActionPerformed
 
     private void btnForActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForActionPerformed
-       String codigo = " begin \n"+ "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
-                        +"\t1: Matriz m(2)(2)=>{1,2}{3,4};~\n" + "\tfor Int i=>0  range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) |\n" 
-                        + "\t\t\tPrint(m[i][j]);°\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
-                        + "end case\nend main \n\n" + "Int begin (Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
-                        + "\treturn 1;\n"+"end if\nelse then\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
-                        +"\treturn resultado;\n"+"end else\nend call\n";
+        String codigo = " begin \n" + "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
+                + "\t1: Matriz m(2)(2)=>{1,2}{3,4};~\n" + "\tfor Int i=>0  range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) |\n"
+                + "\t\t\tPrint(m[i][j]);°\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
+                + "end case\nend main \n\n" + "Int begin (Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
+                + "\treturn 1;\n" + "end if\nelse then\n" + "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                + "\treturn resultado;\n" + "end else\nend call\n";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnForActionPerformed
 
@@ -634,8 +635,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabla_simbolos = new ArrayList<Entry>();
-        ids=null; ids2=null;
-        tipos_matrix=null;Errores_tipos=null; 
+        ids = null;
+        ids2 = null;
+        tipos_matrix = null;
+        Errores_tipos = new ArrayList<String>();
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -655,6 +658,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 root = s.raiz;
                 txtAnalizarSin.setText("Analisis realizado correctamente");
                 txtAnalizarSin.setForeground(new Color(25, 111, 61));
+                try {
+                    analizar();
+                } catch (IOException ex) {
+                    Errores_tipos.add("Error comprobando tipos");
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -673,30 +682,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        } 
-        try {
-            analizar();
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (!Errores_tipos.isEmpty()) {
+            for (int i = 0; i < Errores_tipos.size(); i++) {
+                System.out.println(Errores_tipos.get(i));
+            }
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void btnIfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIfActionPerformed
         // TODO add your handling code here:
-        String codigo = "main begin \n"+ "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in  (i<a)\n" + "\t\t Print(\"hola\");\n"
-                        +"\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
-                        + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");|\n" + "\t default:Println(\"nunca\");° \n"
-                        + "end case\n" + "end main\n\n"+"Int begin metodoRecursivo(Int numero)\n"+ "numero=>resultado; ~\n"
-                        +"if n=1 then\n"+"\t return 1;\n"+"end if\n"+"else then\n"+"\t resultado => metodoRecursivo(numero-1)*numero;\n"
-                        +"\t\t return resultado;\n"+"end else\n"+"end call\n\n"+"call  imprimirHola()\n"  
-                        + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
+        String codigo = "main begin \n" + "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in  (i<a)\n" + "\t\t Print(\"hola\");\n"
+                + "\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+                + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");|\n" + "\t default:Println(\"nunca\");° \n"
+                + "end case\n" + "end main\n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado; ~\n"
+                + "if n=1 then\n" + "\t return 1;\n" + "end if\n" + "else then\n" + "\t resultado => metodoRecursivo(numero-1)*numero;\n"
+                + "\t\t return resultado;\n" + "end else\n" + "end call\n\n" + "call  imprimirHola()\n"
+                + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
         txtResultado.setText(codigo);
     }//GEN-LAST:event_btnIfActionPerformed
 
     private void btnArbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArbolActionPerformed
         try {
-           jpanel2.setModal(true);
+            jpanel2.setModal(true);
             jpanel2.pack();
             jpanel2.setLocationRelativeTo(this);
             jpanel2.setVisible(true);
@@ -707,7 +715,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
             arbol = new DefaultMutableTreeNode(root);
-            DefaultTreeModel modelo = (DefaultTreeModel)jtree.getModel();
+            DefaultTreeModel modelo = (DefaultTreeModel) jtree.getModel();
             llenar(root, arbol);
             modelo.setRoot(arbol);
             jtree.setModel(modelo);
@@ -716,39 +724,87 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnIf1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIf1ActionPerformed
-        String codigo = "main begin \n"+ "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
-                        +"\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n" 
-                        + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
-                        + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
-                        + "\treturn 1;\n"+"end if\nelse then\n"+ "\tresultado => metodoRecursivo(numero-1)*numero;\n"
-                        +"\treturn resultado;\n"+"end else\nend call\n";
+        String codigo = "main begin \n" + "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
+                + "\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n"
+                + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
+                + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
+                + "\treturn 1;\n" + "end if\nelse then\n" + "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                + "\treturn resultado;\n" + "end else\nend call\n";
         txtResultado.setText(codigo);
-        
+
     }//GEN-LAST:event_btnIf1ActionPerformed
-        public static void llenar(Node root, DefaultMutableTreeNode current){
+    public static void llenar(Node root, DefaultMutableTreeNode current) {
         for (int i = 0; i < root.hijos.size(); i++) {
             current.add(new DefaultMutableTreeNode(root.hijos.get(i)));
-            if(!root.hijos.get(i).hijos.isEmpty()){
-                llenar(root.hijos.get(i), (DefaultMutableTreeNode)current.getChildAt(i));
+            if (!root.hijos.get(i).hijos.isEmpty()) {
+                try {
+                    llenar(root.hijos.get(i), (DefaultMutableTreeNode) current.getChildAt(i));
+                } catch (Exception e) {
+                    Errores_tipos.add("Error en llenar tabla");
+                }
             }
         }
     }
-        
-        public static void llenar_tabla(Node actual) {
-        if (actual.nombre.equals("FOR")) {
-            if (actual.hijos.get(0).valor.equals("Int")) {
+
+    public static void llenar_tabla(Node actual) {
+
+        if (actual.nombre.equals("FOR")) {//Comprobacion de tipos de for
+            if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            } else {
+                Errores_tipos.add("Error en el For, en la declaracion se necesita valores Int");
             }
-            if(!Compr_valor(actual.hijos.get(4)).equals("Int")){
-                System.out.println("Error en el for, se esperaba un int en la proposicion");
+            System.out.println("" + Compr_valor(actual.hijos.get(4)));
+            if (!Compr_valor(actual.hijos.get(4)).equals("Int")) {
+                Errores_tipos.add("Error en el for, se esperaba un int en la proposicion");
             }
-        
-        }else if(actual.nombre.equals("DECLARAR_ASIGNAR")){
-            if(actual.hijos.get(0).valor.equals("Int")){
-                 
+            
+        } else if (actual.nombre.equals("asig")) {//Comprobacion de tipos de Declaracion con asignacion
+            if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            } else if (actual.hijos.get(0).valor.equals("Int") && !Compr_valor(actual.hijos.get(3)).equals("Int")) {
+                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
+            if (actual.hijos.get(0).valor.equals("Float") && Compr_valor(actual.hijos.get(3)).equals("Float")) {
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            } else if (actual.hijos.get(0).valor.equals("Float") && !Compr_valor(actual.hijos.get(3)).equals("Float")) {
+                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+            }
+
+            if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("String")) {
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            }else if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
+                if (existe(actual.hijos.get(3).valor)==1) {
+                    if (actual.hijos.get(0).valor.equals("String") && get_tipo(actual.hijos.get(3).valor).equals("String")) {
+                    agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                }
+                }else {
+                    Errores_tipos.add("La raiable "+actual.hijos.get(3).valor+" no existe");
+                }
+            } else if (actual.hijos.get(0).valor.equals("String") && !actual.hijos.get(3).nombre.equals("String")) {
+                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+            }
+
+            if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("Bool")) {
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+            } else if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
+                if (existe(actual.hijos.get(3).valor)==1) {
+                     if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
+                    agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
+                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                }
+                }else{
+                    Errores_tipos.add("La raiable "+actual.hijos.get(3).valor+" no existe");
+                }
+            } else if (actual.hijos.get(0).valor.equals("Bool") && !(actual.hijos.get(3).nombre.equals("Bool"))) {
+                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+            }
+
         }
-                
+
         for (int i = 0; i < actual.hijos.size(); i++) {
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 llenar_tabla(actual.hijos.get(i));
@@ -770,110 +826,107 @@ public class FrmPrincipal extends javax.swing.JFrame {
             tabla_simbolos.add(e);
         }
     }
-/*
-    public static String tipo_valoro(Node n) {
-        int caracter = '"';
-        if (n.hijos.isEmpty()) {
-            if (n.valor.contains("" + caracter)) {
-                return "String";
-            } else if (n.valor.equals("true") || n.valor.equals("false")) {
-                return "Bool";
-            } else {
-                if (existe(n.valor)) {
-                    return get_tipo(n.valor);
-                } else {
-                    System.out.println("La variable: " + n.valor + " no ha sido declarada");
-                    return "Int";
+
+    public static String Compr_valor(Node n) {
+        if (n.nombre.equals("op")) {
+            Node t1 = n.hijos.get(0);
+            if (t1.nombre.equals("Valor")) {
+                Node t2 = t1.hijos.get(0);
+                if (t2.nombre.equals("Valoro")) {
+                    if (t2.hijos.get(0).nombre.equals("Int")) {
+                        return "Int";
+                    } else if (t2.hijos.get(0).nombre.equals("Float")) {
+                        return "Float";
+                    } else if (t2.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                        Node t3 = t2.hijos.get(0);
+                        if (existe(t3.valor) == 1) {
+                            if (get_tipo(t3.valor).equals("Int")) {
+                                return "Int";
+                            } else if (get_tipo(t3.valor).equals("Float")) {
+                                return "Float";
+                            } else if (get_tipo(t3.valor).equals("String")) {
+                                return "String";
+                            } else if (get_tipo(t3.valor).equals("Bool")) {
+                                return "Bool";
+                            }
+                        } else {
+                            Errores_tipos.add("La variable " + t3.valor + " no existe");
+                        }
+                    }
                 }
             }
         }
-        return "Int";
-    }
-*/
-    public static String Compr_valor(Node n){
-        if(n.valor.substring(0).equals("1")||
-                n.valor.substring(0).equals("2")||
-                n.valor.substring(0).equals("3")||
-                n.valor.substring(0).equals("4")||
-                n.valor.substring(0).equals("5")||
-                n.valor.substring(0).equals("6")||
-                n.valor.substring(0).equals("7")||
-                n.valor.substring(0).equals("8")||
-                n.valor.substring(0).equals("9")||
-                n.valor.substring(0).equals("0")                
-           ){
-            return "Int";
-        }else if(n.nombre.equals("PROPOSICION1")){
-                if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("Int")) {
-                    return "Int";
-                }else if(n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Float")){
-                    return "Float";
-                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")){
-                        if(existe(n.hijos.get(0).valor)==0 || existe(n.hijos.get(2).valor)==0){
-                            System.out.println("La variable "+n.hijos.get(0).valor+" o La variable "+n.hijos.get(2).valor+"no existe");
-                            return "";
-                        }else{
-                            
-                            if(get_tipo(n.hijos.get(0).valor).equals(get_tipo(n.hijos.get(2).valor))){
-                                    return get_tipo(n.hijos.get(0).valor); 
-                            }else{
-                                    return "";
-                            }
-                        }
-                        
-                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Int")){
-                    if(existe(n.hijos.get(0).valor)==0){
-                        System.out.println("La variable"+n.hijos.get(0).valor+" no existe");
-                            return "";
-                        }else if(existe(n.hijos.get(0).valor)==1){
-                            if(get_tipo(n.hijos.get(0).valor).equals("Int")){
-                                    return get_tipo(n.hijos.get(0).valor); 
-                            }else{
-                                    return "";
-                            }
-                        }
-                        
-                }else if(n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")){
-                        if(existe(n.hijos.get(2).valor)==0){
-                            System.out.println("la variable"+n.hijos.get(2).valor+" no existe");
-                            return "";
-                        }else if(existe(n.hijos.get(2).valor)==1){
-                            if(get_tipo(n.hijos.get(2).valor).equals("Int")){
-                                    return get_tipo(n.hijos.get(2).valor); 
-                            }else{
-                                    return "";
-                            }
-                        }
-                        
-                }else if(n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Float")){
-                        if(existe(n.hijos.get(0).valor)==0){
-                            System.out.println("La variable "+n.hijos.get(0).valor+" no existe");
-                            return "";
-                        }else if(existe(n.hijos.get(0).valor)==1){
-                            if(get_tipo(n.hijos.get(0).valor).equals("Float")){
-                                    return get_tipo(n.hijos.get(0).valor); 
-                            }else{
-                                    return "";
-                            }
-                        }
-                        
-                }else if(n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Int")){
-                        if(existe(n.hijos.get(2).valor)==0){
-                            System.out.println("La variable "+n.hijos.get(2).valor+"no existe");
-                            return "";
-                        }else{
-                            if(get_tipo(n.hijos.get(2).valor).equals("Float")){
-                                    return get_tipo(n.hijos.get(2).valor); 
-                            }else{
-                                    return "";
-                            }
-                        }
-                        
+        if (n.nombre.equals("PROPOSICION1")) {
+            if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("Int")) {
+                return "Int";
+            } else if (n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Float")) {
+                return "Float";
+            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
+                if (existe(n.hijos.get(0).valor) == 0 || existe(n.hijos.get(2).valor) == 0) {
+                    Errores_tipos.add("La variable  " + n.hijos.get(0).valor + "  o La variable " + n.hijos.get(2).valor + " no existe");
+                    return "";
+                } else {
+
+                    if (get_tipo(n.hijos.get(0).valor).equals(get_tipo(n.hijos.get(2).valor))) {
+                        return get_tipo(n.hijos.get(0).valor);
+                    } else {
+                        return "";
+                    }
                 }
+
+            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Int")) {
+                if (existe(n.hijos.get(0).valor) == 0) {
+                    Errores_tipos.add("La variable" + n.hijos.get(0).valor + " no existe");
+                    return "";
+                } else if (existe(n.hijos.get(0).valor) == 1) {
+                    if (get_tipo(n.hijos.get(0).valor).equals("Int")) {
+                        return get_tipo(n.hijos.get(0).valor);
+                    } else {
+                        return "";
+                    }
+                }
+
+            } else if (n.hijos.get(0).nombre.equals("Int") && n.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
+                if (existe(n.hijos.get(2).valor) == 0) {
+                    Errores_tipos.add("la variable" + n.hijos.get(2).valor + " no existe");
+                    return "";
+                } else if (existe(n.hijos.get(2).valor) == 1) {
+                    if (get_tipo(n.hijos.get(2).valor).equals("Int")) {
+                        return get_tipo(n.hijos.get(2).valor);
+                    } else {
+                        return "";
+                    }
+                }
+
+            } else if (n.hijos.get(0).nombre.equals("IDENTIFICADOR") && n.hijos.get(2).nombre.equals("Float")) {
+                if (existe(n.hijos.get(0).valor) == 0) {
+                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                    return "";
+                } else if (existe(n.hijos.get(0).valor) == 1) {
+                    if (get_tipo(n.hijos.get(0).valor).equals("Float")) {
+                        return get_tipo(n.hijos.get(0).valor);
+                    } else {
+                        return "";
+                    }
+                }
+
+            } else if (n.hijos.get(0).nombre.equals("Float") && n.hijos.get(2).nombre.equals("Int")) {
+                if (existe(n.hijos.get(2).valor) == 0) {
+                    Errores_tipos.add("La variable " + n.hijos.get(2).valor + "no existe");
+                    return "";
+                } else {
+                    if (get_tipo(n.hijos.get(2).valor).equals("Float")) {
+                        return get_tipo(n.hijos.get(2).valor);
+                    } else {
+                        return "";
+                    }
+                }
+
+            }
         }
         return "";
-    } 
-    
+    }
+
     public static int existe(String s) {
         for (int i = 0; i < tabla_simbolos.size(); i++) {
             if (s.equals(tabla_simbolos.get(i).id)) {
@@ -891,12 +944,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         return "";
     }
-    public static void analizar()throws IOException {
+
+    public static void analizar() throws IOException {
         llenar_tabla(root);
         for (int i = 0; i < tabla_simbolos.size(); i++) {
             System.out.println("ID: " + tabla_simbolos.get(i).id + " TIPO: " + tabla_simbolos.get(i).tipo);
-        }   
+        }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -969,5 +1024,5 @@ public class FrmPrincipal extends javax.swing.JFrame {
     DefaultMutableTreeNode arbol;
     public static ArrayList<Entry> tabla_simbolos = new ArrayList<Entry>();
     public static ArrayList<String> ids, ids2;
-    public static ArrayList<String> tipos_matrix,Errores_tipos;
+    public static ArrayList<String> tipos_matrix, Errores_tipos = new ArrayList<String>();
 }

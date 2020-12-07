@@ -641,7 +641,7 @@ terminal  IF,
 non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
              ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
              OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
-             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX,TY,FY; 
+             TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX,TY,FY,VALOR; 
 
 start with INICIO;
 
@@ -788,17 +788,7 @@ TRETORNO::=
         Node tretorno = new Node("retorno");
         tretorno.addNode(op);
         RESULT=tretorno;
-       :}
-    |CADENA:c PuntoComa{:
-        Node tretorno = new Node("retorno");
-        tretorno.addNode(new Node("CADENA", ((String) c)));
-        RESULT=tretorno;
-        :}
-    |TBool:tb PuntoComa {:
-        Node tretorno = new Node("retorno");
-        tretorno.addNode(new Node("TBool", ((String) tb)));
-        RESULT=tretorno;
-        :}| error:e {: System.out.println("RETURN");Sintax.TReturn_Error(); :}
+       :}| error:e {: System.out.println("RETURN");Sintax.TReturn_Error(); :}
 ;
 SENTENCIA::=
 SENTENCIA:s RETORNO:r{:
@@ -904,13 +894,13 @@ SENTENCIA:s RETORNO:r{:
 ;
 
 LOOP_FOR::=
-    For TypeInt IDENTIFICADOR:i OP_ASIG ENTERO:e IN Range ParIzq PROP1:p ParDer SENTENCIA:s EndFor
+    For TypeInt IDENTIFICADOR:i OP_ASIG VALOR:e IN Range ParIzq PROP1:p ParDer SENTENCIA:s EndFor
 {:
         Node For = new Node("FOR");
         For.addNode(new Node("Int","Int"));
         For.addNode(new Node("IDENTIFICADOR", ((String) i)));
         For.addNode(new Node("OP_ASIG", "=>"));
-        For.addNode(new Node("Int",((String) e) ));
+        For.addNode(e);
         For.addNode(p);
         For.addNode(s);
         RESULT=For;
@@ -997,13 +987,13 @@ DECLARAR_ASIGNAR::=
     RESULT=declararA;
     :}|TypeInt error: e {:System.out.println("TYPEINT"); Sintax.TypeInt_Error();:}
     |
-    TypeString:t IDENTIFICADOR:i OP_ASIG CADENA:c PuntoComa
+    TypeString:t IDENTIFICADOR:i OP_ASIG VALOR:c PuntoComa
         {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("String", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
-    declararA.addNode(new Node("CADENA", ((String) c)));
+    declararA.addNode(c);
     RESULT=declararA;
     :}|TypeString error: e {:System.out.println("TYPESTRING"); Sintax.TypeString_Error();:}
     
@@ -1011,30 +1001,30 @@ DECLARAR_ASIGNAR::=
     TypeFloat:t IDENTIFICADOR:i OP_ASIG OPERACION_ARITMETICA:oa PuntoComa
         {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Float", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(oa);
     RESULT=declararA;
     :}|TypeFloat error: e {:System.out.println("TYPEFLOAT"); Sintax.TypeFloat_Error();:}
     |
-    TypeBool:t IDENTIFICADOR:i OP_ASIG TBool:c PuntoComa
+    TypeBool:t IDENTIFICADOR:i OP_ASIG VALOR:c PuntoComa
             {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Bool", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
-    declararA.addNode(new Node("BOOl", ((String) c)));
+    declararA.addNode(c);
     RESULT=declararA;
     :}|TypeBool error: e {:System.out.println("TYPEBOOL"); Sintax.TypeBool_Error();:}
     |
     TypeList:t IDENTIFICADOR:i ParIzq ENTERO:e ParDer OP_ASIG CurlyIzq LISTA:l CurlyDer PuntoComa
             {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("List", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
-    declararA.addNode(new Node("ENTERO",((String) e)));
+    declararA.addNode(new Node("Int",((String) e)));
     declararA.addNode(l);
     RESULT=declararA;
     :}|TypeList error: e {:System.out.println("TYPELIST"); Sintax.TypeList_Error();:}
@@ -1042,11 +1032,11 @@ DECLARAR_ASIGNAR::=
     TypeMatriz:t IDENTIFICADOR:i ParIzq ENTERO:e1 ParDer ParIzq ENTERO:e2 ParDer OP_ASIG CurlyIzq LISTA:l1 CurlyDer CurlyIzq LISTA:l2 CurlyDer PuntoComa
     {: 
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Matriz", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
-    declararA.addNode(new Node("ENTERO",((String) e1)));
-    declararA.addNode(new Node("ENTERO",((String) e2)));
+    declararA.addNode(new Node("Int",((String) e1)));
+    declararA.addNode(new Node("Int",((String) e2)));
     declararA.addNode(l1);
     declararA.addNode(l2);
     RESULT=declararA;
@@ -1055,7 +1045,7 @@ DECLARAR_ASIGNAR::=
     TypeInt:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Int", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1065,7 +1055,7 @@ DECLARAR_ASIGNAR::=
     TypeString:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("String", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1075,7 +1065,7 @@ DECLARAR_ASIGNAR::=
     TypeFloat:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Float", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1085,7 +1075,7 @@ DECLARAR_ASIGNAR::=
     TypeBool:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Bool", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1095,7 +1085,7 @@ DECLARAR_ASIGNAR::=
     TypeList:t IDENTIFICADOR:i  OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("List", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1105,7 +1095,7 @@ DECLARAR_ASIGNAR::=
     TypeMatriz:t IDENTIFICADOR:i OP_ASIG LLAMAR_METODO:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Matriz", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1116,7 +1106,7 @@ DECLARAR_ASIGNAR::=
     TypeInt:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Int", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1126,7 +1116,7 @@ DECLARAR_ASIGNAR::=
     TypeString:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("String", ((String) t)));
     declararA.addNode(i);
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1136,7 +1126,7 @@ DECLARAR_ASIGNAR::=
     TypeFloat:t IDENTIFICADOR:i OP_ASIG SHOWCOORDENADAS:c PuntoComa
     {:
     Node declararA= new Node("asig");
-    declararA.addNode(new Node("Type", ((String) t)));
+    declararA.addNode(new Node("Float", ((String) t)));
     declararA.addNode(new Node("IDENTIFICADOR", ((String) i)));
     declararA.addNode(new Node("OP_ASIG","=>"));
     declararA.addNode(c);
@@ -1165,20 +1155,6 @@ ASIGNAR::=
     :}| IDENTIFICADOR error:e {: System.out.println("ASIGNAR");Sintax.Asignar_Error(); :}
 ;
 TIPOA::=
-     CADENA:t PuntoComa
-     {:
-    Node tipo= new Node("TIPO");
-    tipo.addNode(new Node("CADENA", ((String) t)));
-    RESULT=tipo;
-    :}
-    |
-     TBool:t PuntoComa
-     {:
-      Node tipo= new Node("TIPO");
-        tipo.addNode(new Node("BOOL", ((String) t)));
-        RESULT=tipo;
-    :}
-    |
      CurlyIzq LISTA:t CurlyDer PuntoComa
      {:
     Node tipo= new Node("TIPO");
@@ -1289,7 +1265,7 @@ PROPOSICION::=
     TBool:t
 {:
     Node prop= new Node("PROPOSICION");
-    prop.addNode(new Node("BOOL", ((String) t)));
+    prop.addNode(new Node("Bool", ((String) t)));
     RESULT=prop;
     :}|error
 ;
@@ -1419,31 +1395,21 @@ TX::=
     :}
     |FX:f
     {:
-        Node TX= new Node("operacionA");
+        Node TX= new Node("Valor");
         TX.addNode(f);
         RESULT=TX;
     :}
 ;
 FX::=
-    ENTERO:o
+    VALOR:o
     {:
-        Node FX= new Node("Int", ((String) o));
-        RESULT=FX;
-    :}
-    |IDENTIFICADOR:o
-    {:
-        Node FX= new Node("IDENTIFICADOR", ((String) o));
-        RESULT=FX;
-    :}
-    |DECIMAL:o
-    {:
-        Node FX= new Node("DECIMAL");
-        FX.addNode(new Node("DECIMAL", ((String) o)));
+        Node FX= new Node("Valoro");
+        FX.addNode(o);
         RESULT=FX;
     :}
     |ParIzq OPERACION_ARITMETICA:o ParDer
          {:
-        Node FX= new Node("DECIMAL");
+        Node FX= new Node("operacionA");
         FX.addNode(o);
         RESULT=FX;
     :}
@@ -1688,83 +1654,51 @@ ENTRADA::=
     :}|put error:e {: System.out.println("ENTRADA"); Sintax.Entrada_Error(); :}
 ;
 SHOWCOORDENADAS::=
-    IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
+    IDENTIFICADOR:i SquareBIzq VALOR:e SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("ENTERO", ((String) e)));
+    showCoor.addNode(e);
     RESULT=showCoor;
     :}
     |
-    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBIzq SquareBIzq ENTERO:e2 SquareBDer
+    IDENTIFICADOR:i SquareBIzq VALOR:e1 SquareBDer SquareBIzq VALOR:e2 SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("ENTERO", ((String) e1)));
-    showCoor.addNode(new Node("ENTERO", ((String) e2)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq CADENA:e1 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("CADENA", ((String) e1)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq CADENA:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("CADENA", ((String) e1)));
-    showCoor.addNode(new Node("ENTERO", ((String) e2)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq DECIMAL:e1 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("DECIMAL", ((String) e1)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq DECIMAL:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("DECIMAL", ((String) e1)));
-    showCoor.addNode(new Node("ENTERO", ((String) e2)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
-    showCoor.addNode(new Node("ENTERO", ((String) e2)));
-    RESULT=showCoor;
-    :}
-    |
-    IDENTIFICADOR:i SquareBIzq IDENTIFICADOR:e1 SquareBDer SquareBIzq IDENTIFICADOR:e2 SquareBDer
-    {:
-    Node showCoor= new Node("Coordenadas");
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e1)));
-    showCoor.addNode(new Node("IDENTIFICADOR", ((String) e2)));
+    showCoor.addNode(e1);
+    showCoor.addNode(e2);
     RESULT=showCoor;
     :}|error:e {: System.out.println("MATRIZ"); Sintax.Coordenadas_Error(); :}
 ;
 COMENTAR::=
     COMENTARIO
+;
+
+VALOR::=
+    ENTERO:e
+    {:
+        Node valoro=new Node("Int", ((String) e) );
+        RESULT=valoro;
+    :}
+    |CADENA:e
+    {:
+        Node valoro=new Node("String", ((String) e) );
+        RESULT=valoro;
+    :}
+    |DECIMAL:e
+    {:
+        Node valoro=new Node("Float", ((String) e) );
+        RESULT=valoro;
+    :}
+    |IDENTIFICADOR:e
+    {:
+        Node valoro=new Node("IDENTIFICADOR", ((String) e) );
+        RESULT=valoro;
+    :}
+    |TBool:e
+    {:
+        Node valoro=new Node("Bool", ((String) e) );
+        RESULT=valoro;
+    :}
 ;
