@@ -638,7 +638,7 @@ terminal  IF,
         COMENTARIO,
         ERROR;
 
-non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,
+non terminal INICIO,SENTENCIA,PROPOSICION,PROP1,PROP2,PROP3, SENTENCIA_DEC_ASIG, DECLARAR_ASIGNAR,LISTA,LISTA1,LISTA2,LISTA3,
              ASIGNAR,LOOP_FOR,LOOP_WHILE,IF_ESTRUCTURA,IFELSE,SWITCH_ESTRUCTURA,TIPOA,PARAMETRO,CLASE,METODOS,
              OPERACION_ARITMETICA,IMPRIMIR,CONCAT,CASOS,CASOC,CASOE,M_MAIN,M_VOID,METODO_T,TYPE,RETORNO,
              TRETORNO,LLAMAR_METODO,ARGUMENTO,ENTRADA,SHOWCOORDENADAS,COMENTAR,TX,FX,TY,FY,VALOR; 
@@ -1194,50 +1194,75 @@ TIPOA::=
 ;
 
 LISTA::=
-   ENTERO:t Coma LISTA:l
-    {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("ENTERO", ((String) t)));
-    LISTA.addNode(l);
-    RESULT=LISTA;
-    :}
-    |
-   CADENA:t Coma LISTA:l
+LISTA1:l
 {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("cadena", ((String) t)));
-    LISTA.addNode(l);
-    RESULT=LISTA;
-    :}
-    |
-   DECIMAL:t Coma LISTA:l
+Node lista=new Node("LISTA");
+lista.addNode(l);
+RESULT=lista;
+:}
+|
+LISTA2:l
+{:
+Node lista=new Node("LISTA");
+lista.addNode(l);
+RESULT=lista;
+:}
+|
+LISTA3:l
+{:
+Node lista=new Node("LISTA");
+lista.addNode(l);
+RESULT=lista;
+:}
+;
+
+LISTA1::=
+   ENTERO:t Coma LISTA1:l
     {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("decimal", ((String) t)));
-    LISTA.addNode(l);
-    RESULT=LISTA;
+    Node LISTA1= new Node("LISTAE");
+    LISTA1.addNode(new Node("Int", ((String) t)));
+    LISTA1.addNode(l);
+    RESULT=LISTA1;
     :}
 |
    ENTERO:t
     {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("ENTERO", ((String) t)));
-    RESULT=LISTA;
+    Node LISTA1= new Node("LISTAE");
+    LISTA1.addNode(new Node("Int", ((String) t)));
+    RESULT=LISTA1;
     :}
-|
-   CADENA:t
+;
+LISTA2::=
+   CADENA:t Coma LISTA2:l
+{:
+    Node LISTA2= new Node("LISTAC");
+    LISTA2.addNode(new Node("String", ((String) t)));
+    LISTA2.addNode(l);
+    RESULT=LISTA2;
+:}
+|  CADENA:t
     {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("CADENA", ((String) t)));
-    RESULT=LISTA;
+    Node LISTA2= new Node("LISTAC");
+    LISTA2.addNode(new Node("String", ((String) t)));
+    RESULT=LISTA2;
     :}
+;
+LISTA3::=
+DECIMAL:t Coma LISTA3:l
+    {:
+    Node LISTA3= new Node("LISTAD");
+    LISTA3.addNode(new Node("Float", ((String) t)));
+    LISTA3.addNode(l);
+    RESULT=LISTA3;
+    :}
+
 |
    DECIMAL:t
 {:
-    Node LISTA= new Node("LISTA");
-    LISTA.addNode(new Node("DECIMAL", ((String) t)));
-    RESULT=LISTA;
-    :}|error:e{: System.out.println("LISTA"); Sintax.Lista_Error();:}
+    Node LISTA3= new Node("LISTAD");
+    LISTA3.addNode(new Node("Float", ((String) t)));
+    RESULT=LISTA3;
+    :}
 ;
 
 PROPOSICION::=
@@ -1654,20 +1679,20 @@ ENTRADA::=
     :}|put error:e {: System.out.println("ENTRADA"); Sintax.Entrada_Error(); :}
 ;
 SHOWCOORDENADAS::=
-    IDENTIFICADOR:i SquareBIzq VALOR:e SquareBDer
+    IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(e);
+    showCoor.addNode(new Node("Int", ((String) e)));
     RESULT=showCoor;
     :}
     |
-    IDENTIFICADOR:i SquareBIzq VALOR:e1 SquareBDer SquareBIzq VALOR:e2 SquareBDer
+    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(e1);
-    showCoor.addNode(e2);
+    showCoor.addNode(new Node("Int", ((String) e1)));
+    showCoor.addNode(new Node("Int", ((String) e2)));
     RESULT=showCoor;
     :}|error:e {: System.out.println("MATRIZ"); Sintax.Coordenadas_Error(); :}
 ;
