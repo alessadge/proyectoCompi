@@ -1679,20 +1679,20 @@ ENTRADA::=
     :}|put error:e {: System.out.println("ENTRADA"); Sintax.Entrada_Error(); :}
 ;
 SHOWCOORDENADAS::=
-    IDENTIFICADOR:i SquareBIzq ENTERO:e SquareBDer
+    IDENTIFICADOR:i SquareBIzq VALOR:e SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("Int", ((String) e)));
+    showCoor.addNode(e);
     RESULT=showCoor;
     :}
     |
-    IDENTIFICADOR:i SquareBIzq ENTERO:e1 SquareBDer SquareBIzq ENTERO:e2 SquareBDer
+    IDENTIFICADOR:i SquareBIzq VALOR:e1 SquareBDer SquareBIzq VALOR:e2 SquareBDer
     {:
     Node showCoor= new Node("Coordenadas");
     showCoor.addNode(new Node("IDENTIFICADOR", ((String) i)));
-    showCoor.addNode(new Node("Int", ((String) e1)));
-    showCoor.addNode(new Node("Int", ((String) e2)));
+    showCoor.addNode(e1);
+    showCoor.addNode(e2);
     RESULT=showCoor;
     :}|error:e {: System.out.println("MATRIZ"); Sintax.Coordenadas_Error(); :}
 ;

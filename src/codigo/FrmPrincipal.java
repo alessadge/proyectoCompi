@@ -873,6 +873,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
 
+///////////////////////////Validar switch//////////////////////////////////////
+        if (actual.nombre.equals("switch")) {
+            if (existe(actual.hijos.get(0).valor)==1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Int") &&
+                        actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")
+                    ) {
+                }else if(get_tipo(actual.hijos.get(0).valor).equals("Int") &&
+                        !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")){
+                        Errores_tipos.add("Las opciones en el case para la variable "+ actual.hijos.get(0).valor+" son incorrectas");
+                }
+                if (get_tipo(actual.hijos.get(0).valor).equals("String") &&
+                        actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")
+                    ) {
+                }else if(get_tipo(actual.hijos.get(0).valor).equals("String") &&
+                        !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")){
+                        Errores_tipos.add("Las opciones en el case para la variable "+ actual.hijos.get(0).valor+" son incorrectas");
+                }
+            }else{
+                Errores_tipos.add("La variable "+actual.hijos.get(0).valor+" no existe");
+            }
+        }
+
+//////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 llenar_tabla(actual.hijos.get(i));
