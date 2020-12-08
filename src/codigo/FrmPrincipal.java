@@ -1114,7 +1114,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void ver_operacion(Node n) {
         if (n.nombre.equals("Valoro")) {
-            valores.add(n.hijos.get(0).nombre);
+            if (n.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                if (existe(n.hijos.get(0).valor)==1) {
+                    valores.add(get_tipo(n.hijos.get(0).valor));
+                }else if(existe(n.hijos.get(0).valor)==0){
+                    System.out.println("llego");
+                    valores.add("error");
+                    Errores_tipos.add("La variable "+n.hijos.get(0).valor+" no existe");
+                }
+            }else if (n.hijos.get(0).nombre.equals("Int")) {
+                valores.add(n.hijos.get(0).nombre);
+            }else if (n.hijos.get(0).nombre.equals("Float")) {
+                valores.add(n.hijos.get(0).nombre);
+            }
+            
         }
         for (int i = 0; i < n.hijos.size(); i++) {
             if (!n.hijos.get(i).hijos.isEmpty()) {
