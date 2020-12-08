@@ -1379,7 +1379,7 @@ OPERACION_ARITMETICA::=
 TX::=
     TX:t OP_MULT:o FX:f
     {:
-        Node TX= new Node("operacionA");
+        Node TX= new Node("operacionA-M");
         TX.addNode(t);
         TX.addNode(new Node("OP_MULT", ((String) o)));
         TX.addNode(f);
@@ -1387,7 +1387,7 @@ TX::=
     :}
     |TX:t OP_DIV:o FX:f
     {:
-        Node TX= new Node("operacionA");
+        Node TX= new Node("operacionA-D");
         TX.addNode(t);
         TX.addNode(new Node("OP_DIV", ((String) o)));
         TX.addNode(f);

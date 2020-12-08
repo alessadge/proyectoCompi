@@ -10,7 +10,7 @@ package codigo;
  * @author edujg
  */
 public class Entry {
-    String id, ambito, tipo;
+    String id,tipo , ambito;
     Entry(String i, String t, String a){
         id = i;
         tipo = t;
