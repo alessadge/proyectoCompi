@@ -988,7 +988,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static String Compr_valor(Node n) {
         if (n.nombre.equals("operacionA")) {
-            return opA(n);        }
+            return opA(n);
+        }
         if (n.nombre.equals("op")) {
             Node t1 = n.hijos.get(0);
             if (t1.nombre.equals("Valor")) {
@@ -1019,6 +1020,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         if (n.nombre.equals("TIPO")) {
             Node t = n.hijos.get(0);
+            if (t.nombre.equals("operacionA")) {
+                return opA(t);
+            }
             if (t.nombre.equals("op")) {
                 Node t1 = t.hijos.get(0);
                 if (t1.nombre.equals("Valor")) {
@@ -1078,7 +1082,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
             }
         }
-         System.out.println("s"+valores.size());
+        System.out.println("s" + valores.size());
         if (fallo == 0) {
             return retorno;
         }
@@ -1087,7 +1091,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void ver_operacion(Node n) {
         if (n.nombre.equals("Valoro")) {
-                valores.add(n.hijos.get(0).nombre);
+            valores.add(n.hijos.get(0).nombre);
         }
         for (int i = 0; i < n.hijos.size(); i++) {
             if (!n.hijos.get(i).hijos.isEmpty()) {
