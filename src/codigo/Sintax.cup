@@ -1609,36 +1609,6 @@ CASOE::=
     :}
 ;
 LLAMAR_METODO::=
-    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_SUMA:o OPERACION_ARITMETICA:oa
-    {:
-    Node cmetodo= new Node("llamar metodo");
-    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
-    cmetodo.addNode(a);    
-    cmetodo.addNode(new Node("OP_SUMA", ((String) o)));
-    cmetodo.addNode(oa);
-    RESULT=cmetodo;
-    :}
-    |
-    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_DIV:o OPERACION_ARITMETICA:oa
-    {:
-    Node cmetodo= new Node("llamar metodo");
-    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
-    cmetodo.addNode(a);    
-    cmetodo.addNode(new Node("OP_DIV", ((String) o)));
-    cmetodo.addNode(oa);
-    RESULT=cmetodo;
-    :}
-    |
-    IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer OP_MULT:o OPERACION_ARITMETICA:oa
-    {:
-    Node cmetodo= new Node("llamar metodo");
-    cmetodo.addNode(new Node("INDENTIFICADOR", ((String) i)));    
-    cmetodo.addNode(a);    
-    cmetodo.addNode(new Node("OP_MULT", ((String) o)));
-    cmetodo.addNode(oa);
-    RESULT=cmetodo;
-    :}
-    |
     IDENTIFICADOR:i ParIzq ARGUMENTO:a ParDer 
     {:
     Node cmetodo= new Node("llamar metodo");

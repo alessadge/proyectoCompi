@@ -728,7 +728,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 + "\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n"
                 + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
                 + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n Int resultado=>1+2*8;\n Int n=>1+2;\n" + "numero=>resultado;\nif n=1 then\n"
-                + "\treturn 1;\n" + "end if\nelse then\n" + "\tresultado => metodoRecursivo(numero-1)*numero;\n"
+                + "\treturn 1;\n" + "end if\nelse then\n" +"\t numero=>numero-1;\n" +"\t resultado => metodoRecursivo(numero); \n \tresultado=>resultado*numero; \n  "
                 + "\treturn resultado;\n" + "end else\nend call\n";
         txtResultado.setText(codigo);
 
@@ -1052,7 +1052,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         BuscaR(raiz);
         int fallo = 0;
         String temp = valores.get(0), retorno = "";
-        if (valores.size()==1) {
+        if (valores.size() == 1) {
             return valores.get(0);
         }
         if (temp.equals("Int")) {
@@ -1117,7 +1117,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void BuscaR(Node nodo) {
         if (nodo.nombre.equals("Return")) {
-            Node n=nodo.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
+            Node n = nodo.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
             if (n.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
                 if (existe(n.hijos.get(0).valor) == 1) {
                     valores.add(get_tipo(n.hijos.get(0).valor));
@@ -1150,7 +1150,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static String Compr_valor(Node n) {
-        if (n.nombre.equals("operacionA")) {
+        if (n.nombre.equals("operacionA") || n.hijos.get(0).nombre.equals("operacionA-D") || n.hijos.get(0).nombre.equals("operacionA-M")) {
             return opA(n);
         }
         if (n.nombre.equals("op")) {
@@ -1183,7 +1183,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         if (n.nombre.equals("TIPO")) {
             Node t = n.hijos.get(0);
-            if (t.nombre.equals("operacionA")) {
+            if (t.nombre.equals("operacionA") || t.hijos.get(0).nombre.equals("operacionA-D") || t.hijos.get(0).nombre.equals("operacionA-M")) {
                 return opA(t);
             }
             if (t.nombre.equals("op")) {
