@@ -728,7 +728,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 + "\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n"
                 + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
                 + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n Int resultado=>1+2*8;\n Int n=>1+2;\n" + "numero=>resultado;\nif n=1 then\n"
-                + "\treturn 1;\n" + "end if\nelse then\n" +"\t numero=>numero-1;\n" +"\t resultado => metodoRecursivo(numero); \n \tresultado=>resultado*numero; \n  "
+                + "\treturn 1;\n" + "end if\nelse then\n" + "\t numero=>numero-1;\n" + "\t resultado => metodoRecursivo(numero); \n \tresultado=>resultado*numero; \n  "
                 + "\treturn resultado;\n" + "end else\nend call\n";
         txtResultado.setText(codigo);
 
@@ -921,10 +921,74 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("El valor de retorno " + " no es correcto para esta funcion " + actual.hijos.get(0).valor);
             }
         }
+
+        if (actual.nombre.equals("llamar metodo")) {
+            valores = new ArrayList();
+            ids=new ArrayList();
+            ver_args(actual);
+            String temp = actual.hijos.get(0).valor;
+            ver_params(root, temp);
+            if (valores.containsAll(ids) && ids.containsAll(valores)) {
+            }else{
+                Errores_tipos.add("La llamada de el metodo  "+ temp+" no esta bien debido a que sus parametros y argumentos no son iguales");
+            }
+ 
+        }
 //////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 validarOperaciones(actual.hijos.get(i));
+
+            }
+        }
+    }
+
+    public static void ver_params(Node actual, String metodo) {
+        if (actual.nombre.equals("metodo parametro") && actual.hijos.get(1).valor.equals(metodo)) {
+            vP(actual);
+        }
+        for (int i = 0; i < actual.hijos.size(); i++) {
+            if (!actual.hijos.get(i).hijos.isEmpty()) {
+                ver_params(actual.hijos.get(i), metodo);
+            }
+        }
+    }
+
+    public static void vP(Node n) {
+        if (n.nombre.equals("parametro")) {
+            ids.add(n.hijos.get(0).hijos.get(0).valor);
+        }
+
+        for (int i = 0; i < n.hijos.size(); i++) {
+            if (!n.hijos.get(i).hijos.isEmpty()) {
+                vP(n.hijos.get(i));
+            }
+        }
+    }
+
+    public static void ver_args(Node n) {
+        if (n.nombre.equals("Valoro")) {
+            if (n.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                if (existe(n.hijos.get(0).valor) == 1) {
+                    valores.add(get_tipo(n.hijos.get(0).valor));
+                } else if (existe(n.hijos.get(0).valor) == 0) {
+                    valores.add("error");
+                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                }
+            } else if (n.hijos.get(0).nombre.equals("Int")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("Float")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("String")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("Bool")) {
+                valores.add(n.hijos.get(0).nombre);
+            }
+
+        }
+        for (int i = 0; i < n.hijos.size(); i++) {
+            if (!n.hijos.get(i).hijos.isEmpty()) {
+                ver_args(n.hijos.get(i));
             }
         }
     }
@@ -1185,6 +1249,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Node t = n.hijos.get(0);
             if (t.nombre.equals("operacionA") || t.hijos.get(0).nombre.equals("operacionA-D") || t.hijos.get(0).nombre.equals("operacionA-M")) {
                 return opA(t);
+            }
+            if (t.nombre.equals("llamar metodo")) {
+                if (existe(t.hijos.get(0).valor) == 1) {
+                    return get_tipo(t.hijos.get(0).valor);
+                } else {
+                    Errores_tipos.add("El metodo " + t.hijos.get(0).valor + " no existe");
+                }
             }
             if (t.nombre.equals("op")) {
                 Node t1 = t.hijos.get(0);

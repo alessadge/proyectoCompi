@@ -1443,107 +1443,50 @@ FX::=
 
 
 IMPRIMIR::=
-    ImpLn ParIzq CADENA:c CONCAT:c1 ParDer PuntoComa
+    ImpLn ParIzq CADENA:c ParDer PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(new Node("cadena", ((String) c)));
-    imprimir.addNode(c1); 
+    imprimir.addNode(new Node("String", ((String) c)));
     RESULT=imprimir;
     :}
     |
-    Imp ParIzq CADENA:c CONCAT:c1 ParDer  PuntoComa
+    Imp ParIzq CADENA:c ParDer  PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(new Node("cadena", ((String) c)));
-    imprimir.addNode(c1); 
+    imprimir.addNode(new Node("String", ((String) c)));
     RESULT=imprimir;
     :}
-    |
-    
-    ImpLn ParIzq LLAMAR_METODO:c CONCAT:c1 ParDer PuntoComa
-        {:
+    |    
+    ImpLn ParIzq SHOWCOORDENADAS:c ParDer PuntoComa
+    {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(c);
-    imprimir.addNode(c1); 
+    imprimir.addNode(c); 
     RESULT=imprimir;
     :}
     |
-    Imp ParIzq LLAMAR_METODO:c CONCAT:c1 ParDer  PuntoComa
+    Imp ParIzq SHOWCOORDENADAS:c ParDer  PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
     imprimir.addNode(c);
-    imprimir.addNode(c1); 
-    RESULT=imprimir;
-    :}
-    |
-    
-    ImpLn ParIzq SHOWCOORDENADAS:c CONCAT:c1 ParDer PuntoComa
-    {:
-    Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(c);
-    imprimir.addNode(c1); 
-    RESULT=imprimir;
-    :}
-    |
-    Imp ParIzq SHOWCOORDENADAS:c CONCAT:c1 ParDer  PuntoComa
-    {:
-    Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(c);
-    imprimir.addNode(c1); 
     RESULT=imprimir;
     :}| ImpLn error:e {: System.out.println("PRINTLN");Sintax.Print_Error(); :}
     |
 
-    ImpLn ParIzq IDENTIFICADOR:c CONCAT:c1 ParDer PuntoComa
+    ImpLn ParIzq IDENTIFICADOR:c ParDer PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(new Node("cadena", ((String) c)));
-    imprimir.addNode(c1); 
+    imprimir.addNode(new Node("IDENTIFICADOR", ((String) c)));
     RESULT=imprimir;
     :}
     |
-    Imp ParIzq IDENTIFICADOR:c CONCAT:c1 ParDer  PuntoComa
+    Imp ParIzq IDENTIFICADOR:c ParDer  PuntoComa
     {:
     Node imprimir= new Node("IMPRIMIR");
-    imprimir.addNode(new Node("cadena", ((String) c)));
-    imprimir.addNode(c1); 
+    imprimir.addNode(new Node("IDENTIFICADOR", ((String) c))); 
     RESULT=imprimir;
     :}| Imp error:e {: System.out.println("PRINTLN");Sintax.Print_Error(); :}
 ;
-CONCAT::=
-    Coma CADENA:c CONCAT:c1
-    {:
-    Node concatenacion= new Node("concatenacion");
-    concatenacion.addNode(new Node("cadena", ((String) c)));
-    concatenacion.addNode(c1); 
-    RESULT=concatenacion;
-    :}
-    |
-    Coma LLAMAR_METODO:c CONCAT:c1
-    {:
-    Node concatenacion= new Node("concatenacion");
-    concatenacion.addNode(c);
-    concatenacion.addNode(c1); 
-    RESULT=concatenacion;
-    :}
-    |
-    Coma SHOWCOORDENADAS:c CONCAT:c1
-    {:
-    Node concatenacion= new Node("concatenacion");
-    concatenacion.addNode(c);
-    concatenacion.addNode(c1); 
-    RESULT=concatenacion;
-    :}
-    |
-    Coma IDENTIFICADOR:c CONCAT:c1 
-    {:
-    Node concatenacion= new Node("concatenacion");
-    concatenacion.addNode(new Node("IDENTIFICADOR", ((String) c)));
-    concatenacion.addNode(c1); 
-    RESULT=concatenacion;
-    :}
-    |
-;
+
 SWITCH_ESTRUCTURA::=
     Case ParIzq IDENTIFICADOR:i ParDer Of
         CASOS:c
