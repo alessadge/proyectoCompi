@@ -700,12 +700,13 @@ METODOS::=
 ;
 
 M_VOID::=
-    Call Begin IDENTIFICADOR:i ParIzq ParDer
+    Call Begin IDENTIFICADOR:i ParIzq PARAMETRO:p ParDer
         SENTENCIA:se
     EndCall
 {: 
         Node Void = new Node("void");
         Void.addNode(new Node("IDENTIFICADOR", ((String) i)));
+        Void.addNode(p);
         Void.addNode(se);
         RESULT=Void;
 :}| Call error:e {: System.out.println("FUNCION VOID"); Sintax.Void_Error(); :}
@@ -738,38 +739,38 @@ PARAMETRO::=
     parametro.addNode(new Node("IDENTIFICADOR", ((String) i)));
     RESULT=parametro;
      :}| TYPE error:e {: System.out.println("FUNCION PARAMETRO");Sintax.Parametro(); :}
-   
+     |
 ;
 
 TYPE::=
 TypeInt:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("Int", ((String) t))); 
         RESULT=type;
         :}
 |TypeFloat:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("Float", ((String) t))); 
         RESULT=type;
         :}
 |TypeString:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("String", ((String) t))); 
         RESULT=type;
         :}
 |TypeList:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("List", ((String) t))); 
         RESULT=type;
         :}
 |TypeMatriz:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("Matriz", ((String) t))); 
         RESULT=type;
         :}
 |TypeBool:t {: 
         Node type = new Node("tipo");
-        type.addNode(new Node("TYPE", ((String) t))); 
+        type.addNode(new Node("Bool", ((String) t))); 
         RESULT=type;
         :}
 |

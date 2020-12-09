@@ -727,7 +727,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         String codigo = "main begin \n" + "String miNombre=>\"Franklin \";\n" + "Put miNombre;\n" + "Int a=>1-4*7*6;\n" + "case(a) of\n"
                 + "\t1: Matriz m(2)(2)=>{1,2}{3,4};\n" + "\tfor Int i=>0 in range(i<2)\n" + "\t\tfor Int j=>0 in range(j<2) \n"
                 + "\t\t\tPrint(m[i][j]);\n" + "\t\tend for\n\tend for\n" + "\t2: Println(\"Fin 2\");\n\t default: Println(\"Fin default\");\n"
-                + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\nif n=1 then\n"
+                + "end case\nend main \n\n" + "Int begin metodoRecursivo(Int numero)\n Int resultado=>1+2*8;\n Int n=>1+2;\n" + "numero=>resultado;\nif n=1 then\n"
                 + "\treturn 1;\n" + "end if\nelse then\n" + "\tresultado => metodoRecursivo(numero-1)*numero;\n"
                 + "\treturn resultado;\n" + "end else\nend call\n";
         txtResultado.setText(codigo);
@@ -748,6 +748,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void llenar_tabla(Node actual) {
 //////////////////////////Comprobacion de tipos de for
+
+        if (actual.nombre.equals("void")) {
+            agregar(new Entry(actual.hijos.get(0).valor, "void", ""));
+            if (actual.hijos.get(1).nombre.equals("parametro")) {
+                adParametro(actual.hijos.get(1));
+            }
+        }
+        if (actual.nombre.equals("metodo parametro")) {
+            agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).hijos.get(0).nombre, ""));
+            if (actual.hijos.get(2).nombre.equals("parametro")) {
+                adParametro(actual.hijos.get(2));
+            }
+        }
         if (actual.nombre.equals("FOR")) {
             if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
@@ -875,30 +888,43 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
 ///////////////////////////Validar switch//////////////////////////////////////
         if (actual.nombre.equals("switch")) {
-            if (existe(actual.hijos.get(0).valor)==1) {
-                if (get_tipo(actual.hijos.get(0).valor).equals("Int") &&
-                        actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")
-                    ) {
-                }else if(get_tipo(actual.hijos.get(0).valor).equals("Int") &&
-                        !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")){
-                        Errores_tipos.add("Las opciones en el case para la variable "+ actual.hijos.get(0).valor+" son incorrectas");
+            if (existe(actual.hijos.get(0).valor) == 1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Int")
+                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("Int")
+                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
+                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
                 }
-                if (get_tipo(actual.hijos.get(0).valor).equals("String") &&
-                        actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")
-                    ) {
-                }else if(get_tipo(actual.hijos.get(0).valor).equals("String") &&
-                        !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")){
-                        Errores_tipos.add("Las opciones en el case para la variable "+ actual.hijos.get(0).valor+" son incorrectas");
+                if (get_tipo(actual.hijos.get(0).valor).equals("String")
+                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("String")
+                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
+                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
                 }
-            }else{
-                Errores_tipos.add("La variable "+actual.hijos.get(0).valor+" no existe");
+            } else {
+                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
             }
         }
-
 //////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 llenar_tabla(actual.hijos.get(i));
+            }
+        }
+    }
+
+    public static void validarOperaciones(Node actual) {
+/////////////////////////////////////ver salida de la funcion/////////////////////
+        if (actual.nombre.equals("metodo parametro")) {
+            if (actual.hijos.get(0).hijos.get(0).nombre.equals(Busca_retorno(actual))) {
+            } else if (!actual.hijos.get(0).hijos.get(0).nombre.equals(Busca_retorno(actual))) {
+                Errores_tipos.add("El valor de retorno " + " no es correcto para esta funcion " + actual.hijos.get(0).valor);
+            }
+        }
+//////////////////////////Recorrer arbol////////////////////////////////////////
+        for (int i = 0; i < actual.hijos.size(); i++) {
+            if (!actual.hijos.get(i).hijos.isEmpty()) {
+                validarOperaciones(actual.hijos.get(i));
             }
         }
     }
@@ -1009,6 +1035,120 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }*/
     }
 
+    public static void adParametro(Node n) {
+        if (n.nombre.equals("parametro")) {
+            agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor, ""));
+        }
+
+        for (int i = 0; i < n.hijos.size(); i++) {
+            if (!n.hijos.get(i).hijos.isEmpty()) {
+                adParametro(n.hijos.get(i));
+            }
+        }
+    }
+
+    public static String Busca_retorno(Node raiz) {
+        valores = new ArrayList();
+        BuscaR(raiz);
+        int fallo = 0;
+        String temp = valores.get(0), retorno = "";
+        if (valores.size()==1) {
+            return valores.get(0);
+        }
+        if (temp.equals("Int")) {
+            for (String t : valores) {
+                if (t.equals("Int")) {
+                    retorno = "Int";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (temp.equals("Float")) {
+            for (String t : valores) {
+                if (t.equals("Float")) {
+                    retorno = "Float";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (temp.equals("String")) {
+            for (String t : valores) {
+                if (t.equals("String")) {
+                    retorno = "String";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (temp.equals("Bool")) {
+            for (String t : valores) {
+                if (t.equals("Bool")) {
+                    retorno = "Bool";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (temp.equals("List")) {
+            for (String t : valores) {
+                if (t.equals("List")) {
+                    retorno = "List";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (temp.equals("Matriz")) {
+            for (String t : valores) {
+                if (t.equals("Matriz")) {
+                    retorno = "Matriz";
+                } else {
+                    fallo++;
+                }
+            }
+        }
+        if (fallo == 0) {
+            return retorno;
+        }
+        return "";
+    }
+
+    public static void BuscaR(Node nodo) {
+        if (nodo.nombre.equals("Return")) {
+            Node n=nodo.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
+            if (n.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
+                if (existe(n.hijos.get(0).valor) == 1) {
+                    valores.add(get_tipo(n.hijos.get(0).valor));
+                } else if (existe(n.hijos.get(0).valor) == 0) {
+                    valores.add("error");
+                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                }
+            } else if (n.hijos.get(0).nombre.equals("Int")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("Float")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("String")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("Bool")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("Matriz")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else if (n.hijos.get(0).nombre.equals("List")) {
+                valores.add(n.hijos.get(0).nombre);
+            } else {
+                valores.add("error");
+            }
+        }
+
+        for (int i = 0; i < nodo.hijos.size(); i++) {
+            if (!nodo.hijos.get(i).hijos.isEmpty()) {
+                BuscaR(nodo.hijos.get(i));
+            }
+        }
+    }
+
     public static String Compr_valor(Node n) {
         if (n.nombre.equals("operacionA")) {
             return opA(n);
@@ -1105,7 +1245,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
             }
         }
-        System.out.println("s" + valores.size());
         if (fallo == 0) {
             return retorno;
         }
@@ -1115,19 +1254,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static void ver_operacion(Node n) {
         if (n.nombre.equals("Valoro")) {
             if (n.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
-                if (existe(n.hijos.get(0).valor)==1) {
+                if (existe(n.hijos.get(0).valor) == 1) {
                     valores.add(get_tipo(n.hijos.get(0).valor));
-                }else if(existe(n.hijos.get(0).valor)==0){
-                    System.out.println("llego");
+                } else if (existe(n.hijos.get(0).valor) == 0) {
                     valores.add("error");
-                    Errores_tipos.add("La variable "+n.hijos.get(0).valor+" no existe");
+                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
                 }
-            }else if (n.hijos.get(0).nombre.equals("Int")) {
+            } else if (n.hijos.get(0).nombre.equals("Int")) {
                 valores.add(n.hijos.get(0).nombre);
-            }else if (n.hijos.get(0).nombre.equals("Float")) {
+            } else if (n.hijos.get(0).nombre.equals("Float")) {
                 valores.add(n.hijos.get(0).nombre);
+            } else {
+                valores.add("error");
             }
-            
+
         }
         for (int i = 0; i < n.hijos.size(); i++) {
             if (!n.hijos.get(i).hijos.isEmpty()) {
@@ -1156,6 +1296,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void analizar() throws IOException {
         llenar_tabla(root);
+        validarOperaciones(root);
         for (int i = 0; i < tabla_simbolos.size(); i++) {
             System.out.println("ID: " + tabla_simbolos.get(i).id + " TIPO: " + tabla_simbolos.get(i).tipo);
         }
