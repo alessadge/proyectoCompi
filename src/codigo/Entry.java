@@ -11,9 +11,13 @@ package codigo;
  */
 public class Entry {
     String id,tipo , ambito;
-    Entry(String i, String t, String a){
+    int offset;
+    boolean activo;
+    Entry(String i, String t, String a,int o,boolean bool){
         id = i;
         tipo = t;
         ambito = a;
+        offset=o;
+        activo=bool;
     }
 }

@@ -5,6 +5,7 @@
  */
 package codigo;
 
+import com.sun.awt.SecurityWarning;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dialog.ModalityType;
@@ -639,6 +640,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         ids2 = null;
         tipos_matrix = null;
         Errores_tipos = new ArrayList<String>();
+        cont_ambito=1;
+        control_ambito=-1;
+        offset=0;
+        ambito="";
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -748,22 +753,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void llenar_tabla(Node actual) {
 //////////////////////////Comprobacion de tipos de for
-
-        if (actual.nombre.equals("void")) {
-            agregar(new Entry(actual.hijos.get(0).valor, "void", ""));
-            if (actual.hijos.get(1).nombre.equals("parametro")) {
-                adParametro(actual.hijos.get(1));
-            }
+        if(actual.nombre.equals("FOR")
+                || actual.nombre.equals("If")
+                || actual.nombre.equals("caseE")
+                || actual.nombre.equals("caseC")
+                || actual.nombre.equals("While")){
+            ambito += "," + cont_ambito;
+            cont_ambito++;
+            control_ambito++;
+            
         }
-        if (actual.nombre.equals("metodo parametro")) {
-            agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).hijos.get(0).nombre, ""));
-            if (actual.hijos.get(2).nombre.equals("parametro")) {
-                adParametro(actual.hijos.get(2));
-            }
-        }
+        //bloque for
         if (actual.nombre.equals("FOR")) {
             if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else {
                 Errores_tipos.add("Error en el For, en la declaracion se necesita valores Int");
             }
@@ -779,37 +782,81 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("Condicion no valida para el for");
             }
         }
+        
+        //bloque switch
+        ///////////////////////////Validar switch//////////////////////////////////////
+        if (actual.nombre.equals("switch")) {
+            if (existe(actual.hijos.get(0).valor) == 1) {
+                if (get_tipo(actual.hijos.get(0).valor).equals("Int")
+                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
+                        
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("Int")
+                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
+                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
+                }
+                if (get_tipo(actual.hijos.get(0).valor).equals("String")
+                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
+                       
+                       
+                } else if (get_tipo(actual.hijos.get(0).valor).equals("String")
+                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
+                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
+                }
+            } else {
+                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+            }
+        }
+        
+        
+        
+
+        if (actual.nombre.equals("void")) {
+            agregar(new Entry(actual.hijos.get(0).valor, "void",ambito,offset,activo));
+            if (actual.hijos.get(1).nombre.equals("parametro")) {
+                adParametro(actual.hijos.get(1));
+            }
+        }
+        
+        
+        //METODO PARAMETRO
+        if (actual.nombre.equals("metodo parametro")) {
+            agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).hijos.get(0).nombre, ambito,offset,activo));
+            if (actual.hijos.get(2).nombre.equals("parametro")) {
+                adParametro(actual.hijos.get(2));
+            }
+        }
+        
 ////////////////////////////Comprobacion de tipos de Declaracion con asignacion        
         if (actual.nombre.equals("asig")) {
             if (actual.hijos.get(0).valor.equals("List") && actual.hijos.get(4).nombre.equals("LISTA")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("List") && !actual.hijos.get(4).nombre.equals("LISTA")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Matriz") && actual.hijos.get(5).nombre.equals("LISTA") && actual.hijos.get(6).nombre.equals("LISTA")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+               agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("Matriz") && (!actual.hijos.get(5).nombre.equals("LISTA") || !actual.hijos.get(6).nombre.equals("LISTA"))) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("Int") && !Compr_valor(actual.hijos.get(3)).equals("Int")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
             if (actual.hijos.get(0).valor.equals("Float") && Compr_valor(actual.hijos.get(3)).equals("Float")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("Float") && !Compr_valor(actual.hijos.get(3)).equals("Float")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("String")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
                 if (existe(actual.hijos.get(3).valor) == 1) {
                     if (actual.hijos.get(0).valor.equals("String") && get_tipo(actual.hijos.get(3).valor).equals("String")) {
-                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                       agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor,ambito,offset,activo));
                     } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
                         Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
@@ -821,11 +868,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
 
             if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("Bool")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
             } else if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
                 if (existe(actual.hijos.get(3).valor) == 1) {
                     if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
-                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ""));
+                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
                     } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
                         Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
@@ -837,6 +884,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
 
         }
+        
 ///////////////////////////////////////////////Comprobacion de tipos asignar
         if (actual.nombre.equals("asignar")) {
             if (existe(actual.hijos.get(0).valor) == 1) {
@@ -886,30 +934,51 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
 
-///////////////////////////Validar switch//////////////////////////////////////
-        if (actual.nombre.equals("switch")) {
-            if (existe(actual.hijos.get(0).valor) == 1) {
-                if (get_tipo(actual.hijos.get(0).valor).equals("Int")
-                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
-                } else if (get_tipo(actual.hijos.get(0).valor).equals("Int")
-                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
-                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
-                }
-                if (get_tipo(actual.hijos.get(0).valor).equals("String")
-                        && actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
-                } else if (get_tipo(actual.hijos.get(0).valor).equals("String")
-                        && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
-                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
-                }
-            } else {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
-            }
-        }
+
 //////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
+            if(actual.nombre.equals("metodo parametro")){
+                ambito=actual.hijos.get(1).valor ;
+                offset=0;
+                cont_ambito=1;
+            }else if(actual.nombre.equals("void")){
+                ambito=actual.hijos.get(0).valor ;
+                offset=0;
+                cont_ambito=1;
+            }else if(actual.nombre.equals("Main")){
+                if(actual.hijos.get(i).nombre.equals("sentencias")){
+                    ambito="main";
+                    offset=0;
+                }
+            }
+            
+           /* if(actual.nombre.equals("metodo parametro")){
+                ambito=actual.hijos.get(1).valor+ " 0" ;
+                offset=0;
+                cont_ambito=1;
+            }else if(actual.nombre.equals("void")){
+                ambito=actual.hijos.get(0).valor+ " 0" ;
+                offset=0;
+                cont_ambito=1;
+            }else if(actual.nombre.equals("Main")){
+                if(actual.hijos.get(i).nombre.equals("sentencias")){
+                    ambito="main 0 ";
+                    offset=0;
+                }
+            }*/
             if (!actual.hijos.get(i).hijos.isEmpty()) {
                 llenar_tabla(actual.hijos.get(i));
             }
+        }
+        if(control_ambito >=0
+            && (actual.nombre.equals("FOR")
+                || actual.nombre.equals("If")
+                || actual.nombre.equals("caseE")
+                || actual.nombre.equals("caseC")
+                || actual.nombre.equals("While"))){
+            ambito=ambito.substring(0,ambito.lastIndexOf(","));
+            control_ambito--;
+            //System.out.println(ambito);
         }
     }
 
@@ -1084,24 +1153,30 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void agregar(Entry e) {
-        tabla_simbolos.add(e);
-        /*boolean esta = false;
+        boolean verifica=false;
         for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if (e.id.equals(tabla_simbolos.get(i).id)) {
-                esta = true;
-                break;
+            if(e.id.equals(tabla_simbolos.get(i).id)){
+                if(ambito.contains(tabla_simbolos.get(i).ambito)){
+                    verifica=true;
+                    break;
+                }
             }
+            
         }
-        if (esta) {
-            Errores_tipos.add("La variable: " + e.id + " ya fue declarada");
-        } else {
+        if(verifica==true){
+            System.out.println("la variable "+e.id+ " ya fue declarada");
+        }else{
             tabla_simbolos.add(e);
-        }*/
+            //offset += getSize(e.tipo);
+            offset += e.tipo.length();
+        }
+        
+        
     }
 
     public static void adParametro(Node n) {
         if (n.nombre.equals("parametro")) {
-            agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor, ""));
+            //agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor, ""));
         }
 
         for (int i = 0; i < n.hijos.size(); i++) {
@@ -1369,7 +1444,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         llenar_tabla(root);
         validarOperaciones(root);
         for (int i = 0; i < tabla_simbolos.size(); i++) {
-            System.out.println("ID: " + tabla_simbolos.get(i).id + " TIPO: " + tabla_simbolos.get(i).tipo);
+            System.out.println("ID: " + tabla_simbolos.get(i).id 
+                    + " TIPO: " + tabla_simbolos.get(i).tipo
+                    + " AMBITO: " + tabla_simbolos.get(i).ambito
+                    + " OFFSET: " + tabla_simbolos.get(i).offset
+                    + " ACTIVO: " + tabla_simbolos.get(i).activo);
         }
     }
 
@@ -1447,4 +1526,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static ArrayList<String> ids, ids2;
     public static ArrayList<String> tipos_matrix, Errores_tipos = new ArrayList<String>();
     public static ArrayList<String> valores = new ArrayList();
+    //ambito
+    public static int cont_ambito=0,control_ambito=-1,offset=0;
+    public static String ambito="";
+    public static boolean activo=true;
+    
 }
