@@ -15,7 +15,13 @@ public class Node {
     public String nombre="";
     public String valor="";    
     public ArrayList<Node> hijos;
-
+    public String lugar = "";
+    public String verdadera = "";
+    public String falsa = "";
+    public String siguiente = "";
+    public String comienzo = "";
+    public String asig = "";
+    
     public Node(String nombre) {
         this.nombre = nombre;
         this.valor = "<non-terminal>";

@@ -799,7 +799,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |RETORNO:r{:
-        Node sentencia = new Node("Retorno");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -810,7 +810,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |LOOP_FOR:r{:
-        Node sentencia = new Node("Loop For");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -821,7 +821,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |LOOP_WHILE:r{:
-        Node sentencia = new Node("Loop  While");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -832,7 +832,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |IF_ESTRUCTURA:r{:
-        Node sentencia = new Node("If");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -843,7 +843,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |SENTENCIA_DEC_ASIG:r{:
-        Node sentencia = new Node("Declar_Asig");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -854,7 +854,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |IMPRIMIR:r{:
-        Node sentencia = new Node("Imprimir");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -865,7 +865,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |SWITCH_ESTRUCTURA:r{:
-        Node sentencia = new Node("Switch");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -876,7 +876,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |ENTRADA:r{:
-        Node sentencia = new Node("Entrada");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -887,7 +887,7 @@ SENTENCIA:s RETORNO:r{:
         RESULT=sentencia;
 :}
 |COMENTAR:r{:
-        Node sentencia = new Node("Comentar");
+        Node sentencia = new Node("sentencias");
         sentencia.addNode(r);
         RESULT=sentencia;
 :}
@@ -907,6 +907,7 @@ LOOP_FOR::=
         RESULT=For;
 :}| For error:e {: System.out.println("FOR");Sintax.For_Error(); :}
 ;
+
 LOOP_WHILE::=
     While PROPOSICION:p Repeat 
     SENTENCIA:s

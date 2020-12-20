@@ -584,7 +584,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void btnCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaseActionPerformed
         // TODO add your handling code here:
         String codigo = "main begin \n" + "Int suma=>3*2+6/4;\n" + "Int a=>3;\n" + "Matriz m(2)(2)=>{1,2}{3,4};\n" + "List lista(3)=>{1,2,3};\n" + "if a=3 then \n" + "for Int i=>0 in range (i<10)\n" + "\t Print(\"hola\");\n"
-                + "end for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
+                + "end for\n" + "end if\n" + "while a<10 repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                 + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
                 + "end case\n" + "end main";
         txtResultado.setText(codigo);
@@ -636,14 +636,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         tabla_simbolos = new ArrayList<Entry>();
+        cuads = new ArrayList<Cuadruplo>();
         ids = null;
         ids2 = null;
         tipos_matrix = null;
         Errores_tipos = new ArrayList<String>();
-        cont_ambito=1;
-        control_ambito=-1;
-        offset=0;
-        ambito="";
+        cont_ambito = 1;
+        control_ambito = -1;
+        offset = 0;
+        ambito = "";
         try {
             analizarLexico();
         } catch (IOException ex) {
@@ -665,6 +666,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 txtAnalizarSin.setForeground(new Color(25, 111, 61));
                 try {
                     analizar();
+                    padre = root;
+                    cuadruplos(root);
+                    System.out.println("" + cuads.size());
+                    for (int i = 0; i < cuads.size(); i++) {
+                        System.out.println(cuads.get(i));
+                    }
                 } catch (IOException ex) {
                     Errores_tipos.add("Error comprobando tipos");
                 }
@@ -753,20 +760,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void llenar_tabla(Node actual) {
 //////////////////////////Comprobacion de tipos de for
-        if(actual.nombre.equals("FOR")
+        if (actual.nombre.equals("FOR")
                 || actual.nombre.equals("If")
                 || actual.nombre.equals("caseE")
                 || actual.nombre.equals("caseC")
-                || actual.nombre.equals("While")){
+                || actual.nombre.equals("While")) {
             ambito += "," + cont_ambito;
             cont_ambito++;
             control_ambito++;
-            
+
         }
         //bloque for
         if (actual.nombre.equals("FOR")) {
             if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else {
                 Errores_tipos.add("Error en el For, en la declaracion se necesita valores Int");
             }
@@ -782,22 +789,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("Condicion no valida para el for");
             }
         }
-        
+
         //bloque switch
         ///////////////////////////Validar switch//////////////////////////////////////
         if (actual.nombre.equals("switch")) {
             if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("Int")
                         && actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
-                        
+
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Int")
                         && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
                     Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("String")
                         && actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
-                       
-                       
+
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("String")
                         && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
                     Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
@@ -806,57 +812,53 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
             }
         }
-        
-        
-        
 
         if (actual.nombre.equals("void")) {
-            agregar(new Entry(actual.hijos.get(0).valor, "void",ambito,offset,activo));
+            agregar(new Entry(actual.hijos.get(0).valor, "void", ambito, offset, activo));
             if (actual.hijos.get(1).nombre.equals("parametro")) {
                 adParametro(actual.hijos.get(1));
             }
         }
-        
-        
+
         //METODO PARAMETRO
         if (actual.nombre.equals("metodo parametro")) {
-            agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).hijos.get(0).nombre, ambito,offset,activo));
+            agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).hijos.get(0).nombre, ambito, offset, activo));
             if (actual.hijos.get(2).nombre.equals("parametro")) {
                 adParametro(actual.hijos.get(2));
             }
         }
-        
+
 ////////////////////////////Comprobacion de tipos de Declaracion con asignacion        
         if (actual.nombre.equals("asig")) {
             if (actual.hijos.get(0).valor.equals("List") && actual.hijos.get(4).nombre.equals("LISTA")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("List") && !actual.hijos.get(4).nombre.equals("LISTA")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Matriz") && actual.hijos.get(5).nombre.equals("LISTA") && actual.hijos.get(6).nombre.equals("LISTA")) {
-               agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Matriz") && (!actual.hijos.get(5).nombre.equals("LISTA") || !actual.hijos.get(6).nombre.equals("LISTA"))) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Int") && !Compr_valor(actual.hijos.get(3)).equals("Int")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
             if (actual.hijos.get(0).valor.equals("Float") && Compr_valor(actual.hijos.get(3)).equals("Float")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Float") && !Compr_valor(actual.hijos.get(3)).equals("Float")) {
                 Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("String")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
                 if (existe(actual.hijos.get(3).valor) == 1) {
                     if (actual.hijos.get(0).valor.equals("String") && get_tipo(actual.hijos.get(3).valor).equals("String")) {
-                       agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor,ambito,offset,activo));
+                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
                     } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
                         Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
@@ -868,11 +870,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
 
             if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("Bool")) {
-                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("IDENTIFICADOR")) {
                 if (existe(actual.hijos.get(3).valor) == 1) {
                     if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
-                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito,offset,activo));
+                        agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
                     } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
                         Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
@@ -884,7 +886,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
 
         }
-        
+
 ///////////////////////////////////////////////Comprobacion de tipos asignar
         if (actual.nombre.equals("asignar")) {
             if (existe(actual.hijos.get(0).valor) == 1) {
@@ -934,25 +936,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
 
-
 //////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
-            if(actual.nombre.equals("metodo parametro")){
-                ambito=actual.hijos.get(1).valor ;
-                offset=0;
-                cont_ambito=1;
-            }else if(actual.nombre.equals("void")){
-                ambito=actual.hijos.get(0).valor ;
-                offset=0;
-                cont_ambito=1;
-            }else if(actual.nombre.equals("Main")){
-                if(actual.hijos.get(i).nombre.equals("sentencias")){
-                    ambito="main";
-                    offset=0;
+            if (actual.nombre.equals("metodo parametro")) {
+                ambito = actual.hijos.get(1).valor;
+                offset = 0;
+                cont_ambito = 1;
+            } else if (actual.nombre.equals("void")) {
+                ambito = actual.hijos.get(0).valor;
+                offset = 0;
+                cont_ambito = 1;
+            } else if (actual.nombre.equals("Main")) {
+                if (actual.hijos.get(i).nombre.equals("sentencias")) {
+                    ambito = "main";
+                    offset = 0;
                 }
             }
-            
-           /* if(actual.nombre.equals("metodo parametro")){
+
+            /* if(actual.nombre.equals("metodo parametro")){
                 ambito=actual.hijos.get(1).valor+ " 0" ;
                 offset=0;
                 cont_ambito=1;
@@ -970,13 +971,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 llenar_tabla(actual.hijos.get(i));
             }
         }
-        if(control_ambito >=0
-            && (actual.nombre.equals("FOR")
+        if (control_ambito >= 0
+                && (actual.nombre.equals("FOR")
                 || actual.nombre.equals("If")
                 || actual.nombre.equals("caseE")
                 || actual.nombre.equals("caseC")
-                || actual.nombre.equals("While"))){
-            ambito=ambito.substring(0,ambito.lastIndexOf(","));
+                || actual.nombre.equals("While"))) {
+            ambito = ambito.substring(0, ambito.lastIndexOf(","));
             control_ambito--;
             //System.out.println(ambito);
         }
@@ -993,15 +994,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         if (actual.nombre.equals("llamar metodo")) {
             valores = new ArrayList();
-            ids=new ArrayList();
+            ids = new ArrayList();
             ver_args(actual);
             String temp = actual.hijos.get(0).valor;
             ver_params(root, temp);
-            if (valores.containsAll(ids) && ids.containsAll(valores)) {
-            }else{
-                Errores_tipos.add("La llamada de el metodo  "+ temp+" no esta bien debido a que sus parametros y argumentos no son iguales");
+            int cont = 0;
+            if (valores.size() == ids.size()) {
+                for (int i = 0; i < valores.size(); i++) {
+                    if (valores.get(i).equals(ids.get(i))) {
+
+                    } else {
+                        cont++;
+                    }
+                }
             }
- 
+            if (cont == 0) {
+            } else {
+                Errores_tipos.add("La llamada de el metodo  " + temp + " no esta bien debido a que sus parametros y argumentos no son iguales");
+            }
+
         }
 //////////////////////////Recorrer arbol////////////////////////////////////////
         for (int i = 0; i < actual.hijos.size(); i++) {
@@ -1153,25 +1164,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void agregar(Entry e) {
-        boolean verifica=false;
+        boolean verifica = false;
         for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if(e.id.equals(tabla_simbolos.get(i).id)){
-                if(ambito.contains(tabla_simbolos.get(i).ambito)){
-                    verifica=true;
+            if (e.id.equals(tabla_simbolos.get(i).id)) {
+                if (ambito.contains(tabla_simbolos.get(i).ambito)) {
+                    verifica = true;
                     break;
                 }
             }
-            
+
         }
-        if(verifica==true){
-            System.out.println("la variable "+e.id+ " ya fue declarada");
-        }else{
+        if (verifica == true) {
+            System.out.println("la variable " + e.id + " ya fue declarada");
+        } else {
             tabla_simbolos.add(e);
             //offset += getSize(e.tipo);
             offset += e.tipo.length();
         }
-        
-        
+
     }
 
     public static void adParametro(Node n) {
@@ -1444,12 +1454,147 @@ public class FrmPrincipal extends javax.swing.JFrame {
         llenar_tabla(root);
         validarOperaciones(root);
         for (int i = 0; i < tabla_simbolos.size(); i++) {
-            System.out.println("ID: " + tabla_simbolos.get(i).id 
+            System.out.println("ID: " + tabla_simbolos.get(i).id
                     + " TIPO: " + tabla_simbolos.get(i).tipo
                     + " AMBITO: " + tabla_simbolos.get(i).ambito
                     + " OFFSET: " + tabla_simbolos.get(i).offset
                     + " ACTIVO: " + tabla_simbolos.get(i).activo);
         }
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////------------ Codigo intermedio-----------------------------------------------------------
+
+    public static void cuadruplos(Node root) {
+        boolean skip = false;
+        boolean main = false;
+        boolean code_block = false;
+        boolean falta = false;
+        boolean func = false;
+        if (root.nombre.equals("sentencias") && root.hijos.size() > 1) {
+            if (root.hijos.get(1).nombre.equals("While")
+                    || root.hijos.get(1).nombre.equals("If")
+                    || root.hijos.get(1).nombre.equals("FOR")
+                    || root.hijos.get(1).nombre.equals("switch")) {
+                code_block = true;
+                root.siguiente = etiqnueva();
+                root.hijos.get(1).siguiente = root.siguiente;
+            }
+        } else if (root.nombre.equals("sentencias") && root.hijos.size() == 1) {
+            if (root.hijos.get(0).nombre.equals("While")
+                    || root.hijos.get(0).nombre.equals("If")
+                    || root.hijos.get(0).nombre.equals("FOR")
+                    || root.hijos.get(0).nombre.equals("switch")) {
+                code_block = true;
+                root.siguiente = etiqnueva();
+                root.hijos.get(0).siguiente = root.siguiente;
+            }
+        }
+        if (root.nombre.equals("While")) {
+            skip = true;
+            root.comienzo = etiqnueva();
+            cuads.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
+            root.hijos.get(0).verdadera = etiqnueva();
+            root.hijos.get(0).falsa = root.siguiente;
+            genCodBOOL(root.hijos.get(0));
+            cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+            root.hijos.get(1).siguiente = root.comienzo;
+            cuadruplos(root.hijos.get(1));
+            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+        }
+        for (int i = 0; i < root.hijos.size(); i++) {
+            if (code_block) {
+                if (i == root.hijos.size() - 1 && !root.hijos.get(i).nombre.equals("sentencias")) {
+                    falta = true;
+                }
+            }
+            if (!skip) {
+                cuadruplos(root.hijos.get(i));
+            }
+        }
+
+        if (falta) {
+            cuads.add(new Cuadruplo("ETIQ", root.siguiente, "", ""));
+        }
+    }
+
+    public static void genCodBOOL(Node root) {
+        if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
+            genCodOP(root.hijos.get(0).hijos.get(0));
+            genCodOP(root.hijos.get(0).hijos.get(2));
+            String val = "if " + root.hijos.get(0).hijos.get(1).valor;
+            cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+            cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+        } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")) {
+            genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(0));
+            genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(2));
+            String val = "if " + root.hijos.get(0).hijos.get(0).hijos.get(1).valor;
+            cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
+            cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+        } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION2")) {
+            if (root.hijos.get(0).hijos.get(1).valor.equals("And")) {
+                root.hijos.get(0).hijos.get(0).verdadera = etiqnueva();
+                root.hijos.get(0).hijos.get(0).falsa = root.siguiente;
+                genCodBOOL(root.hijos.get(0).hijos.get(0));
+                cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).verdadera, "", ""));
+                root.hijos.get(0).hijos.get(2).verdadera = root.verdadera;
+                root.hijos.get(0).hijos.get(2).falsa = root.falsa;
+                genCodBOOL(root.hijos.get(0).hijos.get(2));
+            }else if (root.hijos.get(0).hijos.get(1).valor.equals("Or")) {
+                root.hijos.get(0).hijos.get(0).verdadera = root.verdadera;
+                root.hijos.get(0).hijos.get(0).falsa = etiqnueva();
+                genCodBOOL(root.hijos.get(0).hijos.get(0));
+                cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).falsa, "", ""));
+                root.hijos.get(0).hijos.get(2).verdadera = root.verdadera;
+                root.hijos.get(0).hijos.get(2).falsa = root.falsa;
+                genCodBOOL(root.hijos.get(0).hijos.get(2));
+            }
+        } else if (root.nombre.equals("PROPOSICION1")) {
+            if (root.hijos.size() > 1) {
+                genCodOP(root.hijos.get(0));
+                genCodOP(root.hijos.get(2));
+                String val = "if " + root.hijos.get(1).valor;
+                cuads.add(new Cuadruplo(val, root.hijos.get(0).lugar, root.hijos.get(2).lugar, root.verdadera));
+                cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+            } else if (root.hijos.get(0).nombre.equals("PROPOSICION1-2")) {
+                genCodOP(root.hijos.get(0).hijos.get(0));
+                genCodOP(root.hijos.get(0).hijos.get(2));
+                String val = "if " + root.hijos.get(0).hijos.get(1).valor;
+                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+            }
+        } else if (root.nombre.equals("PROPOSICION2")) {
+            if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size()>1) {
+                genCodOP(root.hijos.get(0).hijos.get(0));
+                genCodOP(root.hijos.get(0).hijos.get(2));
+                String val = "if " + root.hijos.get(0).hijos.get(1).valor;
+                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                cuads.add(new Cuadruplo("GOTO", root.hijos.get(0).falsa, "", ""));
+            }else if(root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")){
+                genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(0));
+                genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(2));
+                String val = "if " + root.hijos.get(0).hijos.get(0).hijos.get(1).valor;
+                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                cuads.add(new Cuadruplo("GOTO", root.hijos.get(0).hijos.get(0).falsa, "", ""));
+            }
+        }
+    }
+
+    public static void genCodOP(Node root) {
+        boolean funcion = false;
+        for (int i = 0; i < root.hijos.size(); i++) {
+            genCodOP(root.hijos.get(i));
+        }
+        if (root.nombre.equals("Int") || root.nombre.equals("IDENTIFICADOR") && root.hijos.size() == 0
+                && !funcion || root.nombre.equals("String") || root.nombre.equals("TBool")) {
+            root.lugar = root.valor;
+        }
+    }
+
+    public static String etiqnueva() {
+        String r = "etiq" + etiquetas;
+        etiquetas = etiquetas + 1;
+        return r;
     }
 
     /**
@@ -1527,8 +1672,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static ArrayList<String> tipos_matrix, Errores_tipos = new ArrayList<String>();
     public static ArrayList<String> valores = new ArrayList();
     //ambito
-    public static int cont_ambito=0,control_ambito=-1,offset=0;
-    public static String ambito="";
-    public static boolean activo=true;
-    
+    public static int cont_ambito = 0, control_ambito = -1, offset = 0;
+    public static String ambito = "";
+    public static boolean activo = true;
+    public static int temporales = 0, cantparam = 0, etiquetas = 0;
+    public static ArrayList<String> mensajes = new ArrayList<String>();
+    public static Node padre, options_father;
+    public static String id_options = "";
+    public static ArrayList<Cuadruplo> cuads = new ArrayList<Cuadruplo>();
+
 }
