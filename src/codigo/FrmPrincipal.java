@@ -1186,7 +1186,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public static void adParametro(Node n) {
         if (n.nombre.equals("parametro")) {
-            //agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor, ""));
+            agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor,"",offset,true));
         }
 
         for (int i = 0; i < n.hijos.size(); i++) {
@@ -1501,7 +1501,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
-        }else if(root.nombre.equals("Main")){
+        }else if (root.equals("")) {
+            
+        }
+        else if(root.nombre.equals("IMPRIMIR")){
+            if(root.hijos.get(0).nombre.equals("String")){
+                cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, "String", ""));
+            }else if(root.hijos.get(0).nombre.equals("IDENTIFICADOR")){
+                genCodOP(root.hijos.get(0));
+                cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).nombre), ""));
+                System.out.println("entroo 2");
+            }
+        }
+        else if(root.nombre.equals("Main")){
             main=true;
         }
         else if (root.nombre.equals("FOR")) {
@@ -1543,7 +1555,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
                 cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
             }
-        }else if (root.nombre.equals("asignar")) {
+        }else if (root.nombre.equals("asignar") && root.nombre.equals("TIPO") ) {
             cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
         }
         for (int i = 0; i < root.hijos.size(); i++) {
@@ -1558,6 +1570,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if(main && root.hijos.get(i).nombre.equals("sentencias")){
                 cuads.add(new Cuadruplo("MAIN_ETIQ", "Main", "", ""));
             }
+            if (main) {
+            cuads.add(new Cuadruplo("P_ETIQ", "fin_main", "", ""));
+        }
         }
 
         if (falta) {
