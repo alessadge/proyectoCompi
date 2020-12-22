@@ -68,10 +68,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         while (true) {
             Tokens token = lexer.yylex();
             if (token == null) {
-                //ta_intermedio.setText(resultado);
-                System.out.println(resultado);
-                String m="Analisis Léxico: No hay errores lexicos \n Análisis Sintáctico: No hay errores Sintácticos";
-                JOptionPane.showMessageDialog(null, m);
+
                 return;
             }
             switch (token) {
@@ -714,27 +711,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (Sintax.Errores.isEmpty() && Lexer.ErroresLexicos.isEmpty()) {
-            try {
-                root = s.raiz;
-                txtAnalizarSin.setText("Analisis realizado correctamente");
-                txtAnalizarSin.setForeground(new Color(25, 111, 61));
-                try {
-                    analizar();
-                    padre = root;
-                   /* cuadruplos(root);
-                    System.out.println("" + cuads.size());
-                    for (int i = 0; i < cuads.size(); i++) {
-                        System.out.println(cuads.get(i));
-                    }*/
-                } catch (IOException ex) {
-                    Errores_tipos.add("Error comprobando tipos");
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } else {
+        if (!Sintax.Errores.isEmpty() && !Lexer.ErroresLexicos.isEmpty()) {
             try {
                 Symbol sym = s.getS();
                 temporal = temporal + Sintax.Errores;
@@ -746,6 +723,41 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 Sintax.Errores.clear();
                 Lexer.ErroresLexicos.clear();
                 txtAnalizarSin.setForeground(Color.red);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+
+            try {
+                root = s.raiz;
+                try {
+                    analizar();
+                    padre = root;
+                    /* cuadruplos(root);
+                    System.out.println("" + cuads.size());
+                    for (int i = 0; i < cuads.size(); i++) {
+                        System.out.println(cuads.get(i));
+                    }*/
+                    if (!Errores_tipos.isEmpty()) {
+                        boton_intermedio.setEnabled(false);
+                        boton_simbolos.setEnabled(false);
+                        String temp = "";
+                        for (int i = 0; i < Errores_tipos.size(); i++) {
+                            temp += "" + Errores_tipos.get(i) + "\n";
+                        }
+                        txtAnalizarSin.setText(temp);
+                        txtAnalizarSin.setForeground(Color.red);
+
+                    } else {
+                        boton_intermedio.setEnabled(true);
+                        boton_simbolos.setEnabled(true);
+                        txtAnalizarSin.setText("Analisis realizado correctamente");
+                        txtAnalizarSin.setForeground(new Color(25, 111, 61));
+                    }
+                } catch (IOException ex) {
+                    System.out.println("error");
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -805,31 +817,34 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void boton_intermedioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_intermedioMouseClicked
         try {
             cuadruplos(root);
-            String mensaje="";
+            String mensaje = "";
             for (int i = 0; i < cuads.size(); i++) {
-                mensaje+=cuads.get(i)+"\n";
-                
+                mensaje += cuads.get(i) + "\n";
+
             }
             ta_intermedio.setText(mensaje);
         } catch (Exception e) {
         }
-          
-        
-                    
+
+
     }//GEN-LAST:event_boton_intermedioMouseClicked
 
     private void boton_intermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_intermedioActionPerformed
-        // TODO add your handling code here:
+        String temp = "";
+        for (int i = 0; i < cuads.size(); i++) {
+            temp = temp + cuads.get(i) + "/n";
+        }
+        ta_intermedio.setText(temp);
     }//GEN-LAST:event_boton_intermedioActionPerformed
 
     private void boton_simbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_simbolosActionPerformed
-       try {
-            String mensaje="";
+        try {
+            String mensaje = "";
             for (int i = 0; i < tabla_simbolos.size(); i++) {
-                mensaje +="ID: " + tabla_simbolos.get(i).id
+                mensaje += "ID: " + tabla_simbolos.get(i).id
                         + " TIPO: " + tabla_simbolos.get(i).tipo
                         + " AMBITO: " + tabla_simbolos.get(i).ambito
-                        + " OFFSET: " + tabla_simbolos.get(i).offset+ "\n";
+                        + " OFFSET: " + tabla_simbolos.get(i).offset + "\n";
             }
             ta_simbolos.setText(mensaje);
         } catch (Exception e) {
@@ -1271,14 +1286,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             tabla_simbolos.add(e);
             //offset += getSize(e.tipo);
             offset += e.tipo.length();
-            
+
         }
 
     }
 
     public static void adParametro(Node n) {
         if (n.nombre.equals("parametro")) {
-            agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor,"",offset,true));
+            agregar(new Entry(n.hijos.get(1).valor, n.hijos.get(0).hijos.get(0).valor, "", offset, true));
         }
 
         for (int i = 0; i < n.hijos.size(); i++) {
@@ -1545,8 +1560,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static void analizar() throws IOException {
         llenar_tabla(root);
         validarOperaciones(root);
-        
-        
+
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1588,20 +1602,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
-        }
-        else if(root.nombre.equals("IMPRIMIR")){
-            if(root.hijos.get(0).nombre.equals("String")){
+        } else if (root.nombre.equals("IMPRIMIR")) {
+            if (root.hijos.get(0).nombre.equals("String")) {
                 cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, "String", ""));
-            }else if(root.hijos.get(0).nombre.equals("IDENTIFICADOR")){
+            } else if (root.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
                 genCodOP(root.hijos.get(0));
                 cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).nombre), ""));
                 System.out.println("entroo 2");
             }
-        }
-        else if(root.nombre.equals("Main")){
-            main=true;
-        }
-        else if (root.nombre.equals("FOR")) {
+        } else if (root.nombre.equals("Main")) {
+            main = true;
+        } else if (root.nombre.equals("FOR")) {
             skip = true;
             cuads.add(new Cuadruplo("=", "0", "", root.hijos.get(1).valor));
             root.comienzo = etiqnueva();
@@ -1621,21 +1632,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuads.add(new Cuadruplo("=", temp, "", root.hijos.get(1).valor));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
 
-        }else if(root.nombre.equals("switch")){
-            skip=true;
-            id_options=root.hijos.get(0).valor;
-            options_father=root.hijos.get(1);
-            options_father.comienzo=etiqnueva();
-            root.hijos.get(1).hijos.get(0).siguiente=root.siguiente;
-           opciones_switch(root.hijos.get(1).hijos.get(0));
-            
-        }
-        else if (root.nombre.equals("Return")) {
-            Node temp=root.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
+        } else if (root.nombre.equals("switch")) {
+            skip = true;
+            id_options = root.hijos.get(0).valor;
+            options_father = root.hijos.get(1);
+            options_father.comienzo = etiqnueva();
+            root.hijos.get(1).hijos.get(0).siguiente = root.siguiente;
+            opciones_switch(root.hijos.get(1).hijos.get(0));
+
+        } else if (root.nombre.equals("Return")) {
+            Node temp = root.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
             genCodOP(temp);
             cuads.add(new Cuadruplo("Return", temp.lugar, "", ""));
-        }
-        else if (root.nombre.equals("Entrada")) {
+        } else if (root.nombre.equals("Entrada")) {
             cuads.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
         } else if (root.nombre.equals("asig")) {
             if (root.hijos.size() == 4 && root.hijos.get(3).nombre.equals("op")) {
@@ -1643,24 +1652,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
             if (root.hijos.size() == 4
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
-                cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
+                cuads.add(new Cuadruplo("=", root.hijos.get(3).valor, "", root.hijos.get(1).valor));
             }
         }/*else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO") ) {
             if (root.hijos.get(2).hijos.get(0).equals("")) {
                  
             }else{
                 cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
-            }*/
-        
-        else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO")) {
+            }*/ else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO")) {
             if (root.hijos.get(2).hijos.get(0).nombre.equals("llamar metodo")) {
                 addParams(root.hijos.get(2).hijos.get(0));
-                cuads.add(new Cuadruplo("call",root.hijos.get(2).hijos.get(0).hijos.get(0).valor,"",""));
-                cuads.add(new Cuadruplo("=","RET",root.hijos.get(0).valor,""));
-            } else if(root.hijos.get(2).hijos.get(0).nombre.equals("op")){ 
+                cuads.add(new Cuadruplo("call", root.hijos.get(2).hijos.get(0).hijos.get(0).valor, "", ""));
+                cuads.add(new Cuadruplo("=", "RET", root.hijos.get(0).valor, ""));
+            } else if (root.hijos.get(2).hijos.get(0).nombre.equals("op")) {
                 cuads.add(new Cuadruplo("=", root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(0).valor));
             }
-        }else if (root.nombre.equals("If")) {
+        } else if (root.nombre.equals("If")) {
             skip = true;
             if (root.hijos.size() > 1) {
                 if (root.hijos.size() == 2) {
@@ -1701,21 +1708,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (!skip) {
                 cuadruplos(root.hijos.get(i));
             }
-            if(main && root.hijos.get(i).nombre.equals("sentencias")){
+            if (main && root.hijos.get(i).nombre.equals("sentencias")) {
                 cuads.add(new Cuadruplo("MAIN_ETIQ", "Main", "", ""));
             }
             if (main) {
-            cuads.add(new Cuadruplo("P_ETIQ", "fin_main", "", ""));
-        }
+                cuads.add(new Cuadruplo("P_ETIQ", "fin_main", "", ""));
+            }
         }
 
         if (falta) {
             cuads.add(new Cuadruplo("ETIQ", root.siguiente, "", ""));
         }
     }
+
     public static void addParams(Node n) {
         if (n.nombre.equals("Valoro")) {
-            cuads.add(new Cuadruplo("Param",n.hijos.get(0).valor,"",""));
+            cuads.add(new Cuadruplo("Param", n.hijos.get(0).valor, "", ""));
         }
 
         for (int i = 0; i < n.hijos.size(); i++) {
@@ -1724,6 +1732,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
     }
+
     public static void genCodBOOL(Node root) {
         if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool")) {
             String salto = "";
@@ -1879,6 +1888,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         etiquetas = etiquetas + 1;
         return r;
     }
+
     public static String get_tipo2(String s) {
         for (int i = 0; i < tabla_simbolos.size(); i++) {
             if (s.equals(tabla_simbolos.get(i).id)) {
@@ -1887,10 +1897,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         return "";
     }
-    public static void opciones_switch(Node root){
+
+    public static void opciones_switch(Node root) {
         System.out.println("ok");
-         if (root.nombre.equals("caseE")) {
-             System.out.println("si entra casee");
+        if (root.nombre.equals("caseE")) {
+            System.out.println("si entra casee");
             cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
             root.verdadera = etiqnueva();
             genCodOP(root.hijos.get(0));
@@ -1902,16 +1913,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
             options_father = root;
-            if(root.hijos.size()==3){
+            if (root.hijos.size() == 3) {
                 root.hijos.get(2).siguiente = root.siguiente;
                 opciones_switch(root.hijos.get(2));
-            }else if(root.hijos.size()==2){
+            } else if (root.hijos.size() == 2) {
                 root.hijos.get(1).siguiente = root.siguiente;
             }
-           
-        }else if(root.nombre.equals("caseC")){
+
+        } else if (root.nombre.equals("caseC")) {
             System.out.println("si entra casec");
-             cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
+            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
             root.verdadera = etiqnueva();
             genCodOP(root.hijos.get(0));
             cuads.add(new Cuadruplo("if ==", id_options, root.hijos.get(0).lugar, root.verdadera));
@@ -1922,13 +1933,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
             options_father = root;
-        }else {
+        } else {
             cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
             root.hijos.get(0).siguiente = root.siguiente;
             cuadruplos(root.hijos.get(0));
             //bloque default options
         }
     }
+
     /**
      * @param args the command line arguments
      */
