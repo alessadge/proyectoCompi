@@ -1522,14 +1522,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
 
         } else if (root.nombre.equals("Entrada")) {
-            cuads.add(new Cuadruplo("Read", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).valor), ""));
+            cuads.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
         } else if (root.nombre.equals("asig")) {
             if (root.hijos.size() == 4 && root.hijos.get(3).nombre.equals("op")) {
-                cuads.add(new Cuadruplo("=", root.hijos.get(3).lugar, "", root.hijos.get(0).valor));
+                cuads.add(new Cuadruplo("=", root.hijos.get(3).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(1).valor));
             }
             if (root.hijos.size() == 4
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
-
+                cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
             }
         }
         for (int i = 0; i < root.hijos.size(); i++) {
