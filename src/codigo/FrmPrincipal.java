@@ -1521,7 +1521,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuads.add(new Cuadruplo("=", temp, "", root.hijos.get(1).valor));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
 
-        } else if (root.nombre.equals("Entrada")) {
+        }else if(root.nombre.equals("switch")){
+            skip=true;
+            id_options=root.hijos.get(0).valor;
+            options_father=root.hijos.get(1);
+            options_father.comienzo=etiqnueva();
+            root.hijos.get(1).hijos.get(0).siguiente=root.siguiente;
+           opciones_switch(root.hijos.get(1).hijos.get(0));
+            
+        } 
+        else if (root.nombre.equals("Entrada")) {
             cuads.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
         } else if (root.nombre.equals("asig")) {
             if (root.hijos.size() == 4 && root.hijos.get(3).nombre.equals("op")) {
@@ -1712,6 +1721,48 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
         return "";
+    }
+    public static void opciones_switch(Node root){
+        System.out.println("ok");
+         if (root.nombre.equals("caseE")) {
+             System.out.println("si entra casee");
+            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
+            root.verdadera = etiqnueva();
+            genCodOP(root.hijos.get(0));
+            cuads.add(new Cuadruplo("if ==", id_options, root.hijos.get(0).valor, root.verdadera));
+            root.comienzo = etiqnueva();
+            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            root.hijos.get(1).siguiente = root.siguiente;
+            cuads.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
+            cuadruplos(root.hijos.get(1));
+            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            options_father = root;
+            if(root.hijos.size()==3){
+                root.hijos.get(2).siguiente = root.siguiente;
+                opciones_switch(root.hijos.get(2));
+            }else if(root.hijos.size()==2){
+                root.hijos.get(1).siguiente = root.siguiente;
+            }
+           
+        }else if(root.nombre.equals("caseC")){
+            System.out.println("si entra casec");
+             cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
+            root.verdadera = etiqnueva();
+            genCodOP(root.hijos.get(0));
+            cuads.add(new Cuadruplo("if ==", id_options, root.hijos.get(0).lugar, root.verdadera));
+            root.comienzo = etiqnueva();
+            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            root.hijos.get(1).siguiente = root.siguiente;
+            cuads.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
+            cuadruplos(root.hijos.get(1));
+            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            options_father = root;
+        }else {
+            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
+            root.hijos.get(0).siguiente = root.siguiente;
+            cuadruplos(root.hijos.get(0));
+            //bloque default options
+        }
     }
     /**
      * @param args the command line arguments
