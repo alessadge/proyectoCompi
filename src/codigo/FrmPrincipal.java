@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -35,6 +36,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         jpanel2.setVisible(false);
+        boton_intermedio.setEnabled(false);
+        boton_simbolos.setEnabled(false);
     }
 
     public int corregirLinea(int x) {
@@ -65,7 +68,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         while (true) {
             Tokens token = lexer.yylex();
             if (token == null) {
-                ta_intermedio.setText(resultado);
+                //ta_intermedio.setText(resultado);
+                System.out.println(resultado);
+                String m="Analisis Léxico: No hay errores lexicos \n Análisis Sintáctico: No hay errores Sintácticos";
+                JOptionPane.showMessageDialog(null, m);
                 return;
             }
             switch (token) {
@@ -306,14 +312,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnIf = new javax.swing.JButton();
         btnIf1 = new javax.swing.JButton();
         btnWhile = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        boton_intermedio = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAnalizarSin = new javax.swing.JTextArea();
         btnArbol = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         ta_simbolos = new javax.swing.JTextArea();
+        boton_simbolos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -429,15 +435,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Codigo intermedio");
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+        boton_intermedio.setText("Codigo intermedio");
+        boton_intermedio.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton5MouseClicked(evt);
+                boton_intermedioMouseClicked(evt);
             }
         });
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        boton_intermedio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                boton_intermedioActionPerformed(evt);
             }
         });
 
@@ -459,14 +465,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
+                    .addComponent(boton_intermedio))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
+                .addComponent(boton_intermedio)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
@@ -526,11 +532,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel2.setText("Tabla de simbolos");
-
         ta_simbolos.setColumns(20);
         ta_simbolos.setRows(5);
         jScrollPane6.setViewportView(ta_simbolos);
+
+        boton_simbolos.setText("Mostrar tabla de simbolos");
+        boton_simbolos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_simbolosActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
 
@@ -583,34 +594,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(76, 76, 76)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(boton_simbolos))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(boton_simbolos)
+                        .addGap(12, 12, 12)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(27, Short.MAX_VALUE))))
+                        .addGap(0, 11, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
@@ -680,6 +686,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        boton_intermedio.setEnabled(false);
+        boton_simbolos.setEnabled(false);
         ta_intermedio.setText("");
         ta_simbolos.setText("");
         tabla_simbolos = new ArrayList<Entry>();
@@ -794,7 +802,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnIf1ActionPerformed
 
-    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+    private void boton_intermedioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_intermedioMouseClicked
         try {
             cuadruplos(root);
             String mensaje="";
@@ -808,11 +816,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
           
         
                     
-    }//GEN-LAST:event_jButton5MouseClicked
+    }//GEN-LAST:event_boton_intermedioMouseClicked
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void boton_intermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_intermedioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_boton_intermedioActionPerformed
+
+    private void boton_simbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_simbolosActionPerformed
+       try {
+            String mensaje="";
+            for (int i = 0; i < tabla_simbolos.size(); i++) {
+                mensaje +="ID: " + tabla_simbolos.get(i).id
+                        + " TIPO: " + tabla_simbolos.get(i).tipo
+                        + " AMBITO: " + tabla_simbolos.get(i).ambito
+                        + " OFFSET: " + tabla_simbolos.get(i).offset+ "\n";
+            }
+            ta_simbolos.setText(mensaje);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_boton_simbolosActionPerformed
     public static void llenar(Node root, DefaultMutableTreeNode current) {
         for (int i = 0; i < root.hijos.size(); i++) {
             current.add(new DefaultMutableTreeNode(root.hijos.get(i)));
@@ -1243,11 +1265,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         }
         if (verifica == true) {
-            System.out.println("la variable " + e.id + " ya fue declarada");
+            //System.out.println("la variable " + e.id + " ya fue declarada");
+            Errores_tipos.add("la variable " + e.id + " ya fue declarada");
         } else {
             tabla_simbolos.add(e);
             //offset += getSize(e.tipo);
             offset += e.tipo.length();
+            
         }
 
     }
@@ -1521,17 +1545,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static void analizar() throws IOException {
         llenar_tabla(root);
         validarOperaciones(root);
-        try {
-            String mensaje="";
-            for (int i = 0; i < tabla_simbolos.size(); i++) {
-                mensaje +="ID: " + tabla_simbolos.get(i).id
-                        + " TIPO: " + tabla_simbolos.get(i).tipo
-                        + " AMBITO: " + tabla_simbolos.get(i).ambito
-                        + " OFFSET: " + tabla_simbolos.get(i).offset+ "\n";
-            }
-            //ta_simbolos.setText(mensaje);
-        } catch (Exception e) {
-        }
+        
         
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1645,6 +1659,37 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 cuads.add(new Cuadruplo("=","RET",root.hijos.get(0).valor,""));
             } else if(root.hijos.get(2).hijos.get(0).nombre.equals("op")){ 
                 cuads.add(new Cuadruplo("=", root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(0).valor));
+            }
+        }else if (root.nombre.equals("If")) {
+            skip = true;
+            if (root.hijos.size() > 1) {
+                if (root.hijos.size() == 2) {
+                    root.hijos.get(0).verdadera = etiqnueva();
+                    root.hijos.get(0).falsa = root.siguiente;
+                    genCodBOOL(root.hijos.get(0));
+                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    root.hijos.get(1).siguiente = root.siguiente;
+                    cuadruplos(root.hijos.get(1));
+                } else if (root.hijos.size() == 3 && root.hijos.get(1).nombre.equals("sentencias")) {
+                    //solo if
+                    root.hijos.get(0).verdadera = etiqnueva();
+                    root.hijos.get(0).falsa = root.siguiente;
+                    genCodBOOL(root.hijos.get(0));
+                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    root.hijos.get(1).siguiente = root.siguiente;
+                    cuadruplos(root.hijos.get(1));
+                } else {
+                    //if con else o else if
+                    root.hijos.get(0).verdadera = etiqnueva();
+                    root.hijos.get(0).falsa = etiqnueva();
+                    genCodBOOL(root.hijos.get(0));
+                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    root.hijos.get(1).siguiente = root.siguiente;
+                    padre.hijos.get(1).siguiente = padre.siguiente;
+                    cuadruplos(root.hijos.get(1));
+                    cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).falsa, "", ""));
+                }
             }
         }
         for (int i = 0; i < root.hijos.size(); i++) {
@@ -1920,6 +1965,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton boton_intermedio;
+    private javax.swing.JButton boton_simbolos;
     private javax.swing.JButton btnArbol;
     private javax.swing.JButton btnCase;
     private javax.swing.JButton btnFor;
@@ -1931,9 +1978,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
