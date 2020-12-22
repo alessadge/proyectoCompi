@@ -643,8 +643,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         String codigo = "main begin \n" + "Int a=>3+2*7;\n" + "if a=3 then \n" + "\tfor Int i=>0 in range (i<a)\n" + "\t\t Print(\"hola\");\n"
                 + "\tend for\n" + "end if\n" + "while true repeat \n" + "\t a=>10; \n" + "end while \n" + "case(a) of \n"
                 + "\t 1:Println(\"hola\"); \n" + "\t 2:Println(\"adios\");\n" + "\t default:Println(\"nunca\"); \n"
-                + "end case\n" + "end main\n\n" + "Int begin metodoRecursivo(Int numero)\n" + "numero=>resultado;\n"
-                + "if n=1 then\n" + "\t return 1;\n" + "end if\n" + "else then\n" + "\t resultado => metodoRecursivo(numero-1)*numero;\n"
+                + "end case\n" + "end main\n\n" + "Int begin metodoRecursivo(Int numero)\n" +"Int resultado=>0;\n"+"Int n=>0;\n" +"numero=>resultado;\n"
+                + "if n=1 then\n" + "\t return 1;\n" + "end if\n" + "else then\n" + "\t resultado => metodoRecursivo(numero-1);\n"
                 + "\t\t return resultado;\n" + "end else\n" + "end call\n\n" + "call begin imprimirHola()\n"
                 + "List lista(3)=>{1,2,3};\n\t for Int i=>0 in range(i<3) \n\t\t Print(i[i]); \n\tend for\nend call";
         txtResultado.setText(codigo);
@@ -680,6 +680,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         ta_intermedio.setText(null);
         txtAnalizarSin.setText(null);
+        ta_simbolos.setText(null);
+        txtAnalizarSin.setText(null);
+        txtResultado.setText(null);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -687,14 +690,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         boton_simbolos.setEnabled(false);
         ta_intermedio.setText("");
         ta_simbolos.setText("");
-        tabla_simbolos = new ArrayList<Entry>();
-        cuads = new ArrayList<Cuadruplo>();
+        lista_tabla_simbolos = new ArrayList<Entry>();
+        lista_cuadruplos = new ArrayList<Cuadruplo>();
         ids = null;
         ids2 = null;
-        tipos_matrix = null;
-        Errores_tipos = new ArrayList<String>();
-        cont_ambito = 1;
-        control_ambito = -1;
+        lista_tipos_matrix = null;
+        lista_errores_type = new ArrayList<String>();
+        ambito_cont = 1;
+        ambito_control = -1;
         offset = 0;
         ambito = "";
         try {
@@ -733,17 +736,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 try {
                     analizar();
                     padre = root;
-                    /* cuadruplos(root);
-                    System.out.println("" + cuads.size());
-                    for (int i = 0; i < cuads.size(); i++) {
-                        System.out.println(cuads.get(i));
+                    /* funcion_cuadruplos(root);
+                    System.out.println("" + lista_cuadruplos.size());
+                    for (int i = 0; i < lista_cuadruplos.size(); i++) {
+                        System.out.println(lista_cuadruplos.get(i));
                     }*/
-                    if (!Errores_tipos.isEmpty()) {
+                    if (!lista_errores_type.isEmpty()) {
                         boton_intermedio.setEnabled(false);
                         boton_simbolos.setEnabled(false);
                         String temp = "";
-                        for (int i = 0; i < Errores_tipos.size(); i++) {
-                            temp += "" + Errores_tipos.get(i) + "\n";
+                        for (int i = 0; i < lista_errores_type.size(); i++) {
+                            temp += "" + lista_errores_type.get(i) + "\n";
                         }
                         txtAnalizarSin.setText(temp);
                         txtAnalizarSin.setForeground(Color.red);
@@ -762,9 +765,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 ex.printStackTrace();
             }
         }
-        if (!Errores_tipos.isEmpty()) {
-            for (int i = 0; i < Errores_tipos.size(); i++) {
-                System.out.println(Errores_tipos.get(i));
+        if (!lista_errores_type.isEmpty()) {
+            for (int i = 0; i < lista_errores_type.size(); i++) {
+                System.out.println(lista_errores_type.get(i));
             }
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -817,14 +820,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void boton_intermedioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_intermedioMouseClicked
         ta_intermedio.setText("");
         try {
-            cuadruplos(root);
+            funcion_cuadruplos(root);
             String mensaje = "";
-            mensaje+="---------------------";
-            for (int i = 0; i < cuads.size(); i++) {
-                mensaje += cuads.get(i) + "\n";
+            mensaje+="---------------------\n";
+            for (int i = 0; i < lista_cuadruplos.size(); i++) {
+                mensaje += lista_cuadruplos.get(i) + "\n";
 
             }
-            mensaje+="---------------------";
+            mensaje+="---------------------\n";
             ta_intermedio.setText(mensaje);
         } catch (Exception e) {
         }
@@ -834,8 +837,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void boton_intermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_intermedioActionPerformed
        /* String temp = "";
-        for (int i = 0; i < cuads.size(); i++) {
-            temp = temp + cuads.get(i) + "/n";
+        for (int i = 0; i < lista_cuadruplos.size(); i++) {
+            temp = temp + lista_cuadruplos.get(i) + "/n";
         }
         ta_intermedio.setText(temp);*/
     }//GEN-LAST:event_boton_intermedioActionPerformed
@@ -844,11 +847,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         ta_simbolos.setText("");
         try {
             String mensaje = "";
-            for (int i = 0; i < tabla_simbolos.size(); i++) {
-                mensaje += "ID: " + tabla_simbolos.get(i).id
-                        + " TIPO: " + tabla_simbolos.get(i).tipo
-                        + " AMBITO: " + tabla_simbolos.get(i).ambito
-                        + " OFFSET: " + tabla_simbolos.get(i).offset + "\n";
+            for (int i = 0; i < lista_tabla_simbolos.size(); i++) {
+                mensaje += "ID: " + lista_tabla_simbolos.get(i).id
+                        + " TIPO: " + lista_tabla_simbolos.get(i).tipo
+                        + " AMBITO: " + lista_tabla_simbolos.get(i).ambito
+                        + " OFFSET: " + lista_tabla_simbolos.get(i).offset + "\n";
             }
             ta_simbolos.setText(mensaje);
         } catch (Exception e) {
@@ -861,22 +864,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 try {
                     llenar(root.hijos.get(i), (DefaultMutableTreeNode) current.getChildAt(i));
                 } catch (Exception e) {
-                    Errores_tipos.add("Error en llenar tabla");
+                    lista_errores_type.add("Error en llenar tabla");
                 }
             }
         }
     }
 
-    public static void llenar_tabla(Node actual) {
+    public static void llenar_tabla_simbolos(Node actual) {
 //////////////////////////Comprobacion de tipos de for
         if (actual.nombre.equals("FOR")
                 || actual.nombre.equals("If")
                 || actual.nombre.equals("caseE")
                 || actual.nombre.equals("caseC")
                 || actual.nombre.equals("While")) {
-            ambito += "," + cont_ambito;
-            cont_ambito++;
-            control_ambito++;
+            ambito += "," + ambito_cont;
+            ambito_cont++;
+            ambito_control++;
 
         }
         //bloque for
@@ -884,7 +887,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (actual.hijos.get(0).valor.equals("Int") && actual.hijos.get(3).nombre.equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else {
-                Errores_tipos.add("Error en el For, en la declaracion se necesita valores Int");
+                lista_errores_type.add("Error en el For, en la declaracion se necesita valores Int");
             }
 
             if (actual.hijos.get(4).hijos.size() > 1) {
@@ -892,10 +895,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         || actual.hijos.get(4).hijos.get(2).nombre.equals("IDENTIFICADOR")) {
 
                 } else {
-                    Errores_tipos.add("Condicion no valida para el for");
+                    lista_errores_type.add("Condicion no valida para el for");
                 }
             } else {
-                Errores_tipos.add("Condicion no valida para el for");
+                lista_errores_type.add("Condicion no valida para el for");
             }
         }
 
@@ -908,17 +911,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Int")
                         && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseE")) {
-                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
+                    lista_errores_type.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("String")
                         && actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
 
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("String")
                         && !actual.hijos.get(1).hijos.get(0).nombre.equals("caseC")) {
-                    Errores_tipos.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
+                    lista_errores_type.add("Las opciones en el case para la variable " + actual.hijos.get(0).valor + " son incorrectas");
                 }
             } else {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " no existe");
             }
         }
 
@@ -942,24 +945,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (actual.hijos.get(0).valor.equals("List") && actual.hijos.get(4).nombre.equals("LISTA")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("List") && !actual.hijos.get(4).nombre.equals("LISTA")) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Matriz") && actual.hijos.get(5).nombre.equals("LISTA") && actual.hijos.get(6).nombre.equals("LISTA")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Matriz") && (!actual.hijos.get(5).nombre.equals("LISTA") || !actual.hijos.get(6).nombre.equals("LISTA"))) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Int") && Compr_valor(actual.hijos.get(3)).equals("Int")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Int") && !Compr_valor(actual.hijos.get(3)).equals("Int")) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
             if (actual.hijos.get(0).valor.equals("Float") && Compr_valor(actual.hijos.get(3)).equals("Float")) {
                 agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
             } else if (actual.hijos.get(0).valor.equals("Float") && !Compr_valor(actual.hijos.get(3)).equals("Float")) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("String") && actual.hijos.get(3).nombre.equals("String")) {
@@ -969,13 +972,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     if (actual.hijos.get(0).valor.equals("String") && get_tipo(actual.hijos.get(3).valor).equals("String")) {
                         agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
                     } else if (actual.hijos.get(0).valor.equals("String") && !(get_tipo(actual.hijos.get(3).valor).equals("String"))) {
-                        Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                        lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
                 } else {
-                    Errores_tipos.add("La raiable " + actual.hijos.get(3).valor + " no existe");
+                    lista_errores_type.add("La raiable " + actual.hijos.get(3).valor + " no existe");
                 }
             } else if (actual.hijos.get(0).valor.equals("String") && !actual.hijos.get(3).nombre.equals("String")) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
             if (actual.hijos.get(0).valor.equals("Bool") && actual.hijos.get(3).nombre.equals("Bool")) {
@@ -985,13 +988,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     if (actual.hijos.get(0).valor.equals("Bool") && get_tipo(actual.hijos.get(3).valor).equals("Bool")) {
                         agregar(new Entry(actual.hijos.get(1).valor, actual.hijos.get(0).valor, ambito, offset, activo));
                     } else if (actual.hijos.get(0).valor.equals("Bool") && !(get_tipo(actual.hijos.get(3).valor).equals("Bool"))) {
-                        Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                        lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
                     }
                 } else {
-                    Errores_tipos.add("La raiable " + actual.hijos.get(3).valor + " no existe");
+                    lista_errores_type.add("La raiable " + actual.hijos.get(3).valor + " no existe");
                 }
             } else if (actual.hijos.get(0).valor.equals("Bool") && !(actual.hijos.get(3).nombre.equals("Bool"))) {
-                Errores_tipos.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
+                lista_errores_type.add("El valor asignado a " + actual.hijos.get(1).valor + " no es correcta");
             }
 
         }
@@ -1001,47 +1004,47 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("List") && actual.hijos.get(2).hijos.get(0).nombre.equals("LISTA")) {
                 } else if ((get_tipo(actual.hijos.get(0).valor).equals("List") && !actual.hijos.get(2).hijos.get(0).nombre.equals("LISTA"))) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("Matriz") && (actual.hijos.get(2).hijos.get(0).nombre.equals("LISTA") && actual.hijos.get(2).hijos.get(1).nombre.equals("LISTA"))) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Matriz") && (!actual.hijos.get(2).hijos.get(0).nombre.equals("LISTA") || !actual.hijos.get(2).hijos.get(1).nombre.equals("LISTA"))) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("Int") && Compr_valor(actual.hijos.get(2)).equals("Int")) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Int") && !Compr_valor(actual.hijos.get(2)).equals("Int")) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcto");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("Float") && Compr_valor(actual.hijos.get(2)).equals("Float")) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Float") && !Compr_valor(actual.hijos.get(2)).equals("Float")) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
                 }
 
                 if (get_tipo(actual.hijos.get(0).valor).equals("String") && Compr_valor(actual.hijos.get(2)).equals("String")) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("String") && !Compr_valor(actual.hijos.get(2)).equals("String")) {
                     System.out.println("tipo" + get_tipo(actual.hijos.get(0).valor));
                     System.out.println("tipo" + Compr_valor(actual.hijos.get(2)));
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
                 }
                 if (get_tipo(actual.hijos.get(0).valor).equals("Bool") && Compr_valor(actual.hijos.get(2)).equals("Bool")) {
                 } else if (get_tipo(actual.hijos.get(0).valor).equals("Bool") && !Compr_valor(actual.hijos.get(2)).equals("Bool")) {
-                    Errores_tipos.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
+                    lista_errores_type.add("El valor asignado a " + actual.hijos.get(0).valor + " no es correcta");
                 }
 
             } else {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " no existe");
             }
         }
 ///////////////////////////////////////Comprobacion de tipos condicion1
         if (actual.nombre.equals("PROPOSICION1") && actual.hijos.size() > 1) {
             if (comprobar_condicion(actual, 1) == 1) {
             } else {
-                Errores_tipos.add("error en la condicion");
+                lista_errores_type.add("error en la condicion");
             }
         }
         if (actual.nombre.equals("PROPOSICION1-2") && actual.hijos.size() > 1) {
             if (comprobar_condicion(actual, 2) == 1) {
             } else {
-                Errores_tipos.add("error en la condicion");
+                lista_errores_type.add("error en la condicion");
             }
         }
 
@@ -1050,11 +1053,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             if (actual.nombre.equals("metodo parametro")) {
                 ambito = actual.hijos.get(1).valor;
                 offset = 0;
-                cont_ambito = 1;
+                ambito_cont = 1;
             } else if (actual.nombre.equals("void")) {
                 ambito = actual.hijos.get(0).valor;
                 offset = 0;
-                cont_ambito = 1;
+                ambito_cont = 1;
             } else if (actual.nombre.equals("Main")) {
                 if (actual.hijos.get(i).nombre.equals("sentencias")) {
                     ambito = "main";
@@ -1065,11 +1068,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
             /* if(actual.nombre.equals("metodo parametro")){
                 ambito=actual.hijos.get(1).valor+ " 0" ;
                 offset=0;
-                cont_ambito=1;
+                ambito_cont=1;
             }else if(actual.nombre.equals("void")){
                 ambito=actual.hijos.get(0).valor+ " 0" ;
                 offset=0;
-                cont_ambito=1;
+                ambito_cont=1;
             }else if(actual.nombre.equals("Main")){
                 if(actual.hijos.get(i).nombre.equals("sentencias")){
                     ambito="main 0 ";
@@ -1077,17 +1080,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
             }*/
             if (!actual.hijos.get(i).hijos.isEmpty()) {
-                llenar_tabla(actual.hijos.get(i));
+                llenar_tabla_simbolos(actual.hijos.get(i));
             }
         }
-        if (control_ambito >= 0
+        if (ambito_control >= 0
                 && (actual.nombre.equals("FOR")
                 || actual.nombre.equals("If")
                 || actual.nombre.equals("caseE")
                 || actual.nombre.equals("caseC")
                 || actual.nombre.equals("While"))) {
             ambito = ambito.substring(0, ambito.lastIndexOf(","));
-            control_ambito--;
+            ambito_control--;
             //System.out.println(ambito);
         }
     }
@@ -1097,7 +1100,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if (actual.nombre.equals("metodo parametro")) {
             if (actual.hijos.get(0).hijos.get(0).nombre.equals(Busca_retorno(actual))) {
             } else if (!actual.hijos.get(0).hijos.get(0).nombre.equals(Busca_retorno(actual))) {
-                Errores_tipos.add("El valor de retorno " + " no es correcto para esta funcion " + actual.hijos.get(0).valor);
+                lista_errores_type.add("El valor de retorno " + " no es correcto para esta funcion " + actual.hijos.get(0).valor);
             }
         }
 
@@ -1119,7 +1122,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
             if (cont == 0) {
             } else {
-                Errores_tipos.add("La llamada de el metodo  " + temp + " no esta bien debido a que sus parametros y argumentos no son iguales");
+                lista_errores_type.add("La llamada de el metodo  " + temp + " no esta bien debido a que sus parametros y argumentos no son iguales");
             }
 
         }
@@ -1162,7 +1165,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     valores.add(get_tipo(n.hijos.get(0).valor));
                 } else if (existe(n.hijos.get(0).valor) == 0) {
                     valores.add("error");
-                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                    lista_errores_type.add("La variable " + n.hijos.get(0).valor + " no existe");
                 }
             } else if (n.hijos.get(0).nombre.equals("Int")) {
                 valores.add(n.hijos.get(0).nombre);
@@ -1192,91 +1195,91 @@ public class FrmPrincipal extends javax.swing.JFrame {
             return 1;
         } else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
             if (existe(actual.hijos.get(0).valor) == 0 || existe(actual.hijos.get(2).valor) == 0) {
-                Errores_tipos.add("La variable  " + actual.hijos.get(0).valor + "  o La variable " + actual.hijos.get(2).valor + " no existe");
+                lista_errores_type.add("La variable  " + actual.hijos.get(0).valor + "  o La variable " + actual.hijos.get(2).valor + " no existe");
 
             } else {
                 if (get_tipo(actual.hijos.get(0).valor).equals(get_tipo(actual.hijos.get(2).valor))) {
                     return 1;
                 } else {
-                    Errores_tipos.add("Las variables " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("Las variables " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
 
         } else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("Int")) {
             if (existe(actual.hijos.get(0).valor) == 0) {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " no existe");
             } else if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("Int")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " y el valor " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " y el valor " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
 
         } else if (actual.hijos.get(0).nombre.equals("Int") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
             if (existe(actual.hijos.get(2).valor) == 0) {
-                Errores_tipos.add("la variable " + actual.hijos.get(2).valor + " no existe");
+                lista_errores_type.add("la variable " + actual.hijos.get(2).valor + " no existe");
             } else if (existe(actual.hijos.get(2).valor) == 1) {
                 if (get_tipo(actual.hijos.get(2).valor).equals("Int")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
 
         } else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("Float")) {
             if (existe(actual.hijos.get(0).valor) == 0) {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " no existe");
             } else if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("Float")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
 
         } else if (actual.hijos.get(0).nombre.equals("Float") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
             if (existe(actual.hijos.get(2).valor) == 0) {
-                Errores_tipos.add("La variable " + actual.hijos.get(2).valor + "no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(2).valor + "no existe");
             } else {
                 if (get_tipo(actual.hijos.get(2).valor).equals("Float")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
         } else if (actual.hijos.get(0).nombre.equals("IDENTIFICADOR") && actual.hijos.get(2).nombre.equals("String")) {
             if (existe(actual.hijos.get(0).valor) == 0) {
-                Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " no existe");
             } else if (existe(actual.hijos.get(0).valor) == 1) {
                 if (get_tipo(actual.hijos.get(0).valor).equals("String")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("La variable " + actual.hijos.get(0).valor + " y el valor" + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
 
         } else if (actual.hijos.get(0).nombre.equals("String") && actual.hijos.get(2).nombre.equals("IDENTIFICADOR")) {
             if (existe(actual.hijos.get(2).valor) == 0) {
-                Errores_tipos.add("La variable " + actual.hijos.get(2).valor + "no existe");
+                lista_errores_type.add("La variable " + actual.hijos.get(2).valor + "no existe");
             } else {
                 if (get_tipo(actual.hijos.get(2).valor).equals("String")) {
                     return 1;
                 } else {
-                    Errores_tipos.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+                    lista_errores_type.add("El valor " + actual.hijos.get(0).valor + " y la variable " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
                 }
             }
         } else {
-            Errores_tipos.add("Los valores " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
+            lista_errores_type.add("Los valores " + actual.hijos.get(0).valor + " y " + actual.hijos.get(2).valor + " de la condicion no son iguales de tipos");
         }
         return 0;
     }
 
     public static void agregar(Entry e) {
         boolean verifica = false;
-        for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if (e.id.equals(tabla_simbolos.get(i).id)) {
-                if (ambito.contains(tabla_simbolos.get(i).ambito)) {
+        for (int i = 0; i < lista_tabla_simbolos.size(); i++) {
+            if (e.id.equals(lista_tabla_simbolos.get(i).id)) {
+                if (ambito.contains(lista_tabla_simbolos.get(i).ambito)) {
                     verifica = true;
                     break;
                 }
@@ -1285,9 +1288,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         if (verifica == true) {
             //System.out.println("la variable " + e.id + " ya fue declarada");
-            Errores_tipos.add("la variable " + e.id + " ya fue declarada");
+            lista_errores_type.add("la variable " + e.id + " ya fue declarada");
         } else {
-            tabla_simbolos.add(e);
+            lista_tabla_simbolos.add(e);
             //offset += getSize(e.tipo);
             offset += e.tipo.length();
 
@@ -1383,7 +1386,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     valores.add(get_tipo(n.hijos.get(0).valor));
                 } else if (existe(n.hijos.get(0).valor) == 0) {
                     valores.add("error");
-                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                    lista_errores_type.add("La variable " + n.hijos.get(0).valor + " no existe");
                 }
             } else if (n.hijos.get(0).nombre.equals("Int")) {
                 valores.add(n.hijos.get(0).nombre);
@@ -1435,7 +1438,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                 return "Bool";
                             }
                         } else {
-                            Errores_tipos.add("La variable " + t3.valor + " no existe");
+                            lista_errores_type.add("La variable " + t3.valor + " no existe");
                         }
                     }
                 }
@@ -1450,7 +1453,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 if (existe(t.hijos.get(0).valor) == 1) {
                     return get_tipo(t.hijos.get(0).valor);
                 } else {
-                    Errores_tipos.add("El metodo " + t.hijos.get(0).valor + " no existe");
+                    lista_errores_type.add("El metodo " + t.hijos.get(0).valor + " no existe");
                 }
             }
             if (t.nombre.equals("op")) {
@@ -1479,7 +1482,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                                     return "Bool";
                                 }
                             } else {
-                                Errores_tipos.add("La variable " + t3.valor + " no existe");
+                                lista_errores_type.add("La variable " + t3.valor + " no existe");
                             }
                         }
                     }
@@ -1525,7 +1528,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     valores.add(get_tipo(n.hijos.get(0).valor));
                 } else if (existe(n.hijos.get(0).valor) == 0) {
                     valores.add("error");
-                    Errores_tipos.add("La variable " + n.hijos.get(0).valor + " no existe");
+                    lista_errores_type.add("La variable " + n.hijos.get(0).valor + " no existe");
                 }
             } else if (n.hijos.get(0).nombre.equals("Int")) {
                 valores.add(n.hijos.get(0).nombre);
@@ -1544,8 +1547,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static int existe(String s) {
-        for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if (s.equals(tabla_simbolos.get(i).id)) {
+        for (int i = 0; i < lista_tabla_simbolos.size(); i++) {
+            if (s.equals(lista_tabla_simbolos.get(i).id)) {
                 return 1;
             }
         }
@@ -1553,16 +1556,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static String get_tipo(String s) {
-        for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if (s.equals(tabla_simbolos.get(i).id)) {
-                return tabla_simbolos.get(i).tipo;
+        for (int i = 0; i < lista_tabla_simbolos.size(); i++) {
+            if (s.equals(lista_tabla_simbolos.get(i).id)) {
+                return lista_tabla_simbolos.get(i).tipo;
             }
         }
         return "";
     }
-
+    
     public static void analizar() throws IOException {
-        llenar_tabla(root);
+        llenar_tabla_simbolos(root);
         validarOperaciones(root);
 
     }
@@ -1570,7 +1573,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////------------ Codigo intermedio-----------------------------------------------------------
 
-    public static void cuadruplos(Node root) {
+    public static void funcion_cuadruplos(Node root) {
         boolean skip = false;
         boolean main = false;
         boolean code_block = false;
@@ -1582,7 +1585,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     || root.hijos.get(1).nombre.equals("FOR")
                     || root.hijos.get(1).nombre.equals("switch")) {
                 code_block = true;
-                root.siguiente = etiqnueva();
+                root.siguiente = etiqueta_nueva();
                 root.hijos.get(1).siguiente = root.siguiente;
             }
         } else if (root.nombre.equals("sentencias") && root.hijos.size() == 1) {
@@ -1591,115 +1594,115 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     || root.hijos.get(0).nombre.equals("FOR")
                     || root.hijos.get(0).nombre.equals("switch")) {
                 code_block = true;
-                root.siguiente = etiqnueva();
+                root.siguiente = etiqueta_nueva();
                 root.hijos.get(0).siguiente = root.siguiente;
             }
         }
         if (root.nombre.equals("While")) {
             skip = true;
-            root.comienzo = etiqnueva();
-            cuads.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
-            root.hijos.get(0).verdadera = etiqnueva();
+            root.comienzo = etiqueta_nueva();
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
+            root.hijos.get(0).verdadera = etiqueta_nueva();
             root.hijos.get(0).falsa = root.siguiente;
-            genCodBOOL(root.hijos.get(0));
-            cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+            codigoBooleans(root.hijos.get(0));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
             root.hijos.get(1).siguiente = root.comienzo;
-            cuadruplos(root.hijos.get(1));
-            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            funcion_cuadruplos(root.hijos.get(1));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
         } else if (root.nombre.equals("IMPRIMIR")) {
             if (root.hijos.get(0).nombre.equals("String")) {
-                cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, "String", ""));
+                lista_cuadruplos.add(new Cuadruplo("print", root.hijos.get(0).valor, "String", ""));
             } else if (root.hijos.get(0).nombre.equals("IDENTIFICADOR")) {
-                genCodOP(root.hijos.get(0));
-                cuads.add(new Cuadruplo("print", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).nombre), ""));
+                codigoOpcionales(root.hijos.get(0));
+                lista_cuadruplos.add(new Cuadruplo("print", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).nombre), ""));
                 System.out.println("entroo 2");
             }
         } else if (root.nombre.equals("Main")) {
             main = true;
         } else if (root.nombre.equals("FOR")) {
             skip = true;
-            cuads.add(new Cuadruplo("=", "0", "", root.hijos.get(1).valor));
-            root.comienzo = etiqnueva();
-            cuads.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
-            genCodOP(root.hijos.get(4).hijos.get(2));
-            String verdadera = etiqnueva();
+            lista_cuadruplos.add(new Cuadruplo("=", "0", "", root.hijos.get(1).valor));
+            root.comienzo = etiqueta_nueva();
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
+            codigoOpcionales(root.hijos.get(4).hijos.get(2));
+            String verdadera = etiqueta_nueva();
             String signo = root.hijos.get(4).hijos.get(1).valor;
-            cuads.add(new Cuadruplo("if" + signo, root.hijos.get(4).hijos.get(0).valor, root.hijos.get(4).hijos.get(2).lugar, verdadera));
-            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
-            root.asig = etiqnueva();
+            lista_cuadruplos.add(new Cuadruplo("if" + signo, root.hijos.get(4).hijos.get(0).valor, root.hijos.get(4).hijos.get(2).lugar, verdadera));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            root.asig = etiqueta_nueva();
             root.hijos.get(5).siguiente = root.asig;
-            cuads.add(new Cuadruplo("ETIQ", verdadera, "", ""));
-            cuadruplos(root.hijos.get(5));
-            cuads.add(new Cuadruplo("ETIQ", root.asig, "", ""));
-            String temp = tempnuevo();
-            cuads.add(new Cuadruplo("+", root.hijos.get(1).valor, "1", temp));
-            cuads.add(new Cuadruplo("=", temp, "", root.hijos.get(1).valor));
-            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", verdadera, "", ""));
+            funcion_cuadruplos(root.hijos.get(5));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.asig, "", ""));
+            String temp = tempporal_nuevo();
+            lista_cuadruplos.add(new Cuadruplo("+", root.hijos.get(1).valor, "1", temp));
+            lista_cuadruplos.add(new Cuadruplo("=", temp, "", root.hijos.get(1).valor));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
 
         } else if (root.nombre.equals("switch")) {
             skip = true;
-            id_options = root.hijos.get(0).valor;
-            options_father = root.hijos.get(1);
-            options_father.comienzo = etiqnueva();
+            opcionesID = root.hijos.get(0).valor;
+            padre_opciones = root.hijos.get(1);
+            padre_opciones.comienzo = etiqueta_nueva();
             root.hijos.get(1).hijos.get(0).siguiente = root.siguiente;
             opciones_switch(root.hijos.get(1).hijos.get(0));
 
         } else if (root.nombre.equals("Return")) {
             Node temp = root.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
-            genCodOP(temp);
-            cuads.add(new Cuadruplo("Return", temp.lugar, "", ""));
+            codigoOpcionales(temp);
+            lista_cuadruplos.add(new Cuadruplo("Return", temp.lugar, "", ""));
         } else if (root.nombre.equals("Entrada")) {
-            cuads.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
+            lista_cuadruplos.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
         } else if (root.nombre.equals("asig")) {
             if (root.hijos.size() == 4 && root.hijos.get(3).nombre.equals("op")) {
-                cuads.add(new Cuadruplo("=", root.hijos.get(3).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(1).valor));
+                lista_cuadruplos.add(new Cuadruplo("=", root.hijos.get(3).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(1).valor));
             }
             if (root.hijos.size() == 4
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
-                cuads.add(new Cuadruplo("=", root.hijos.get(3).valor, "", root.hijos.get(1).valor));
+                lista_cuadruplos.add(new Cuadruplo("=", root.hijos.get(3).valor, "", root.hijos.get(1).valor));
             }
         }/*else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO") ) {
             if (root.hijos.get(2).hijos.get(0).equals("")) {
                  
             }else{
-                cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
+                lista_cuadruplos.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
             }*/ else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO")) {
             if (root.hijos.get(2).hijos.get(0).nombre.equals("llamar metodo")) {
-                addParams(root.hijos.get(2).hijos.get(0));
-                cuads.add(new Cuadruplo("call", root.hijos.get(2).hijos.get(0).hijos.get(0).valor, "", ""));
-                cuads.add(new Cuadruplo("=", "RET", root.hijos.get(0).valor, ""));
+                agregar_parametros(root.hijos.get(2).hijos.get(0));
+                lista_cuadruplos.add(new Cuadruplo("call", root.hijos.get(2).hijos.get(0).hijos.get(0).valor, "", ""));
+                lista_cuadruplos.add(new Cuadruplo("=", "RET", root.hijos.get(0).valor, ""));
             } else if (root.hijos.get(2).hijos.get(0).nombre.equals("op")) {
-                cuads.add(new Cuadruplo("=", root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(0).valor));
+                lista_cuadruplos.add(new Cuadruplo("=", root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(0).valor));
             }
         } else if (root.nombre.equals("If")) {
             skip = true;
             if (root.hijos.size() > 1) {
                 if (root.hijos.size() == 2) {
-                    root.hijos.get(0).verdadera = etiqnueva();
+                    root.hijos.get(0).verdadera = etiqueta_nueva();
                     root.hijos.get(0).falsa = root.siguiente;
-                    genCodBOOL(root.hijos.get(0));
-                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    codigoBooleans(root.hijos.get(0));
+                    lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
                     root.hijos.get(1).siguiente = root.siguiente;
-                    cuadruplos(root.hijos.get(1));
+                    funcion_cuadruplos(root.hijos.get(1));
                 } else if (root.hijos.size() == 3 && root.hijos.get(1).nombre.equals("sentencias")) {
                     //solo if
-                    root.hijos.get(0).verdadera = etiqnueva();
+                    root.hijos.get(0).verdadera = etiqueta_nueva();
                     root.hijos.get(0).falsa = root.siguiente;
-                    genCodBOOL(root.hijos.get(0));
-                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    codigoBooleans(root.hijos.get(0));
+                    lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
                     root.hijos.get(1).siguiente = root.siguiente;
-                    cuadruplos(root.hijos.get(1));
+                    funcion_cuadruplos(root.hijos.get(1));
                 } else {
                     //if con else o else if
-                    root.hijos.get(0).verdadera = etiqnueva();
-                    root.hijos.get(0).falsa = etiqnueva();
-                    genCodBOOL(root.hijos.get(0));
-                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
+                    root.hijos.get(0).verdadera = etiqueta_nueva();
+                    root.hijos.get(0).falsa = etiqueta_nueva();
+                    codigoBooleans(root.hijos.get(0));
+                    lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).verdadera, "", ""));
                     root.hijos.get(1).siguiente = root.siguiente;
                     padre.hijos.get(1).siguiente = padre.siguiente;
-                    cuadruplos(root.hijos.get(1));
-                    cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
-                    cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).falsa, "", ""));
+                    funcion_cuadruplos(root.hijos.get(1));
+                    lista_cuadruplos.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+                    lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).falsa, "", ""));
                 }
             }
         }
@@ -1710,34 +1713,34 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
             }
             if (!skip) {
-                cuadruplos(root.hijos.get(i));
+                funcion_cuadruplos(root.hijos.get(i));
             }
             if (main && root.hijos.get(i).nombre.equals("sentencias")) {
-                cuads.add(new Cuadruplo("MAIN_ETIQ", "Main", "", ""));
+                lista_cuadruplos.add(new Cuadruplo("MAIN_ETIQ", "Main", "", ""));
             }
             if (main) {
-                cuads.add(new Cuadruplo("P_ETIQ", "fin_main", "", ""));
+                lista_cuadruplos.add(new Cuadruplo("P_ETIQ", "fin_main", "", ""));
             }
         }
 
         if (falta) {
-            cuads.add(new Cuadruplo("ETIQ", root.siguiente, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.siguiente, "", ""));
         }
     }
 
-    public static void addParams(Node n) {
+    public static void agregar_parametros(Node n) {
         if (n.nombre.equals("Valoro")) {
-            cuads.add(new Cuadruplo("Param", n.hijos.get(0).valor, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("Param", n.hijos.get(0).valor, "", ""));
         }
 
         for (int i = 0; i < n.hijos.size(); i++) {
             if (!n.hijos.get(i).hijos.isEmpty()) {
-                addParams(n.hijos.get(i));
+                agregar_parametros(n.hijos.get(i));
             }
         }
     }
 
-    public static void genCodBOOL(Node root) {
+    public static void codigoBooleans(Node root) {
         if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool")) {
             String salto = "";
             if (root.hijos.get(0).valor.contains("true")) {
@@ -1745,71 +1748,71 @@ public class FrmPrincipal extends javax.swing.JFrame {
             } else {
                 salto = root.falsa;
             }
-            cuads.add(new Cuadruplo("GOTO", salto, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", salto, "", ""));
         } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
-            genCodOP(root.hijos.get(0).hijos.get(0));
-            genCodOP(root.hijos.get(0).hijos.get(2));
+            codigoOpcionales(root.hijos.get(0).hijos.get(0));
+            codigoOpcionales(root.hijos.get(0).hijos.get(2));
             String val = "if " + root.hijos.get(0).hijos.get(1).valor;
-            cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
-            cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+            lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.falsa, "", ""));
         } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")) {
-            genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(0));
-            genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(2));
+            codigoOpcionales(root.hijos.get(0).hijos.get(0).hijos.get(0));
+            codigoOpcionales(root.hijos.get(0).hijos.get(0).hijos.get(2));
             String val = "if " + root.hijos.get(0).hijos.get(0).hijos.get(1).valor;
-            cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
-            cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+            lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.falsa, "", ""));
         } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION2")) {
             if (root.hijos.get(0).hijos.get(1).valor.equals("And")) {
-                root.hijos.get(0).hijos.get(0).verdadera = etiqnueva();
+                root.hijos.get(0).hijos.get(0).verdadera = etiqueta_nueva();
                 root.hijos.get(0).hijos.get(0).falsa = root.siguiente;
-                genCodBOOL(root.hijos.get(0).hijos.get(0));
-                cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).verdadera, "", ""));
+                codigoBooleans(root.hijos.get(0).hijos.get(0));
+                lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).verdadera, "", ""));
                 root.hijos.get(0).hijos.get(2).verdadera = root.verdadera;
                 root.hijos.get(0).hijos.get(2).falsa = root.falsa;
-                genCodBOOL(root.hijos.get(0).hijos.get(2));
+                codigoBooleans(root.hijos.get(0).hijos.get(2));
             } else if (root.hijos.get(0).hijos.get(1).valor.equals("Or")) {
                 root.hijos.get(0).hijos.get(0).verdadera = root.verdadera;
-                root.hijos.get(0).hijos.get(0).falsa = etiqnueva();
-                genCodBOOL(root.hijos.get(0).hijos.get(0));
-                cuads.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).falsa, "", ""));
+                root.hijos.get(0).hijos.get(0).falsa = etiqueta_nueva();
+                codigoBooleans(root.hijos.get(0).hijos.get(0));
+                lista_cuadruplos.add(new Cuadruplo("ETIQ", root.hijos.get(0).hijos.get(0).falsa, "", ""));
                 root.hijos.get(0).hijos.get(2).verdadera = root.verdadera;
                 root.hijos.get(0).hijos.get(2).falsa = root.falsa;
-                genCodBOOL(root.hijos.get(0).hijos.get(2));
+                codigoBooleans(root.hijos.get(0).hijos.get(2));
             }
         } else if (root.nombre.equals("PROPOSICION1")) {
             if (root.hijos.size() > 1) {
-                genCodOP(root.hijos.get(0));
-                genCodOP(root.hijos.get(2));
+                codigoOpcionales(root.hijos.get(0));
+                codigoOpcionales(root.hijos.get(2));
                 String val = "if " + root.hijos.get(1).valor;
-                cuads.add(new Cuadruplo(val, root.hijos.get(0).lugar, root.hijos.get(2).lugar, root.verdadera));
-                cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+                lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).lugar, root.hijos.get(2).lugar, root.verdadera));
+                lista_cuadruplos.add(new Cuadruplo("GOTO", root.falsa, "", ""));
             } else if (root.hijos.get(0).nombre.equals("PROPOSICION1-2")) {
-                genCodOP(root.hijos.get(0).hijos.get(0));
-                genCodOP(root.hijos.get(0).hijos.get(2));
+                codigoOpcionales(root.hijos.get(0).hijos.get(0));
+                codigoOpcionales(root.hijos.get(0).hijos.get(2));
                 String val = "if " + root.hijos.get(0).hijos.get(1).valor;
-                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
-                cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
+                lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                lista_cuadruplos.add(new Cuadruplo("GOTO", root.falsa, "", ""));
             }
         } else if (root.nombre.equals("PROPOSICION2")) {
             if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
-                genCodOP(root.hijos.get(0).hijos.get(0));
-                genCodOP(root.hijos.get(0).hijos.get(2));
+                codigoOpcionales(root.hijos.get(0).hijos.get(0));
+                codigoOpcionales(root.hijos.get(0).hijos.get(2));
                 String val = "if " + root.hijos.get(0).hijos.get(1).valor;
-                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
-                cuads.add(new Cuadruplo("GOTO", root.hijos.get(0).falsa, "", ""));
+                lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                lista_cuadruplos.add(new Cuadruplo("GOTO", root.hijos.get(0).falsa, "", ""));
             } else if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")) {
-                genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(0));
-                genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(2));
+                codigoOpcionales(root.hijos.get(0).hijos.get(0).hijos.get(0));
+                codigoOpcionales(root.hijos.get(0).hijos.get(0).hijos.get(2));
                 String val = "if " + root.hijos.get(0).hijos.get(0).hijos.get(1).valor;
-                cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
-                cuads.add(new Cuadruplo("GOTO", root.hijos.get(0).hijos.get(0).falsa, "", ""));
+                lista_cuadruplos.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(0).hijos.get(2).lugar, root.verdadera));
+                lista_cuadruplos.add(new Cuadruplo("GOTO", root.hijos.get(0).hijos.get(0).falsa, "", ""));
             }
         }
     }
 
-    public static void genCodOP(Node root) {
+    public static void codigoOpcionales(Node root) {
         for (int i = 0; i < root.hijos.size(); i++) {
-            genCodOP(root.hijos.get(i));
+            codigoOpcionales(root.hijos.get(i));
         }
         boolean funcion = false;
         if (root.nombre.equals("ID")) {
@@ -1824,79 +1827,79 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 && !funcion || root.nombre.equals("String") || root.nombre.equals("Bool")) {
             root.lugar = root.valor;
         } else if (root.valor.equals("*")) {
-            root.lugar = tempnuevo();
-            cuads.add(new Cuadruplo("*", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+            root.lugar = tempporal_nuevo();
+            lista_cuadruplos.add(new Cuadruplo("*", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
         } else if (root.valor.equals("/")) {
-            root.lugar = tempnuevo();
-            cuads.add(new Cuadruplo("/", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+            root.lugar = tempporal_nuevo();
+            lista_cuadruplos.add(new Cuadruplo("/", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
         } else if (root.valor.equals("+")) {
-            root.lugar = tempnuevo();
-            cuads.add(new Cuadruplo("+", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+            root.lugar = tempporal_nuevo();
+            lista_cuadruplos.add(new Cuadruplo("+", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
         } else if (root.valor.equals("-")) {
-            root.lugar = tempnuevo();
-            cuads.add(new Cuadruplo("-", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+            root.lugar = tempporal_nuevo();
+            lista_cuadruplos.add(new Cuadruplo("-", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
         } else if (root.nombre.equals("IDENTIFICADOR")) {
             String tipo = get_tipo2(root.valor);
             if (tipo.contains("array")) {
-                String t = tempnuevo();
+                String t = tempporal_nuevo();
                 String tip = tipo.substring(tipo.indexOf("_") + 1, tipo.indexOf("{"));
                 int tam = tip.length();
                 String sz = "" + tam;
-                cuads.add(new Cuadruplo("*", root.hijos.get(0).lugar, sz, t));
-                root.lugar = tempnuevo();
-                cuads.add(new Cuadruplo("=[]", root.valor, t, root.lugar));
+                lista_cuadruplos.add(new Cuadruplo("*", root.hijos.get(0).lugar, sz, t));
+                root.lugar = tempporal_nuevo();
+                lista_cuadruplos.add(new Cuadruplo("=[]", root.valor, t, root.lugar));
             } else if (tipo.contains("matrix")) {
                 if (!root.hijos.get(0).nombre.equals("LISTA POSICIONES")) {
                     //NO FUE CUBIERTAA ASIGNAR UN ARRAY ENTERO DE UN SOLO A UNA MATRIZ
                 } else {
-                    String t = tempnuevo();
+                    String t = tempporal_nuevo();
                     String col = tipo.substring(tipo.indexOf("{") + 3, tipo.indexOf("}"));
-                    cuads.add(new Cuadruplo("*", root.hijos.get(0).hijos.get(0).lugar, col, t));
-                    String t1 = tempnuevo();
-                    cuads.add(new Cuadruplo("+", t, root.hijos.get(0).hijos.get(1).lugar, t1));
-                    String t2 = tempnuevo();
+                    lista_cuadruplos.add(new Cuadruplo("*", root.hijos.get(0).hijos.get(0).lugar, col, t));
+                    String t1 = tempporal_nuevo();
+                    lista_cuadruplos.add(new Cuadruplo("+", t, root.hijos.get(0).hijos.get(1).lugar, t1));
+                    String t2 = tempporal_nuevo();
                     String tip = tipo.substring(tipo.indexOf("_") + 1, tipo.indexOf("{"));
                     int tam = tip.length();
                     String sz = "" + tam;
-                    cuads.add(new Cuadruplo("*", t1, sz, t2));
-                    root.lugar = tempnuevo();
-                    cuads.add(new Cuadruplo("=[]", root.valor, t2, root.lugar));
+                    lista_cuadruplos.add(new Cuadruplo("*", t1, sz, t2));
+                    root.lugar = tempporal_nuevo();
+                    lista_cuadruplos.add(new Cuadruplo("=[]", root.valor, t2, root.lugar));
                 }
             } else {
                 //FUNCION
                 /*if (root.hijos.size() == 0) {
-                    cuads.add(new Cuadruplo("call", root.valor, "0", ""));
-                    root.lugar = tempnuevo();
-                    cuads.add(new Cuadruplo("=", "RET", "", root.lugar));
+                    lista_cuadruplos.add(new Cuadruplo("call", root.valor, "0", ""));
+                    root.lugar = tempporal_nuevo();
+                    lista_cuadruplos.add(new Cuadruplo("=", "RET", "", root.lugar));
                 } else {
                     cantparam = 0;
                     params2(root, root.valor);
                     String cant = "" + cantparam;
-                    cuads.add(new Cuadruplo("call", root.valor, cant, ""));
-                    root.lugar = tempnuevo();
-                    cuads.add(new Cuadruplo("=", "RET", "", root.lugar));
+                    lista_cuadruplos.add(new Cuadruplo("call", root.valor, cant, ""));
+                    root.lugar = tempporal_nuevo();
+                    lista_cuadruplos.add(new Cuadruplo("=", "RET", "", root.lugar));
                 }*/
             }
         }
         /////////////////////////////
     }
 
-    public static String tempnuevo() {
+    public static String tempporal_nuevo() {
         String r = "t" + temporales;
         temporales = temporales + 1;
         return r;
     }
 
-    public static String etiqnueva() {
+    public static String etiqueta_nueva() {
         String r = "etiq" + etiquetas;
         etiquetas = etiquetas + 1;
         return r;
     }
 
     public static String get_tipo2(String s) {
-        for (int i = 0; i < tabla_simbolos.size(); i++) {
-            if (s.equals(tabla_simbolos.get(i).id)) {
-                return tabla_simbolos.get(i).tipo;
+        for (int i = 0; i < lista_tabla_simbolos.size(); i++) {
+            if (s.equals(lista_tabla_simbolos.get(i).id)) {
+                return lista_tabla_simbolos.get(i).tipo;
             }
         }
         return "";
@@ -1906,17 +1909,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
         System.out.println("ok");
         if (root.nombre.equals("caseE")) {
             System.out.println("si entra casee");
-            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
-            root.verdadera = etiqnueva();
-            genCodOP(root.hijos.get(0));
-            cuads.add(new Cuadruplo("if ==", id_options, root.hijos.get(0).valor, root.verdadera));
-            root.comienzo = etiqnueva();
-            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", padre_opciones.comienzo, "", ""));
+            root.verdadera = etiqueta_nueva();
+            codigoOpcionales(root.hijos.get(0));
+            lista_cuadruplos.add(new Cuadruplo("if ==", opcionesID, root.hijos.get(0).valor, root.verdadera));
+            root.comienzo = etiqueta_nueva();
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
             root.hijos.get(1).siguiente = root.siguiente;
-            cuads.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
-            cuadruplos(root.hijos.get(1));
-            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
-            options_father = root;
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
+            funcion_cuadruplos(root.hijos.get(1));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            padre_opciones = root;
             if (root.hijos.size() == 3) {
                 root.hijos.get(2).siguiente = root.siguiente;
                 opciones_switch(root.hijos.get(2));
@@ -1926,21 +1929,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         } else if (root.nombre.equals("caseC")) {
             System.out.println("si entra casec");
-            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
-            root.verdadera = etiqnueva();
-            genCodOP(root.hijos.get(0));
-            cuads.add(new Cuadruplo("if ==", id_options, root.hijos.get(0).lugar, root.verdadera));
-            root.comienzo = etiqnueva();
-            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", padre_opciones.comienzo, "", ""));
+            root.verdadera = etiqueta_nueva();
+            codigoOpcionales(root.hijos.get(0));
+            lista_cuadruplos.add(new Cuadruplo("if ==", opcionesID, root.hijos.get(0).lugar, root.verdadera));
+            root.comienzo = etiqueta_nueva();
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
             root.hijos.get(1).siguiente = root.siguiente;
-            cuads.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
-            cuadruplos(root.hijos.get(1));
-            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
-            options_father = root;
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", root.verdadera, "", ""));
+            funcion_cuadruplos(root.hijos.get(1));
+            lista_cuadruplos.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            padre_opciones = root;
         } else {
-            cuads.add(new Cuadruplo("ETIQ", options_father.comienzo, "", ""));
+            lista_cuadruplos.add(new Cuadruplo("ETIQ", padre_opciones.comienzo, "", ""));
             root.hijos.get(0).siguiente = root.siguiente;
-            cuadruplos(root.hijos.get(0));
+            funcion_cuadruplos(root.hijos.get(0));
             //bloque default options
         }
     }
@@ -2019,18 +2022,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     public static Node root;
     DefaultMutableTreeNode arbol;
-    public static ArrayList<Entry> tabla_simbolos = new ArrayList<Entry>();
+    public static ArrayList<Entry> lista_tabla_simbolos = new ArrayList<Entry>();
     public static ArrayList<String> ids, ids2;
-    public static ArrayList<String> tipos_matrix, Errores_tipos = new ArrayList<String>();
+    public static ArrayList<String> lista_tipos_matrix, lista_errores_type = new ArrayList<String>();
     public static ArrayList<String> valores = new ArrayList();
     //ambito
-    public static int cont_ambito = 0, control_ambito = -1, offset = 0;
+    public static int ambito_cont = 0, ambito_control = -1, offset = 0;
     public static String ambito = "";
     public static boolean activo = true;
     public static int temporales = 0, cantparam = 0, etiquetas = 0;
-    public static ArrayList<String> mensajes = new ArrayList<String>();
-    public static Node padre, options_father;
-    public static String id_options = "";
-    public static ArrayList<Cuadruplo> cuads = new ArrayList<Cuadruplo>();
+    public static ArrayList<String> lista_mensajes = new ArrayList<String>();
+    public static Node padre, padre_opciones;
+    public static String opcionesID = "";
+    public static ArrayList<Cuadruplo> lista_cuadruplos = new ArrayList<Cuadruplo>();
 
 }
