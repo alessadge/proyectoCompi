@@ -1531,6 +1531,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
                 cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
             }
+        }else if (root.nombre.equals("asignar")) {
+            cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
         }
         for (int i = 0; i < root.hijos.size(); i++) {
             if (code_block) {
