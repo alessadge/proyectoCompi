@@ -65,7 +65,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         while (true) {
             Tokens token = lexer.yylex();
             if (token == null) {
-                txtAnalizarLex.setText(resultado);
+                ta_intermedio.setText(resultado);
                 return;
             }
             switch (token) {
@@ -296,20 +296,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jtree = new javax.swing.JTree();
         jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        btnWhile = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtResultado = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        txtAnalizarLex = new javax.swing.JTextArea();
+        ta_intermedio = new javax.swing.JTextArea();
         btnCase = new javax.swing.JButton();
         btnFunctions = new javax.swing.JButton();
         btnFor = new javax.swing.JButton();
         btnIf = new javax.swing.JButton();
         btnIf1 = new javax.swing.JButton();
+        btnWhile = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAnalizarSin = new javax.swing.JTextArea();
         btnArbol = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        ta_simbolos = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -367,23 +371,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnWhile.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        btnWhile.setText("Error Case");
-        btnWhile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnWhileActionPerformed(evt);
-            }
-        });
-
         txtResultado.setColumns(20);
         txtResultado.setRows(5);
         txtResultado.setText("main begin\n\t/^ INGRESE\n\tSU\n\tCODIGO^/\nend main\n\n");
         jScrollPane1.setViewportView(txtResultado);
 
-        txtAnalizarLex.setEditable(false);
-        txtAnalizarLex.setColumns(20);
-        txtAnalizarLex.setRows(5);
-        jScrollPane2.setViewportView(txtAnalizarLex);
+        ta_intermedio.setEditable(false);
+        ta_intermedio.setColumns(20);
+        ta_intermedio.setRows(5);
+        jScrollPane2.setViewportView(ta_intermedio);
 
         btnCase.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         btnCase.setText("Case");
@@ -425,50 +421,74 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnWhile.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        btnWhile.setText("Error Case");
+        btnWhile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnWhileActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Codigo intermedio");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnWhile)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnFor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnIf))
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCase)
-                        .addGap(27, 27, 27)
-                        .addComponent(btnIf1)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnFunctions))
-                    .addComponent(jScrollPane2))
-                .addGap(19, 19, 19))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnWhile)
+                    .addComponent(btnFor)
+                    .addComponent(btnIf)
+                    .addComponent(btnIf1)
+                    .addComponent(btnCase)
+                    .addComponent(btnFunctions))
+                .addGap(83, 83, 83)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFunctions)
-                    .addComponent(btnIf1)
-                    .addComponent(btnCase)
-                    .addComponent(btnIf)
-                    .addComponent(btnFor)
-                    .addComponent(btnWhile))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(btnCase)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnIf1)
+                .addGap(18, 18, 18)
+                .addComponent(btnFunctions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(btnWhile)
+                .addGap(18, 18, 18)
+                .addComponent(btnFor)
+                .addGap(18, 18, 18)
+                .addComponent(btnIf)
+                .addGap(54, 54, 54))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Errores...", 2, 0, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Errores...", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         txtAnalizarSin.setEditable(false);
         txtAnalizarSin.setColumns(20);
@@ -490,21 +510,27 @@ public class FrmPrincipal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnArbol)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(298, 298, 298)
-                .addComponent(btnArbol)
-                .addContainerGap(286, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addComponent(btnArbol)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
+
+        jLabel2.setText("Tabla de simbolos");
+
+        ta_simbolos.setColumns(20);
+        ta_simbolos.setRows(5);
+        jScrollPane6.setViewportView(ta_simbolos);
 
         jMenu1.setText("Archivo");
 
@@ -555,17 +581,36 @@ public class FrmPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(27, Short.MAX_VALUE))))
         );
 
         pack();
@@ -630,11 +675,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        txtAnalizarLex.setText(null);
+        ta_intermedio.setText(null);
         txtAnalizarSin.setText(null);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        ta_intermedio.setText("");
+        ta_simbolos.setText("");
         tabla_simbolos = new ArrayList<Entry>();
         cuads = new ArrayList<Cuadruplo>();
         ids = null;
@@ -667,11 +714,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 try {
                     analizar();
                     padre = root;
-                    cuadruplos(root);
+                   /* cuadruplos(root);
                     System.out.println("" + cuads.size());
                     for (int i = 0; i < cuads.size(); i++) {
                         System.out.println(cuads.get(i));
-                    }
+                    }*/
                 } catch (IOException ex) {
                     Errores_tipos.add("Error comprobando tipos");
                 }
@@ -746,6 +793,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtResultado.setText(codigo);
 
     }//GEN-LAST:event_btnIf1ActionPerformed
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        try {
+            cuadruplos(root);
+            String mensaje="";
+            for (int i = 0; i < cuads.size(); i++) {
+                mensaje+=cuads.get(i)+"\n";
+                
+            }
+            ta_intermedio.setText(mensaje);
+        } catch (Exception e) {
+        }
+          
+        
+                    
+    }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
     public static void llenar(Node root, DefaultMutableTreeNode current) {
         for (int i = 0; i < root.hijos.size(); i++) {
             current.add(new DefaultMutableTreeNode(root.hijos.get(i)));
@@ -1454,13 +1521,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
     public static void analizar() throws IOException {
         llenar_tabla(root);
         validarOperaciones(root);
-        for (int i = 0; i < tabla_simbolos.size(); i++) {
-            System.out.println("ID: " + tabla_simbolos.get(i).id
-                    + " TIPO: " + tabla_simbolos.get(i).tipo
-                    + " AMBITO: " + tabla_simbolos.get(i).ambito
-                    + " OFFSET: " + tabla_simbolos.get(i).offset
-                    + " ACTIVO: " + tabla_simbolos.get(i).activo);
+        try {
+            String mensaje="";
+            for (int i = 0; i < tabla_simbolos.size(); i++) {
+                mensaje +="ID: " + tabla_simbolos.get(i).id
+                        + " TIPO: " + tabla_simbolos.get(i).tipo
+                        + " AMBITO: " + tabla_simbolos.get(i).ambito
+                        + " OFFSET: " + tabla_simbolos.get(i).offset+ "\n";
+            }
+            //ta_simbolos.setText(mensaje);
+        } catch (Exception e) {
         }
+        
     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1559,11 +1631,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
                 cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
             }
-        }else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO") ) {
+        }/*else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO") ) {
             if (root.hijos.get(2).hijos.get(0).equals("")) {
                  
             }else{
                 cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
+            }*/
+        
+        else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO")) {
+            if (root.hijos.get(2).hijos.get(0).nombre.equals("llamar metodo")) {
+                addParams(root.hijos.get(2).hijos.get(0));
+                cuads.add(new Cuadruplo("call",root.hijos.get(2).hijos.get(0).hijos.get(0).valor,"",""));
+                cuads.add(new Cuadruplo("=","RET",root.hijos.get(0).valor,""));
+            } else if(root.hijos.get(2).hijos.get(0).nombre.equals("op")){ 
+                cuads.add(new Cuadruplo("=", root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor, "", root.hijos.get(0).valor));
             }
         }
         for (int i = 0; i < root.hijos.size(); i++) {
@@ -1587,7 +1668,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             cuads.add(new Cuadruplo("ETIQ", root.siguiente, "", ""));
         }
     }
+    public static void addParams(Node n) {
+        if (n.nombre.equals("Valoro")) {
+            cuads.add(new Cuadruplo("Param",n.hijos.get(0).valor,"",""));
+        }
 
+        for (int i = 0; i < n.hijos.size(); i++) {
+            if (!n.hijos.get(i).hijos.isEmpty()) {
+                addParams(n.hijos.get(i));
+            }
+        }
+    }
     public static void genCodBOOL(Node root) {
         if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool")) {
             String salto = "";
@@ -1840,7 +1931,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -1855,9 +1948,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JDialog jpanel2;
     private javax.swing.JTree jtree;
-    private javax.swing.JTextArea txtAnalizarLex;
+    private javax.swing.JTextArea ta_intermedio;
+    private javax.swing.JTextArea ta_simbolos;
     private javax.swing.JTextArea txtAnalizarSin;
     private javax.swing.JTextArea txtResultado;
     // End of variables declaration//GEN-END:variables
