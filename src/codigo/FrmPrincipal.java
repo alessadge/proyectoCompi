@@ -1501,7 +1501,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
-        } else if (root.nombre.equals("FOR")) {
+        }else if(root.nombre.equals("Main")){
+            main=true;
+        }
+        else if (root.nombre.equals("FOR")) {
             skip = true;
             cuads.add(new Cuadruplo("=", "0", "", root.hijos.get(1).valor));
             root.comienzo = etiqnueva();
@@ -1551,6 +1554,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
             if (!skip) {
                 cuadruplos(root.hijos.get(i));
+            }
+            if(main && root.hijos.get(i).nombre.equals("sentencias")){
+                cuads.add(new Cuadruplo("MAIN_ETIQ", "Main", "", ""));
             }
         }
 

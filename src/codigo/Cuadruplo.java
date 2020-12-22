@@ -10,16 +10,16 @@ package codigo;
  * @author edujg
  */
 public class Cuadruplo {
-    String op, op1, op2, res;
-    Cuadruplo(String op, String op1, String op2, String res){
+    String op, arg1, arg2, res;
+    Cuadruplo(String op, String arg1, String arg2, String res){
         this.op = op;
-        this.op1 = op1;
-        this.op2 = op2;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
         this.res = res;
     }
     
     @Override
     public String toString(){
-        return "Operador: " + op + ", ARG1: " + op1 + ", AGR2: " + op2 + ", RES: " + res;
+        return "Op: " + op + ", arg1: " + arg1 + ", arg2: " + arg2 + ", res: " + res;
     }
 }
