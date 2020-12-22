@@ -1519,7 +1519,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void genCodBOOL(Node root) {
-        if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
+        if (activo) {
+            
+        }
+        else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool") ) {
+                 String salto = "";
+            if (root.hijos.get(0).valor.contains("true")) {
+                salto = root.verdadera;
+            } else {
+                salto = root.falsa; 
+            }
+            cuads.add(new Cuadruplo("GOTO", salto, "", ""));
+        }
+        else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
             genCodOP(root.hijos.get(0).hijos.get(0));
             genCodOP(root.hijos.get(0).hijos.get(2));
             String val = "if " + root.hijos.get(0).hijos.get(1).valor;
