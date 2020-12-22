@@ -1501,8 +1501,36 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
-        }else if (root.nombre.equals("Entrada")) {
-            cuads.add(new Cuadruplo("Read", root.hijos.get(0).valor, get_tipo(root.hijos.get(0).valor), ""));
+        } else if (root.nombre.equals("FOR")) {
+            skip = true;
+            cuads.add(new Cuadruplo("=", "0", "", root.hijos.get(1).valor));
+            root.comienzo = etiqnueva();
+            cuads.add(new Cuadruplo("ETIQ", root.comienzo, "", ""));
+            genCodOP(root.hijos.get(4).hijos.get(2));
+            String verdadera = etiqnueva();
+            String signo = root.hijos.get(4).hijos.get(1).valor;
+            cuads.add(new Cuadruplo("if" + signo, root.hijos.get(4).hijos.get(0).valor, root.hijos.get(4).hijos.get(2).lugar, verdadera));
+            cuads.add(new Cuadruplo("GOTO", root.siguiente, "", ""));
+            root.asig = etiqnueva();
+            root.hijos.get(5).siguiente = root.asig;
+            cuads.add(new Cuadruplo("ETIQ", verdadera, "", ""));
+            cuadruplos(root.hijos.get(5));
+            cuads.add(new Cuadruplo("ETIQ", root.asig, "", ""));
+            String temp = tempnuevo();
+            cuads.add(new Cuadruplo("+", root.hijos.get(1).valor, "1", temp));
+            cuads.add(new Cuadruplo("=", temp, "", root.hijos.get(1).valor));
+            cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+
+        } else if (root.nombre.equals("Entrada")) {
+            cuads.add(new Cuadruplo("Read", root.hijos.get(0).valor, get_tipo2(root.hijos.get(0).valor), ""));
+        } else if (root.nombre.equals("asig")) {
+            if (root.hijos.size() == 4 && root.hijos.get(3).nombre.equals("op")) {
+                cuads.add(new Cuadruplo("=", root.hijos.get(3).lugar, "", root.hijos.get(0).valor));
+            }
+            if (root.hijos.size() == 4
+                    && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
+
+            }
         }
         for (int i = 0; i < root.hijos.size(); i++) {
             if (code_block) {
@@ -1521,16 +1549,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void genCodBOOL(Node root) {
-       if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool") ) {
-                 String salto = "";
+        if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool")) {
+            String salto = "";
             if (root.hijos.get(0).valor.contains("true")) {
                 salto = root.verdadera;
             } else {
-                salto = root.falsa; 
+                salto = root.falsa;
             }
             cuads.add(new Cuadruplo("GOTO", salto, "", ""));
-        }
-        else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
+        } else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
             genCodOP(root.hijos.get(0).hijos.get(0));
             genCodOP(root.hijos.get(0).hijos.get(2));
             String val = "if " + root.hijos.get(0).hijos.get(1).valor;
@@ -1551,7 +1578,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 root.hijos.get(0).hijos.get(2).verdadera = root.verdadera;
                 root.hijos.get(0).hijos.get(2).falsa = root.falsa;
                 genCodBOOL(root.hijos.get(0).hijos.get(2));
-            }else if (root.hijos.get(0).hijos.get(1).valor.equals("Or")) {
+            } else if (root.hijos.get(0).hijos.get(1).valor.equals("Or")) {
                 root.hijos.get(0).hijos.get(0).verdadera = root.verdadera;
                 root.hijos.get(0).hijos.get(0).falsa = etiqnueva();
                 genCodBOOL(root.hijos.get(0).hijos.get(0));
@@ -1575,13 +1602,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 cuads.add(new Cuadruplo("GOTO", root.falsa, "", ""));
             }
         } else if (root.nombre.equals("PROPOSICION2")) {
-            if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size()>1) {
+            if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.size() > 1) {
                 genCodOP(root.hijos.get(0).hijos.get(0));
                 genCodOP(root.hijos.get(0).hijos.get(2));
                 String val = "if " + root.hijos.get(0).hijos.get(1).valor;
                 cuads.add(new Cuadruplo(val, root.hijos.get(0).hijos.get(0).lugar, root.hijos.get(0).hijos.get(2).lugar, root.verdadera));
                 cuads.add(new Cuadruplo("GOTO", root.hijos.get(0).falsa, "", ""));
-            }else if(root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")){
+            } else if (root.hijos.get(0).nombre.equals("PROPOSICION1") && root.hijos.get(0).hijos.get(0).nombre.equals("PROPOSICION1-2")) {
                 genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(0));
                 genCodOP(root.hijos.get(0).hijos.get(0).hijos.get(2));
                 String val = "if " + root.hijos.get(0).hijos.get(0).hijos.get(1).valor;
@@ -1592,14 +1619,83 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void genCodOP(Node root) {
-        boolean funcion = false;
         for (int i = 0; i < root.hijos.size(); i++) {
             genCodOP(root.hijos.get(i));
         }
-        if (root.nombre.equals("Int") || root.nombre.equals("IDENTIFICADOR") && root.hijos.size() == 0
-                && !funcion || root.nombre.equals("String") || root.nombre.equals("TBool")) {
-            root.lugar = root.valor;
+        boolean funcion = false;
+        if (root.nombre.equals("ID")) {
+            String type = get_tipo2(root.valor);
+            //verificar
+            if (type.contains("->")) {
+                funcion = true;
+            }
         }
+        //////////////////
+        if (root.nombre.equals("Int") || root.nombre.equals("IDENTIFICADOR") && root.hijos.size() == 0
+                && !funcion || root.nombre.equals("String") || root.nombre.equals("Bool")) {
+            root.lugar = root.valor;
+        } else if (root.valor.equals("*")) {
+            root.lugar = tempnuevo();
+            cuads.add(new Cuadruplo("*", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+        } else if (root.valor.equals("/")) {
+            root.lugar = tempnuevo();
+            cuads.add(new Cuadruplo("/", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+        } else if (root.valor.equals("+")) {
+            root.lugar = tempnuevo();
+            cuads.add(new Cuadruplo("+", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+        } else if (root.valor.equals("-")) {
+            root.lugar = tempnuevo();
+            cuads.add(new Cuadruplo("-", root.hijos.get(0).lugar, root.hijos.get(1).lugar, root.lugar));
+        } else if (root.nombre.equals("IDENTIFICADOR")) {
+            String tipo = get_tipo2(root.valor);
+            if (tipo.contains("array")) {
+                String t = tempnuevo();
+                String tip = tipo.substring(tipo.indexOf("_") + 1, tipo.indexOf("{"));
+                int tam = tip.length();
+                String sz = "" + tam;
+                cuads.add(new Cuadruplo("*", root.hijos.get(0).lugar, sz, t));
+                root.lugar = tempnuevo();
+                cuads.add(new Cuadruplo("=[]", root.valor, t, root.lugar));
+            } else if (tipo.contains("matrix")) {
+                if (!root.hijos.get(0).nombre.equals("LISTA POSICIONES")) {
+                    //NO FUE CUBIERTAA ASIGNAR UN ARRAY ENTERO DE UN SOLO A UNA MATRIZ
+                } else {
+                    String t = tempnuevo();
+                    String col = tipo.substring(tipo.indexOf("{") + 3, tipo.indexOf("}"));
+                    cuads.add(new Cuadruplo("*", root.hijos.get(0).hijos.get(0).lugar, col, t));
+                    String t1 = tempnuevo();
+                    cuads.add(new Cuadruplo("+", t, root.hijos.get(0).hijos.get(1).lugar, t1));
+                    String t2 = tempnuevo();
+                    String tip = tipo.substring(tipo.indexOf("_") + 1, tipo.indexOf("{"));
+                    int tam = tip.length();
+                    String sz = "" + tam;
+                    cuads.add(new Cuadruplo("*", t1, sz, t2));
+                    root.lugar = tempnuevo();
+                    cuads.add(new Cuadruplo("=[]", root.valor, t2, root.lugar));
+                }
+            } else {
+                //FUNCION
+                /*if (root.hijos.size() == 0) {
+                    cuads.add(new Cuadruplo("call", root.valor, "0", ""));
+                    root.lugar = tempnuevo();
+                    cuads.add(new Cuadruplo("=", "RET", "", root.lugar));
+                } else {
+                    cantparam = 0;
+                    params2(root, root.valor);
+                    String cant = "" + cantparam;
+                    cuads.add(new Cuadruplo("call", root.valor, cant, ""));
+                    root.lugar = tempnuevo();
+                    cuads.add(new Cuadruplo("=", "RET", "", root.lugar));
+                }*/
+            }
+        }
+        /////////////////////////////
+    }
+
+    public static String tempnuevo() {
+        String r = "t" + temporales;
+        temporales = temporales + 1;
+        return r;
     }
 
     public static String etiqnueva() {
@@ -1607,7 +1703,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         etiquetas = etiquetas + 1;
         return r;
     }
-
+    public static String get_tipo2(String s) {
+        for (int i = 0; i < tabla_simbolos.size(); i++) {
+            if (s.equals(tabla_simbolos.get(i).id)) {
+                return tabla_simbolos.get(i).tipo;
+            }
+        }
+        return "";
+    }
     /**
      * @param args the command line arguments
      */
