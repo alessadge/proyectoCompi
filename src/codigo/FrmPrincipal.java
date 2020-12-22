@@ -711,7 +711,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (!Sintax.Errores.isEmpty() && !Lexer.ErroresLexicos.isEmpty()) {
+        if (!Sintax.Errores.isEmpty() || !Lexer.ErroresLexicos.isEmpty()) {
             try {
                 Symbol sym = s.getS();
                 temporal = temporal + Sintax.Errores;
@@ -726,7 +726,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        } else {
+        } else if(Sintax.Errores.isEmpty() && Lexer.ErroresLexicos.isEmpty()){
 
             try {
                 root = s.raiz;
@@ -815,13 +815,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIf1ActionPerformed
 
     private void boton_intermedioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_intermedioMouseClicked
+        ta_intermedio.setText("");
         try {
             cuadruplos(root);
             String mensaje = "";
+            mensaje+="---------------------";
             for (int i = 0; i < cuads.size(); i++) {
                 mensaje += cuads.get(i) + "\n";
 
             }
+            mensaje+="---------------------";
             ta_intermedio.setText(mensaje);
         } catch (Exception e) {
         }
@@ -830,14 +833,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_boton_intermedioMouseClicked
 
     private void boton_intermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_intermedioActionPerformed
-        String temp = "";
+       /* String temp = "";
         for (int i = 0; i < cuads.size(); i++) {
             temp = temp + cuads.get(i) + "/n";
         }
-        ta_intermedio.setText(temp);
+        ta_intermedio.setText(temp);*/
     }//GEN-LAST:event_boton_intermedioActionPerformed
 
     private void boton_simbolosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_simbolosActionPerformed
+        ta_simbolos.setText("");
         try {
             String mensaje = "";
             for (int i = 0; i < tabla_simbolos.size(); i++) {
