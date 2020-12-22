@@ -1501,6 +1501,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
+        }else if (root.nombre.equals("Entrada")) {
+            cuads.add(new Cuadruplo("Read", root.hijos.get(0).valor, get_tipo(root.hijos.get(0).valor), ""));
         }
         for (int i = 0; i < root.hijos.size(); i++) {
             if (code_block) {
@@ -1519,10 +1521,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     public static void genCodBOOL(Node root) {
-        if (activo) {
-            
-        }
-        else if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool") ) {
+       if (root.nombre.equals("PROPOSICION") && root.hijos.get(0).nombre.equals("Bool") ) {
                  String salto = "";
             if (root.hijos.get(0).valor.contains("true")) {
                 salto = root.verdadera;
