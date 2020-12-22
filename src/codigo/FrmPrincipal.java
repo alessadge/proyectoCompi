@@ -1501,8 +1501,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).siguiente = root.comienzo;
             cuadruplos(root.hijos.get(1));
             cuads.add(new Cuadruplo("GOTO", root.comienzo, "", ""));
-        }else if (root.equals("")) {
-            
         }
         else if(root.nombre.equals("IMPRIMIR")){
             if(root.hijos.get(0).nombre.equals("String")){
@@ -1544,7 +1542,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
             root.hijos.get(1).hijos.get(0).siguiente=root.siguiente;
            opciones_switch(root.hijos.get(1).hijos.get(0));
             
-        } 
+        }
+        else if (root.nombre.equals("Return")) {
+            Node temp=root.hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0);
+            genCodOP(temp);
+            cuads.add(new Cuadruplo("Return", temp.lugar, "", ""));
+        }
         else if (root.nombre.equals("Entrada")) {
             cuads.add(new Cuadruplo("Read", "", "", root.hijos.get(0).valor));
         } else if (root.nombre.equals("asig")) {
@@ -1555,8 +1558,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     && (root.hijos.get(3).nombre.equals("String") || root.hijos.get(3).nombre.equals("Bool"))) {
                 cuads.add(new Cuadruplo("=",root.hijos.get(3).valor , "", root.hijos.get(1).valor));
             }
-        }else if (root.nombre.equals("asignar") && root.nombre.equals("TIPO") ) {
-            cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
+        }else if (root.nombre.equals("asignar") && root.hijos.get(2).nombre.equals("TIPO") ) {
+            if (root.hijos.get(2).hijos.get(0).equals("")) {
+                 
+            }else{
+                cuads.add(new Cuadruplo("=",root.hijos.get(2).hijos.get(0).hijos.get(0).hijos.get(0).hijos.get(0).valor , "", root.hijos.get(0).valor));
+            }
         }
         for (int i = 0; i < root.hijos.size(); i++) {
             if (code_block) {
